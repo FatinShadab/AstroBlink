@@ -1,0 +1,37 @@
+# Ingest Job — Redis queue payload schema
+# Used by: api/ (producer) and worker/ (consumer)
+# Queue: Redis LIST at key "astroblink:ingest_jobs" (BRPOP)
+# See ARCHITECTURE.md §2.3, §2.5
+IngestJobPayload:
+  type: object
+  required: [job_id, ra, dec, size_deg]
+  properties:
+    job_id:
+      type: string
+      format: uuid
+      description: References ingest_jobs.id in PostgreSQL
+    ra:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMaximum: 360
+      description: Right ascension in degrees
+    dec:
+      type: number
+      format: double
+      minimum: -90
+      maximum: 90
+      description: Declination in degrees
+    size_deg:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMinimum: true
+      maximum: 1.0
+      default: 0.1
+      description: Cutout angular size in degrees
+  example:
+    job_id: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+    ra: 180.0
+    dec: -2.5
+    size_deg: 0.1

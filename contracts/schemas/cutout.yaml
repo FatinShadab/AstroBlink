@@ -1,0 +1,47 @@
+# Cutout ingestion — See ARCHITECTURE.md §4.1
+CutoutFetchRequest:
+  type: object
+  required: [ra, dec]
+  properties:
+    ra:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMaximum: 360
+      description: Right ascension in degrees
+    dec:
+      type: number
+      format: double
+      minimum: -90
+      maximum: 90
+      description: Declination in degrees
+    size_deg:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMinimum: true
+      maximum: 1.0
+      default: 0.1
+      description: Cutout angular size in degrees
+
+CutoutFetchResponse:
+  type: object
+  required: [job_id, status, ra, dec, size_deg]
+  properties:
+    job_id:
+      type: string
+      format: uuid
+    status:
+      type: string
+      enum: [queued]
+    ra:
+      type: number
+      format: double
+    dec:
+      type: number
+      format: double
+    size_deg:
+      type: number
+      format: double
+    message:
+      type: string

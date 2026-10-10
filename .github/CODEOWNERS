@@ -1,0 +1,14 @@
+# AstroBlink CODEOWNERS
+# Replace @TODO-role-N placeholders with GitHub usernames when assigned.
+# See docs/ROADMAP.md for role descriptions.
+
+/api/                   @TODO-role-2
+/worker/                @TODO-role-1
+/client/                @TODO-role-3 @TODO-role-4
+/contracts/             @TODO-role-6
+/infra/                 @TODO-role-5
+/docs/                  @TODO-role-6
+/.github/               @TODO-role-5
+/Makefile               @TODO-role-5
+/.env.example           @TODO-role-5
+README.md               @TODO-role-6

@@ -1,0 +1,76 @@
+# Classification — See ARCHITECTURE.md §4.2
+Mark:
+  type: object
+  required: [epoch, pixel_x, pixel_y, ra, dec]
+  properties:
+    epoch:
+      type: integer
+      description: Epoch index (must be in subject's epochs array)
+    pixel_x:
+      type: number
+      format: double
+      minimum: 0
+    pixel_y:
+      type: number
+      format: double
+      minimum: 0
+    ra:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMaximum: 360
+    dec:
+      type: number
+      format: double
+      minimum: -90
+      maximum: 90
+
+ClassificationRequest:
+  type: object
+  required: [subject_id, category, marks]
+  properties:
+    subject_id:
+      type: string
+      format: uuid
+    category:
+      type: string
+      enum:
+        - asteroid_neo
+        - comet
+        - brown_dwarf
+        - planet_x_candidate
+        - artifact
+        - nothing
+    marks:
+      type: array
+      items:
+        $ref: "#/Mark"
+      description: Empty array if category is "nothing"
+    load_time_ms:
+      type: integer
+      description: Milliseconds between subject load and submit (anti-spam)
+
+ClassificationResponse:
+  type: object
+  required: [classification_id, subject_id, category, marks_count]
+  properties:
+    classification_id:
+      type: string
+      format: uuid
+    subject_id:
+      type: string
+      format: uuid
+    category:
+      type: string
+    marks_count:
+      type: integer
+    subject_classification_count:
+      type: integer
+    subject_retired:
+      type: boolean
+    badges_earned:
+      type: array
+      items:
+        type: string
+    message:
+      type: string

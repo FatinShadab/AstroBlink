@@ -1,0 +1,359 @@
+# ==============================================================
+# AstroBlink — OpenAPI 3.1 Contract
+# Source of truth: docs/ARCHITECTURE.md §4
+# ==============================================================
+openapi: "3.1.0"
+info:
+  title: AstroBlink API
+  version: "0.1.0"
+  description: >
+    Citizen-science blink comparator for NASA's SPHEREx mission.
+    See docs/ARCHITECTURE.md for full API contract details.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+
+tags:
+  - name: health
+  - name: cutouts
+    description: Ingestion job management
+  - name: subjects
+    description: Subject queue for classifiers
+  - name: classify
+    description: Classification submission
+  - name: consensus
+    description: Consensus pipeline
+  - name: candidates
+    description: Candidate management and export
+
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      tags: [health]
+      summary: Infrastructure health check
+      responses:
+        "200":
+          description: All dependencies healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /api/v1/cutouts/fetch:
+    post:
+      operationId: fetchCutout
+      tags: [cutouts]
+      summary: Enqueue an ingestion job for a sky region
+      description: See ARCHITECTURE.md §4.1
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/cutout.yaml#/CutoutFetchRequest"
+      responses:
+        "202":
+          description: Job enqueued
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/cutout.yaml#/CutoutFetchResponse"
+        "409":
+          description: Subject already exists at this position
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+  /api/v1/subjects/next:
+    get:
+      operationId: getNextSubject
+      tags: [subjects]
+      summary: Serve the next unretired subject to the current user
+      description: See ARCHITECTURE.md §6.2 (subject queue cache)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Next subject
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/subject.yaml#/SubjectResponse"
+        "204":
+          description: No unretired subjects available
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+  /api/v1/classify:
+    post:
+      operationId: submitClassification
+      tags: [classify]
+      summary: Submit a classification with marks for a subject
+      description: See ARCHITECTURE.md §4.2
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/classification.yaml#/ClassificationRequest"
+      responses:
+        "201":
+          description: Classification recorded
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/classification.yaml#/ClassificationResponse"
+        "409":
+          description: User already classified this subject
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+  /api/v1/consensus/run:
+    post:
+      operationId: runConsensus
+      tags: [consensus]
+      summary: Run the consensus pipeline on retired subjects
+      description: See ARCHITECTURE.md §4.3
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/consensus.yaml#/ConsensusRunRequest"
+      responses:
+        "200":
+          description: Consensus completed (single subject)
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/consensus.yaml#/ConsensusRunResponse"
+        "202":
+          description: Batch consensus job enqueued
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/consensus.yaml#/ConsensusBatchResponse"
+        "404":
+          description: Subject not found or not retired
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+  /api/v1/candidates:
+    get:
+      operationId: listCandidates
+      tags: [candidates]
+      summary: List candidates with optional filters
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [new, under_review, confirmed, rejected]
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/ClassificationCategory"
+        - name: min_reliability
+          in: query
+          schema:
+            type: number
+            format: float
+        - name: min_classifications
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Candidate list
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/candidate.yaml#/CandidateListResponse"
+
+  /api/v1/candidates/export:
+    get:
+      operationId: exportCandidates
+      tags: [candidates]
+      summary: Export candidates as CSV or VOTable
+      description: See ARCHITECTURE.md §4.4
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: format
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [csv, votable]
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: min_reliability
+          in: query
+          schema:
+            type: number
+            format: float
+        - name: min_classifications
+          in: query
+          schema:
+            type: integer
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/ClassificationCategory"
+      responses:
+        "200":
+          description: Export file
+          content:
+            text/csv:
+              schema:
+                type: string
+            application/x-votable+xml:
+              schema:
+                type: string
+        "404":
+          description: No candidates match filters
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+  /api/v1/candidates/{candidate_id}:
+    patch:
+      operationId: updateCandidateStatus
+      tags: [candidates]
+      summary: Update candidate status (astronomer/admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: candidate_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/candidate.yaml#/CandidateStatusUpdateRequest"
+      responses:
+        "200":
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/candidate.yaml#/CandidateResponse"
+        "404":
+          description: Candidate not found
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ClassificationCategory:
+      type: string
+      enum:
+        - asteroid_neo
+        - comet
+        - brown_dwarf
+        - planet_x_candidate
+        - artifact
+        - nothing
+
+    CandidateStatus:
+      type: string
+      enum:
+        - new
+        - under_review
+        - confirmed
+        - rejected
+
+    UserRole:
+      type: string
+      enum:
+        - volunteer
+        - astronomer
+        - admin
+
+    HealthResponse:
+      type: object
+      required: [status, db, redis]
+      properties:
+        status:
+          type: string
+          example: ok
+        db:
+          type: string
+          example: connected
+        redis:
+          type: string
+          example: connected

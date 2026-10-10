@@ -1,0 +1,101 @@
+# Consensus — See ARCHITECTURE.md §4.3
+ConsensusRunRequest:
+  type: object
+  properties:
+    subject_id:
+      type: string
+      format: uuid
+      description: If omitted and batch=true, runs on all retired subjects pending consensus
+    batch:
+      type: boolean
+      default: false
+    epsilon_arcsec:
+      type: number
+      format: double
+      default: 9.2
+      minimum: 3.0
+      maximum: 60.0
+      description: DBSCAN epsilon in arcseconds (default 1.5 pixels at 6.15"/px)
+    min_pts:
+      type: integer
+      default: 3
+      minimum: 2
+      maximum: 8
+    max_displacement_arcsec:
+      type: number
+      format: double
+      default: 30.0
+      minimum: 5.0
+      maximum: 300.0
+      description: Max inter-epoch cluster displacement for tracklet linking
+
+EpochCluster:
+  type: object
+  required: [epoch, centroid_ra, centroid_dec, cluster_size, dispersion_arcsec]
+  properties:
+    epoch:
+      type: integer
+    centroid_ra:
+      type: number
+      format: double
+    centroid_dec:
+      type: number
+      format: double
+    cluster_size:
+      type: integer
+    dispersion_arcsec:
+      type: number
+      format: double
+
+CandidateSummary:
+  type: object
+  required: [candidate_id, category, n_classifications, mean_reliability]
+  properties:
+    candidate_id:
+      type: string
+      format: uuid
+    category:
+      type: string
+    n_classifications:
+      type: integer
+    mean_reliability:
+      type: number
+      format: double
+    motion_arcsec_per_epoch:
+      type: number
+      format: double
+    motion_pa_deg:
+      type: number
+      format: double
+    epochs:
+      type: array
+      items:
+        $ref: "#/EpochCluster"
+
+ConsensusRunResponse:
+  type: object
+  required: [subject_id, classifications_processed, candidates_found, candidates]
+  properties:
+    subject_id:
+      type: string
+      format: uuid
+    classifications_processed:
+      type: integer
+    candidates_found:
+      type: integer
+    candidates:
+      type: array
+      items:
+        $ref: "#/CandidateSummary"
+
+ConsensusBatchResponse:
+  type: object
+  required: [batch_job_id, subjects_queued]
+  properties:
+    batch_job_id:
+      type: string
+      format: uuid
+    subjects_queued:
+      type: integer
+    message:
+      type: string

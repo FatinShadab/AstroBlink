@@ -1,0 +1,58 @@
+# Candidate — See ARCHITECTURE.md §4.4
+CandidateResponse:
+  type: object
+  required: [id, subject_id, category, status, n_classifications, mean_reliability]
+  properties:
+    id:
+      type: string
+      format: uuid
+    subject_id:
+      type: string
+      format: uuid
+    category:
+      type: string
+      enum: [asteroid_neo, comet, brown_dwarf, planet_x_candidate, artifact, nothing]
+    status:
+      type: string
+      enum: [new, under_review, confirmed, rejected]
+    n_classifications:
+      type: integer
+    mean_reliability:
+      type: number
+      format: double
+    cluster_dispersion_arcsec:
+      type: number
+      format: double
+    motion_arcsec_per_epoch:
+      type: number
+      format: double
+    motion_pa_deg:
+      type: number
+      format: double
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+
+CandidateListResponse:
+  type: object
+  required: [candidates, count]
+  properties:
+    candidates:
+      type: array
+      items:
+        $ref: "#/CandidateResponse"
+    count:
+      type: integer
+
+CandidateStatusUpdateRequest:
+  type: object
+  required: [status]
+  properties:
+    status:
+      type: string
+      enum: [confirmed, rejected]
+    rationale:
+      type: string

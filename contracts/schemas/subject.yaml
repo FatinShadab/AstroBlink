@@ -1,0 +1,39 @@
+# Subject — See ARCHITECTURE.md §3 (subjects table)
+SubjectResponse:
+  type: object
+  required: [id, ra_deg, dec_deg, size_deg, epochs, tile_urls]
+  properties:
+    id:
+      type: string
+      format: uuid
+    ra_deg:
+      type: number
+      format: double
+    dec_deg:
+      type: number
+      format: double
+    size_deg:
+      type: number
+      format: double
+    epochs:
+      type: array
+      items:
+        type: integer
+      description: Available epoch indices
+    tile_urls:
+      type: object
+      additionalProperties:
+        type: string
+      description: >
+        Map of "{epoch}_{band}" to tile URL.
+        Example: {"1_swir": "http://localhost:9000/astroblink-tiles/abc/1_swir.webp"}
+    wcs_urls:
+      type: object
+      additionalProperties:
+        type: string
+      description: >
+        Map of "{epoch}_{band}" to WCS JSON sidecar URL.
+    classification_count:
+      type: integer
+    retired:
+      type: boolean
