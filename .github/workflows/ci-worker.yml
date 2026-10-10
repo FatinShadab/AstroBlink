@@ -1,0 +1,47 @@
+name: CI — Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - "contracts/**"
+      - ".github/workflows/ci-worker.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - "contracts/**"
+      - ".github/workflows/ci-worker.yml"
+
+defaults:
+  run:
+    working-directory: worker
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check worker/ tests/
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: python -m pytest tests/ -v --tb=short
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build . -t astroblink-worker:ci-test
+        working-directory: worker

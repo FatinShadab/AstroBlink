@@ -1,0 +1,18 @@
+# ==============================================================
+# AstroBlink — Docker Compose Prod-like
+# No bind mounts, uses built images. For local integration testing.
+# Usage: docker compose -f infra/docker-compose.yml -f infra/docker-compose.prod.yml --project-directory . up
+# Or: make up-prod
+# ==============================================================
+
+services:
+  api:
+    build:
+      target: runtime
+
+  client:
+    command: ["node", "server.js"]
+
+  worker:
+    build:
+      target: runtime

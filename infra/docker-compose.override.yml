@@ -1,0 +1,27 @@
+# ==============================================================
+# AstroBlink — Docker Compose Dev Override
+# Auto-loaded by docker compose (override file).
+# Adds bind mounts, hot reload, dev targets.
+# ==============================================================
+
+services:
+  api:
+    build:
+      target: dev
+    volumes:
+      - ./api/app:/app/app
+      - ./api/tests:/app/tests
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  client:
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    command: ["npm", "run", "dev"]
+
+  worker:
+    build:
+      target: dev
+    volumes:
+      - ./worker/worker:/app/worker
+      - ./worker/tests:/app/tests

@@ -1,0 +1,51 @@
+name: CI — Client
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "client/**"
+      - "contracts/**"
+      - ".github/workflows/ci-client.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "client/**"
+      - "contracts/**"
+      - ".github/workflows/ci-client.yml"
+
+defaults:
+  run:
+    working-directory: client
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+      - run: npx eslint src/
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+      - run: npx vitest run
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build . -t astroblink-client:ci-test --build-arg NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+        working-directory: client
