@@ -1,22 +1,41 @@
 "use client";
 
-/**
- * BandSelector — Toggle between spectral bands.
- *
- * Bands: SWIR (0.75-2.42µm), MWIR (3.8-5.0µm), False-color RGB.
- * See PRD §FR-1.2.
- */
-export default function BandSelector() {
+export type Band = "swir" | "mwir" | "rgb";
+
+interface BandSelectorProps {
+  currentBand?: Band;
+  onBandChange?: (band: Band) => void;
+}
+
+const BANDS: { id: Band; label: string }[] = [
+  { id: "swir", label: "SWIR" },
+  { id: "mwir", label: "MWIR" },
+  { id: "rgb", label: "RGB" },
+];
+
+export default function BandSelector({
+  currentBand = "swir",
+  onBandChange,
+}: BandSelectorProps) {
   return (
-    <div className="flex gap-2">
-      {["SWIR", "MWIR", "RGB"].map((band) => (
-        <button
-          key={band}
-          className="px-4 py-2 bg-astro-surface border border-gray-700 rounded text-sm hover:bg-astro-accent transition"
-        >
-          {band}
-        </button>
-      ))}
+    <div className="flex gap-2" role="group" aria-label="Spectral band selector">
+      {BANDS.map(({ id, label }) => {
+        const active = currentBand === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            onClick={() => onBandChange?.(id)}
+            className={`px-4 py-2 border rounded text-sm font-medium transition ${
+              active
+                ? "bg-blue-600 border-blue-400 text-white"
+                : "bg-astro-surface border-gray-700 text-gray-300 hover:bg-gray-800"
+            }`}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

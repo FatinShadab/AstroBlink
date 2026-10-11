@@ -41,6 +41,10 @@ up-prod: ## Start prod-like stack (built images, no bind mounts)
 migrate: ## Run Alembic migrations via the migrate service
 	$(COMPOSE_DEV) run --rm migrate
 
+.PHONY: seed
+seed: ## Seed dev database and MinIO with fake subjects
+	$(COMPOSE_DEV) run --rm --no-deps api python /build/scripts/seed_dev.py
+
 # ── Testing ──────────────────────────────────────────────────
 
 .PHONY: test
