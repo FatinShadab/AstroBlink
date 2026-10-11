@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.db import get_db
 from app.schemas.consensus import ConsensusRunRequest
 from app.services.consensus import MarkInput, run_pure_consensus
@@ -25,6 +26,7 @@ from app.services.consensus import MarkInput, run_pure_consensus
 router = APIRouter()
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
+
 
 
 @router.post(
@@ -99,29 +101,29 @@ async def run_consensus(
     epochs = [int(e) for e in subj_row["epochs"]]
 
     # 2. Check retirement requirement per ARCHITECTURE.md §4.3
-    if not subj_row["retired"] and subj_row["classification_count"] < 10:
+    if not subj_row["retired"] and subj_row["classification_count"] < settings.retirement_threshold:
         return JSONResponse(
             status_code=404,
             content={
                 "error": {
                     "code": "NOT_FOUND",
-                    "message": f"Subject {subject_id} is not retired (classification count: {subj_row['classification_count']}/10).",
+                    "message": f"Subject {subject_id} is not retired (classification count: {subj_row['classification_count']}/{settings.retirement_threshold}).",
                     "details": [{"field": "subject_id", "issue": "Subject must be retired before consensus"}],
                 }
             },
         )
 
-    # 3. Read valid non-suspicious classifications (anti-spam load_time_ms >= 3000)
+    # 3. Read valid non-suspicious classifications (anti-spam load_time_ms >= min_load_time_ms)
     cls_res = await db.execute(
         text(
             """
             SELECT id, category::text AS category, user_reliability_at_submission
             FROM classifications
             WHERE subject_id = :sid
-              AND (load_time_ms IS NULL OR load_time_ms >= 3000)
+              AND (load_time_ms IS NULL OR load_time_ms >= :min_load_time)
             """
         ),
-        {"sid": subject_id},
+        {"sid": subject_id, "min_load_time": settings.min_load_time_ms},
     )
     cls_rows = cls_res.mappings().all()
     classifications_processed = len(cls_rows)
@@ -134,13 +136,14 @@ async def run_consensus(
             FROM marks m
             JOIN classifications c ON c.id = m.classification_id
             WHERE c.subject_id = :sid
-              AND (c.load_time_ms IS NULL OR c.load_time_ms >= 3000)
+              AND (c.load_time_ms IS NULL OR c.load_time_ms >= :min_load_time)
             ORDER BY m.epoch ASC
             """
         ),
-        {"sid": subject_id},
+        {"sid": subject_id, "min_load_time": settings.min_load_time_ms},
     )
     marks_rows = marks_res.mappings().all()
+
 
     mark_inputs = [
         MarkInput(

@@ -26,10 +26,17 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: str = "http://localhost:3000"
 
+    # Consensus & Ingestion settings
+    consensus_eps_pixels: float = 1.5
+    pixel_scale_arcsec: float = 6.15
+    min_load_time_ms: int = 3000
+    retirement_threshold: int = 10
+
     # Uvicorn
     port: int = 8000
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+
 
     @property
     def cors_origin_list(self) -> list[str]:

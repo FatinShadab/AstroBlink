@@ -175,6 +175,37 @@ def test_6_spam_user_with_low_score_cannot_create_candidate_alone():
     assert len(clusters) == 0
 
 
+def test_6b_spammer_passes_load_time_filter_but_prevented_by_reliability_alone():
+    """4. SPAM: Spammer takes 10s (passes load_time_ms >= 3000), but reliability 0.05 prevents candidate creation."""
+    # 3 honest users agree on an asteroid in epochs 1 & 2
+    honest_marks = [
+        MarkInput(user_id="honest_1", epoch=1, ra_deg=100.0000, dec_deg=0.0000, weight=0.8),
+        MarkInput(user_id="honest_2", epoch=1, ra_deg=100.0002, dec_deg=0.0001, weight=0.8),
+        MarkInput(user_id="honest_3", epoch=1, ra_deg=100.0001, dec_deg=-0.0001, weight=0.8),
+        MarkInput(user_id="honest_1", epoch=2, ra_deg=100.0040, dec_deg=0.0020, weight=0.8),
+        MarkInput(user_id="honest_2", epoch=2, ra_deg=100.0042, dec_deg=0.0021, weight=0.8),
+        MarkInput(user_id="honest_3", epoch=2, ra_deg=100.0041, dec_deg=0.0019, weight=0.8),
+    ]
+
+    # Spammer (who took 10,000 ms, passing the anti-spam load_time filter) creates fake marks at a bogus position
+    spammer_bogus_marks = [
+        MarkInput(user_id="slow_spammer", epoch=1, ra_deg=100.0500, dec_deg=0.0500, weight=0.05),
+        MarkInput(user_id="slow_spammer", epoch=2, ra_deg=100.0500, dec_deg=0.0500, weight=0.05),
+    ]
+
+    combined = honest_marks + spammer_bogus_marks
+    tracklets = run_pure_consensus(combined, epochs=[1, 2], min_pts=2.0)
+
+    # Exactly 1 candidate found (the honest one)
+    assert len(tracklets) == 1
+    t = tracklets[0]
+    assert math.isclose(t.clusters[0].centroid_ra_deg, 100.0001, abs_tol=1e-3)
+    # The spammer's bogus location was completely rejected by reliability weighting alone!
+    for cluster in t.clusters:
+        assert not any(math.isclose(c_ra, 100.0500, abs_tol=1e-2) for c_ra in [cluster.centroid_ra_deg])
+
+
+
 def test_7_zero_marks_or_nothing_here_yields_no_candidate():
     """7. A subject with zero marks or only 'nothing here' classifications yields no candidate."""
     # No marks
