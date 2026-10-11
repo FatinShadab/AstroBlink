@@ -16,12 +16,14 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import require_admin_token
 from app.db import get_db
 from app.services.export import export_candidates_to_csv, export_candidates_to_votable
 
 router = APIRouter()
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
+
 
 
 @router.get("/candidates")
@@ -65,10 +67,19 @@ async def list_candidates(
     return JSONResponse(status_code=200, content={"candidates": rows, "count": len(rows)})
 
 
-@router.get("/candidates/export")
+@router.get(
+    "/candidates/export",
+    dependencies=[Depends(require_admin_token)],
+    responses={
+        200: {"description": "Export file"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "No candidates match filters"},
+    },
+)
 async def export_candidates(
     db: DbSession,
     format: str = Query(..., pattern="^(csv|votable)$"),
+
     status: str | None = Query(None),
     category: str | None = Query(None),
     min_reliability: float | None = Query(None),

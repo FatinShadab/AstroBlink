@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import require_admin_token
 from app.config import settings
 from app.db import get_db
 from app.schemas.consensus import ConsensusRunRequest
@@ -28,12 +29,13 @@ router = APIRouter()
 DbSession = Annotated[AsyncSession, Depends(get_db)]
 
 
-
 @router.post(
     "/consensus/run",
+    dependencies=[Depends(require_admin_token)],
     responses={
         200: {"description": "Consensus completed (single subject)"},
         202: {"description": "Batch job enqueued"},
+        401: {"description": "Unauthorized"},
         404: {"description": "Subject not found or not retired"},
         422: {"description": "Validation error"},
     },
@@ -42,6 +44,7 @@ async def run_consensus(
     body: ConsensusRunRequest,
     db: DbSession,
 ) -> JSONResponse:
+
     if body.batch:
         count_res = await db.execute(
             text("SELECT COUNT(*)::int FROM subjects WHERE retired = TRUE")
@@ -92,7 +95,7 @@ async def run_consensus(
                 "error": {
                     "code": "NOT_FOUND",
                     "message": "Subject not found.",
-                    "details": [],
+                    "details": [{"field": "subject_id", "issue": "subject not found"}],
                 }
             },
         )
@@ -108,10 +111,11 @@ async def run_consensus(
                 "error": {
                     "code": "NOT_FOUND",
                     "message": f"Subject {subject_id} is not retired (classification count: {subj_row['classification_count']}/{settings.retirement_threshold}).",
-                    "details": [{"field": "subject_id", "issue": "Subject must be retired before consensus"}],
+                    "details": [{"field": "subject_id", "issue": "subject not retired"}],
                 }
             },
         )
+
 
     # 3. Read valid non-suspicious classifications (anti-spam load_time_ms >= min_load_time_ms)
     cls_res = await db.execute(
@@ -200,7 +204,7 @@ async def run_consensus(
             {
                 "sid": subject_id,
                 "cat": consensus_category,
-                "n_cls": tracklet.total_marks,
+                "n_cls": tracklet.distinct_users_count,
                 "mean_rel": tracklet.mean_reliability,
                 "disp": tracklet.mean_dispersion_arcsec,
                 "motion": tracklet.motion_arcsec_per_epoch,
@@ -248,13 +252,14 @@ async def run_consensus(
             {
                 "candidate_id": candidate_id,
                 "category": consensus_category,
-                "n_classifications": tracklet.total_marks,
+                "n_classifications": tracklet.distinct_users_count,
                 "mean_reliability": tracklet.mean_reliability,
                 "motion_arcsec_per_epoch": tracklet.motion_arcsec_per_epoch,
                 "motion_pa_deg": tracklet.motion_pa_deg,
                 "epochs": epoch_clusters_dto,
             }
         )
+
 
     await db.commit()
 

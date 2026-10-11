@@ -35,7 +35,11 @@ class Settings(BaseSettings):
     # Uvicorn
     port: int = 8000
 
+    # Admin Token (for consensus / export auth)
+    admin_token: str = "dev-admin-token-change-in-production"
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+
 
 
     @property

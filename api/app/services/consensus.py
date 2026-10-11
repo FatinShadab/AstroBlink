@@ -45,8 +45,10 @@ class TrackletResult:
     motion_arcsec_per_epoch: float | None
     motion_pa_deg: float | None
     total_marks: int
+    distinct_users_count: int
     mean_reliability: float
     mean_dispersion_arcsec: float
+
 
 
 def haversine_arcsec(ra1_deg: float, dec1_deg: float, ra2_deg: float, dec2_deg: float) -> float:
@@ -287,6 +289,7 @@ def compute_motion_vector(
 def link_tracklets(
     clusters_by_epoch: dict[int, list[EpochClusterResult]],
     max_displacement_arcsec: float,
+    marks: Sequence[MarkInput] | None = None,
 ) -> list[TrackletResult]:
     """Link per-epoch clusters across epochs into motion tracklets.
 
@@ -381,16 +384,29 @@ def link_tracklets(
         else:
             motion, pa = None, None
 
+        if marks is not None:
+            contributing_user_ids = {
+                marks[m_idx].user_id
+                for c in t_clusters_sorted
+                for m_idx in c.mark_indices
+                if m_idx < len(marks)
+            }
+            distinct_users = len(contributing_user_ids)
+        else:
+            distinct_users = max(c.cluster_size for c in t_clusters_sorted)
+
         results.append(
             TrackletResult(
                 clusters=t_clusters_sorted,
                 motion_arcsec_per_epoch=motion,
                 motion_pa_deg=pa,
                 total_marks=total_marks,
+                distinct_users_count=distinct_users,
                 mean_reliability=round(mean_rel, 4),
                 mean_dispersion_arcsec=round(mean_disp, 4),
             )
         )
+
 
     # Sort tracklets deterministically: multi-epoch first, then total marks descending
     results.sort(key=lambda t: (-len(t.clusters), -t.total_marks, t.clusters[0].centroid_ra_deg))
@@ -427,7 +443,8 @@ def run_pure_consensus(
     if not clusters_by_epoch:
         return []
 
-    return link_tracklets(clusters_by_epoch, max_displacement_arcsec)
+    return link_tracklets(clusters_by_epoch, max_displacement_arcsec, marks=marks)
+
 
 
 def compute_updated_reliability(

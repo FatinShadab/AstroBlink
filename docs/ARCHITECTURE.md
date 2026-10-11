@@ -1150,7 +1150,9 @@ def run_consensus(subject_id, epsilon_arcsec=9.2, min_pts=3,
         motion, pa = compute_motion_vector(tracklet)
 
         # Aggregate statistics
+        # Note: n_classifications is the count of distinct users contributing marks to the candidate.
         total_marks = sum(c.cluster_size for c in tracklet.clusters)
+        distinct_users_count = len({m.user_id for c in tracklet.clusters for m in c.marks})
         mean_reliability = (sum(c.mean_reliability * c.cluster_size
                                 for c in tracklet.clusters) / total_marks)
         mean_dispersion = (sum(c.dispersion_arcsec for c in tracklet.clusters)
@@ -1160,12 +1162,13 @@ def run_consensus(subject_id, epsilon_arcsec=9.2, min_pts=3,
             subject_id=subject_id,
             category=consensus_category,
             status='new',
-            n_classifications=total_marks,
+            n_classifications=distinct_users_count,
             mean_reliability=mean_reliability,
             cluster_dispersion_arcsec=mean_dispersion,
             motion_arcsec_per_epoch=motion,
             motion_pa_deg=pa
         )
+
 
         for cluster in tracklet.clusters:
             db.insert_candidate_epoch(

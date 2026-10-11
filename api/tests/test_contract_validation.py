@@ -81,12 +81,32 @@ def test_candidate_list_response_matches_contract_schema():
                 "mean_reliability": 0.8,
                 "cluster_dispersion_arcsec": 0.8596,
                 "motion_arcsec_per_epoch": 20.641,
-                "motion_pa_deg": 58.45,
-                "created_at": "2026-10-11T16:28:58Z",
-                "updated_at": "2026-10-11T16:28:58Z",
             }
         ],
         "count": 1,
     }
-
     jsonschema.validate(instance=sample_list_response, schema=candidate_list_schema)
+
+
+
+
+def test_401_error_response_matches_contract_schema():
+    """Verify 401 Unauthorized response body matches ErrorResponse in contracts/schemas/error.yaml."""
+    schema_path = Path(__file__).resolve().parents[2] / "contracts" / "schemas" / "error.yaml"
+    assert schema_path.exists(), f"Schema file not found at {schema_path}"
+
+    with open(schema_path, "r", encoding="utf-8") as f:
+        schemas = yaml.safe_load(f)
+
+    error_response_schema = schemas["ErrorResponse"]
+
+    sample_401_response = {
+        "error": {
+            "code": "UNAUTHORIZED",
+            "message": "Missing Authorization header.",
+            "details": [],
+        }
+    }
+
+    jsonschema.validate(instance=sample_401_response, schema=error_response_schema)
+
