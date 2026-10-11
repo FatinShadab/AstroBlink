@@ -9,7 +9,7 @@ FROM node:22-alpine3.21 AS deps
 
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --ignore-scripts
+RUN if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
 
 # ── Build stage ───────────────────────────────────────────────
 FROM node:22-alpine3.21 AS builder
@@ -27,7 +27,24 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
-# ── Runtime stage ─────────────────────────────────────────────
+# ── Dev stage (target for docker compose dev) ─────────────────
+FROM node:22-alpine3.21 AS dev
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV PORT=3000 \
+    NEXT_TELEMETRY_DISABLED=1
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -qO- http://localhost:${PORT:-3000}/health || exit 1
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
+
+# ── Runtime stage (default) ───────────────────────────────────
 FROM node:22-alpine3.21 AS runtime
 
 # OCI labels

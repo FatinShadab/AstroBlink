@@ -9,19 +9,23 @@ services:
     build:
       target: dev
     volumes:
-      - ./api/app:/app/app
-      - ./api/tests:/app/tests
+      - ./api/app:/build/app
+      - ./api/tests:/build/tests
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
   client:
+    build:
+      target: dev
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
+      - ./client/__tests__:/app/__tests__
     command: ["npm", "run", "dev"]
 
   worker:
     build:
       target: dev
     volumes:
-      - ./worker/worker:/app/worker
-      - ./worker/tests:/app/tests
+      - ./worker/worker:/build/worker
+      - ./worker/tests:/build/tests
+      - ./contracts:/contracts:ro

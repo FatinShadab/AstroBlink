@@ -31,6 +31,14 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
+HEALTHCHECK --interval=15s --timeout=5s --start-period=15s --retries=3 \
+    CMD python -c "\
+import os, time, sys; \
+path='/tmp/heartbeat'; \
+exists=os.path.exists(path); \
+fresh=(time.time()-os.path.getmtime(path)<30) if exists else False; \
+sys.exit(0 if fresh else 1)"
+
 CMD ["python", "-m", "worker.main"]
 
 # ── Runtime stage (default) ──────────────────────────────────

@@ -12,7 +12,6 @@ htmlcov
 *.pyc
 Dockerfile
 .dockerignore
-tests/
 *.egg-info
 dist
 build
