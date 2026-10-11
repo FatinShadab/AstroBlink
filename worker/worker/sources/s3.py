@@ -1,9 +1,12 @@
 """Anonymous S3 client for SPHEREx data.
 
-Accesses the `nasa-irsa-spherex` bucket with unsigned requests.
-See ARCHITECTURE.md \u00a72.3, ROADMAP P1-07.
+Accesses the `nasa-irsa-spherex` bucket with unsigned requests (botocore.UNSIGNED).
+See ARCHITECTURE.md §2.3, ROADMAP P1-07, docs/VERIFIED_FACTS.md §2.
 
-Key layout: qr2/level2/, qr3/  [VERIFY: OQ-3 for DR1/DR2]
+Verified S3 Key Pattern:
+qr2/level2/{YYYY}W{WW}_{step}/{l2b_pipeline_tag}/{detector}/level2_{YYYY}W{WW}_{step}_{exp_id}_{sub_exp}D{detector}_spx_{l2b_pipeline_tag}.fits
+
+[VERIFY] Future DR1/DR2 key layout is unconfirmed until future data release.
 """
 
 import boto3
@@ -22,21 +25,38 @@ def get_spherex_s3_client():
     )
 
 
-def list_level2_exposures(prefix: str = "qr2/level2/") -> list[str]:
+def list_level2_exposures(prefix: str = "qr2/level2/", max_keys: int = 100) -> list[dict]:
     """List Level 2 FITS file keys under the given prefix.
 
-    Stub — returns empty list.
-    Real implementation: paginate s3.list_objects_v2().
+    Args:
+        prefix: S3 key prefix (defaults to verified 'qr2/level2/').
+        max_keys: Maximum number of objects to list per page.
+
+    Returns:
+        List of object summary dicts containing 'Key' and 'Size'.
     """
-    # See ROADMAP P1-07
-    return []
+    s3 = get_spherex_s3_client()
+    paginator = s3.get_paginator("list_objects_v2")
+    results = []
+    for page in paginator.paginate(Bucket=settings.spherex_s3_bucket, Prefix=prefix):
+        for item in page.get("Contents", []):
+            if item["Key"].endswith(".fits"):
+                results.append({"Key": item["Key"], "Size": item["Size"]})
+                if len(results) >= max_keys:
+                    return results
+    return results
 
 
 def download_fits(key: str, local_path: str) -> str:
     """Download a FITS file from SPHEREx S3 to local scratch.
 
-    Stub — raises NotImplementedError.
-    Real implementation: s3.download_file(bucket, key, local_path).
+    Args:
+        key: S3 object key.
+        local_path: Destination path on local filesystem.
+
+    Returns:
+        The local path of the downloaded file.
     """
-    # See ROADMAP P1-07
-    raise NotImplementedError("S3 download not yet implemented.")
+    s3 = get_spherex_s3_client()
+    s3.download_file(settings.spherex_s3_bucket, key, local_path)
+    return local_path

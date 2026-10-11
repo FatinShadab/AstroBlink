@@ -25,10 +25,14 @@ class Settings(BaseSettings):
     spherex_s3_bucket: str = "nasa-irsa-spherex"
     spherex_s3_region: str = "us-east-1"
 
-    # IRSA Cutout Service [VERIFY: OQ-1, OQ-4]
+    # IRSA SPHEREx Cutout Service (verified endpoint pattern per docs/VERIFIED_FACTS.md)
     irsa_cutout_base_url: str = (
-        "https://irsa.ipac.caltech.edu/cgi-bin/Cutouts/nph-cutouts"
+        "https://irsa.ipac.caltech.edu/ibe/data/spherex"
     )
+
+    # SPHEREx S3 Level 2 prefix pattern (verified qr2/level2/ per docs/VERIFIED_FACTS.md)
+    # [VERIFY] Future DR1/DR2 release prefixes are unconfirmed in bucket.
+    spherex_level2_prefix: str = "qr2/level2/"
 
     # Scratch directory for temporary FITS downloads (~500 MB peak)
     fits_scratch_dir: str = "/tmp/astroblink"
@@ -42,7 +46,11 @@ class Settings(BaseSettings):
     # Heartbeat file path
     heartbeat_path: str = "/tmp/heartbeat"
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",
+    }
 
 
 settings = Settings()
