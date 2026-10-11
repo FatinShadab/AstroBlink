@@ -3,7 +3,10 @@
 # All commands use docker compose with infra/ config files.
 # ==============================================================
 
-COMPOSE_BASE   := docker compose -f infra/docker-compose.yml --project-directory .
+-include .env
+
+COMPOSE_PROJECT_NAME ?= astroblink
+COMPOSE_BASE   := docker compose -f infra/docker-compose.yml --project-directory . -p $(COMPOSE_PROJECT_NAME)
 COMPOSE_DEV    := $(COMPOSE_BASE) -f infra/docker-compose.override.yml
 COMPOSE_PROD   := $(COMPOSE_BASE) -f infra/docker-compose.prod.yml
 
@@ -96,7 +99,7 @@ health: ## Hit every health endpoint
 build-standalone: ## Build each app image using only its folder as context
 	docker build ./api -t astroblink-api:standalone-test
 	docker build ./worker -t astroblink-worker:standalone-test
-	docker build ./client -t astroblink-client:standalone-test --build-arg NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+	docker build ./client -t astroblink-client:standalone-test --build-arg NEXT_PUBLIC_API_BASE_URL=$${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
 
 # ── Cleanup ──────────────────────────────────────────────────
 
@@ -105,7 +108,6 @@ clean: ## Remove all containers, volumes, and images (asks for confirmation)
 	@echo "This will remove ALL AstroBlink containers, volumes, and images."
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
 	$(COMPOSE_DEV) --profile worker down -v --rmi local
-	docker image prune -f --filter "label=org.opencontainers.image.title=astroblink-*"
 
 # ── Help ─────────────────────────────────────────────────────
 
