@@ -428,3 +428,79 @@ def run_pure_consensus(
         return []
 
     return link_tracklets(clusters_by_epoch, max_displacement_arcsec)
+
+
+def compute_updated_reliability(
+    gold_total: int,
+    gold_correct: int,
+    min_reliability: float = 0.05,
+    max_reliability: float = 1.0,
+    prior_reliability: float = 0.5,
+    prior_weight: float = 2.0,
+) -> float:
+    """Compute updated user reliability score.
+
+    Uses Bayesian m-estimate / Laplace smoothing:
+        reliability = (gold_correct + prior_weight * prior_reliability) / (gold_total + prior_weight)
+    clamped to [min_reliability, max_reliability].
+
+    When prior_weight = 0.0 and gold_total > 0:
+        reduces to standard empirical accuracy (gold_correct / gold_total).
+    """
+    if gold_total <= 0:
+        return max(min_reliability, min(max_reliability, prior_reliability))
+
+    if prior_weight <= 0.0:
+        score = float(gold_correct) / float(gold_total)
+    else:
+        score = (float(gold_correct) + prior_weight * prior_reliability) / (float(gold_total) + prior_weight)
+
+    return round(max(min_reliability, min(max_reliability, score)), 4)
+
+
+def evaluate_gold_classification(
+    category: str,
+    marks: Sequence[MarkInput],
+    gold_expected: dict,
+    position_tolerance_arcsec: float = 15.0,
+) -> bool:
+    """Evaluate if a volunteer's classification matches the gold-standard expectation.
+
+    gold_expected format (from seed/MPC):
+    {
+        "category": "asteroid_neo" | "nothing" | ...,
+        "positions": [
+            {"epoch": 1, "ra_deg": 180.002, "dec_deg": -2.498},
+            {"epoch": 2, "ra_deg": 180.005, "dec_deg": -2.495}
+        ]
+    }
+    """
+    expected_category = gold_expected.get("category")
+    if expected_category and category != expected_category:
+        return False
+
+    expected_positions = gold_expected.get("positions", [])
+    if not expected_positions:
+        # If no positions expected (e.g. empty or artifact), category match is sufficient
+        return True
+
+    # For each expected epoch position, user must have provided at least one mark within tolerance
+    for exp in expected_positions:
+        exp_epoch = exp.get("epoch")
+        exp_ra = float(exp["ra_deg"])
+        exp_dec = float(exp["dec_deg"])
+
+        matching_mark = False
+        for m in marks:
+            if exp_epoch is not None and m.epoch != exp_epoch:
+                continue
+            dist = haversine_arcsec(exp_ra, exp_dec, m.ra_deg, m.dec_deg)
+            if dist <= position_tolerance_arcsec:
+                matching_mark = True
+                break
+
+        if not matching_mark:
+            return False
+
+    return True
+
