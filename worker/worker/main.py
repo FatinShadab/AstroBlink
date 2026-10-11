@@ -108,7 +108,7 @@ def process_job(payload: dict) -> str | None:
             return subj_id
 
         # Step 2: Spatial discovery of candidate exposures
-        candidates = find_candidate_files(ra, dec, limit=10)
+        candidates = find_candidate_files(ra, dec, limit=2)
         if not candidates:
             err = f"No Level 2 exposures found covering (RA={ra}, Dec={dec})"
             logger.warning(err)

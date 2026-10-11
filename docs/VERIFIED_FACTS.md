@@ -218,3 +218,56 @@ Verified directly from `HDU 1 (IMAGE)` and `HDU 5 (PSF)` headers of `s3://nasa-i
    ```text
    IMAGE Pixel scales (arcsec/px): [6.1341444  6.14109365]
    ```
+
+---
+
+## 6. Live Ingestion & S3 Object Verification (Phase W9)
+
+Verified via live ingestion through worker pipeline on real targets in `s3://nasa-irsa-spherex`:
+
+1. **IRSA TAP Spatial Discovery Query:**
+   ```sql
+   SELECT TOP {limit} p.energy_bandpassname, a.uri, p.time_bounds_lower
+   FROM spherex.artifact a
+   JOIN spherex.plane p ON a.planeid = p.planeid
+   WHERE 1 = CONTAINS(POINT('ICRS', {ra}, {dec}), p.poly)
+   ORDER BY p.time_bounds_lower
+   ```
+   Directly returns valid Level 2 FITS object URIs matching bucket keys under `qr2/level2/`.
+
+2. **Real Target Position Results:**
+   - **Target 1:** RA `160.61529°`, Dec `30.66915°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-241/1/level2_2025W17_4B_0001_1D1_spx_l2b-v20-2025-241.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/4/level2_2025W17_4B_0001_1D4_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `66.68%`
+     - Tile Sizes: SWIR: `1.6 KiB`, MWIR: `1.0 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `7cd1e61f-eb1d-4e57-931b-ca603a959900`
+   - **Target 2:** RA `276.26139°`, Dec `64.82577°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-240/5/level2_2025W17_4B_0030_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0030_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.81%`
+     - Tile Sizes: SWIR: `618 B`, MWIR: `360 B`, RGB: `1.0 KiB`
+     - Subject ID: `72ea4cc3-d374-480e-9ed3-0e1b7df389bc`
+   - **Target 3:** RA `349.78099°`, Dec `-56.49399°`
+     - Files: `qr2/level2/2025W18_1B/l2b-v20-2025-241/1/level2_2025W18_1B_0112_2D1_spx_l2b-v20-2025-241.fits`, `qr2/level2/2025W18_1B/l2b-v20-2025-240/4/level2_2025W18_1B_0112_2D4_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `90.21%`
+     - Tile Sizes: SWIR: `1.6 KiB`, MWIR: `1.0 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `5571684b-f5b5-4613-93c1-b5bbe8998fcc`
+   - **Target 4:** RA `207.74854°`, Dec `64.95670°`
+     - Files: `qr2/level2/2025W18_1B/l2b-v20-2025-240/5/level2_2025W18_1B_0418_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W18_1B/l2b-v20-2025-240/2/level2_2025W18_1B_0418_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.45%`
+     - Tile Sizes: SWIR: `1.7 KiB`, MWIR: `2.2 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `b1dbddf3-c52b-4949-bfd3-d82836ed6ea2`
+   - **Target 5:** RA `158.73328°`, Dec `45.46230°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-240/5/level2_2025W17_4B_0146_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0146_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.36%`
+     - Tile Sizes: SWIR: `1.7 KiB`, MWIR: `2.1 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `d9e856e4-e6f8-43ea-809f-935edcd7fc19`
+
+3. **Status of Unconfirmed Items:**
+   - Future DR1/DR2 release prefixes: **UNCONFIRMED** (only QR2 present in bucket).
+   - Live IRSA IBE Cutout Service HDU preservation: **UNCONFIRMED** (service returned 502/503; anonymous S3 download fallback functioning reliably).
+   - FLAGS bits 3, 8, 13, 16, 18, 20, 22–31: **UNCONFIRMED** (absent in Level 2 header MP cards).
