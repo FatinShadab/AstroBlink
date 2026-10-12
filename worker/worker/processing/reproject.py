@@ -240,32 +240,37 @@ def reproject_wavelength_slice(
 
     wcs_in = WCS(img_hdr)
 
+    ty_g, tx_g = np.meshgrid(
+        np.arange(shape_out[0], dtype=np.float64),
+        np.arange(shape_out[1], dtype=np.float64),
+        indexing="ij",
+    )
+    sky_ra, sky_dec = target_wcs.pixel_to_world_values(tx_g, ty_g)
+    px_det, py_det = wcs_in.world_to_pixel_values(sky_ra, sky_dec)
+    in_det = (px_det >= x0) & (px_det <= x1 - 1) & (py_det >= y0) & (py_det <= y1 - 1)
+
+    from scipy.interpolate import RegularGridInterpolator
+
+    y_axis = np.arange(y0, y1, dtype=np.float64)
+    x_axis = np.arange(x0, x1, dtype=np.float64)
+
     # Evaluate native cutout wavelength map and target-grid wavelength map
     if wave_interp is not None:
-        ny_g, nx_g = np.meshgrid(
-            np.arange(y0, y1, dtype=np.float64) + 1.0,
-            np.arange(x0, x1, dtype=np.float64) + 1.0,
-            indexing="ij",
-        )
+        ny_g, nx_g = np.meshgrid(y_axis + 1.0, x_axis + 1.0, indexing="ij")
         w_native = np.asarray(wave_interp((ny_g, nx_g)), dtype=np.float64)
 
-        ty_g, tx_g = np.meshgrid(
-            np.arange(shape_out[0], dtype=np.float64),
-            np.arange(shape_out[1], dtype=np.float64),
-            indexing="ij",
-        )
-        sky_ra, sky_dec = target_wcs.pixel_to_world_values(tx_g, ty_g)
-        px_det, py_det = wcs_in.world_to_pixel_values(sky_ra, sky_dec)
-        in_det = (px_det >= 0) & (px_det < nx_det) & (py_det >= 0) & (py_det < ny_det)
         w_target = np.full(shape_out, np.nan, dtype=np.float64)
-        if np.any(in_det):
-            w_target[in_det] = wave_interp((py_det[in_det] + 1.0, px_det[in_det] + 1.0))
+        in_full_det = (px_det >= 0) & (px_det < nx_det) & (py_det >= 0) & (py_det < ny_det)
+        if np.any(in_full_det):
+            w_target[in_full_det] = wave_interp((py_det[in_full_det] + 1.0, px_det[in_full_det] + 1.0))
     elif "wavelength_cutout" in cutout_res:
         w_native = np.asarray(cutout_res["wavelength_cutout"], dtype=np.float64)
-        full_w = np.full((ny_det, nx_det), np.nan, dtype=np.float32)
-        full_w[y0:y1, x0:x1] = w_native.astype(np.float32)
-        reproj_w, _ = reproject_interp((full_w, wcs_in), target_wcs, shape_out=shape_out)
-        w_target = np.asarray(reproj_w, dtype=np.float64)
+        w_rgi = RegularGridInterpolator(
+            (y_axis, x_axis), w_native, method="linear", bounds_error=False, fill_value=np.nan
+        )
+        w_target = np.full(shape_out, np.nan, dtype=np.float64)
+        if np.any(in_det):
+            w_target[in_det] = w_rgi((py_det[in_det], px_det[in_det]))
     else:
         raise ValueError("Either wave_interp or cutout_res['wavelength_cutout'] must be provided")
 
@@ -283,14 +288,15 @@ def reproject_wavelength_slice(
         | (var_cut <= 1e-12)
     )
 
-    clean_cut = img_cut.copy()
+    clean_cut = img_cut.copy().astype(np.float64)
     clean_cut[bad_native] = np.nan
 
-    full_img = np.full((ny_det, nx_det), np.nan, dtype=np.float32)
-    full_img[y0:y1, x0:x1] = clean_cut
-
-    reproj_img, _ = reproject_interp((full_img, wcs_in), target_wcs, shape_out=shape_out)
-    reproj_img = np.asarray(reproj_img, dtype=np.float32)
+    img_rgi = RegularGridInterpolator(
+        (y_axis, x_axis), clean_cut, method="linear", bounds_error=False, fill_value=np.nan
+    )
+    reproj_img = np.full(shape_out, np.nan, dtype=np.float32)
+    if np.any(in_det):
+        reproj_img[in_det] = img_rgi((py_det[in_det], px_det[in_det])).astype(np.float32)
 
     # Apply per-pixel shared-wavelength mask on the target grid
     sh_mask = apply_shared_wavelength_mask(w_target, shared_w_min, shared_w_max)

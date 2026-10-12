@@ -81,7 +81,7 @@ class Settings(BaseSettings):
     tap_timeout_sec: float = 30.0
     tap_max_retries: int = 3
     max_scratch_bytes: int = 500 * 1024 * 1024  # 500 MiB total scratch budget
-    job_timeout_sec: float = 180.0  # Per-job execution time cap in seconds
+    job_timeout_sec: float = 600.0  # Per-job execution time cap in seconds
 
     model_config = {
         "env_file": ".env",

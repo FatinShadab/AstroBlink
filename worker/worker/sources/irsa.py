@@ -358,7 +358,8 @@ def find_exposures_at_position(
                 continue
 
         poly_pts = parse_poly_wkb(poly_hex)
-        cov = cutout_coverage_fraction(ra, dec, poly_pts, size_deg=size_deg)
+        core_size_deg = min(float(size_deg), 0.1)
+        cov = cutout_coverage_fraction(ra, dec, poly_pts, size_deg=core_size_deg)
         if cov < min_cov:
             continue
 
@@ -414,9 +415,11 @@ def find_exposures_at_position(
             ),
         )
 
+    core_size_deg = min(float(size_deg), 0.1)
+
     def _inspect_one(item: dict[str, Any]) -> dict[str, Any] | None:
         res = fetch_cutout_wavelength_range(
-            s3_client, settings.spherex_s3_bucket, item["s3_key"], ra, dec, size_deg=size_deg
+            s3_client, settings.spherex_s3_bucket, item["s3_key"], ra, dec, size_deg=core_size_deg
         )
         if res is None:
             return None

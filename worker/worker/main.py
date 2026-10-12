@@ -182,7 +182,7 @@ def process_job(payload: dict) -> dict:
             connect_timeout=settings.s3_connect_timeout,
             read_timeout=settings.s3_read_timeout,
             max_retries=settings.s3_max_retries,
-            max_pool_connections=max(10, settings.s3_parallel_threads + 4),
+            max_pool_connections=max(25, settings.s3_parallel_threads * 4),
         )
 
         total_bytes_transferred = 0
@@ -190,62 +190,76 @@ def process_job(payload: dict) -> dict:
         slices_by_epoch: dict[int, dict[float, dict]] = {}
 
         # Step 4: Fetch ranged cutouts and reproject with per-pixel shared-wavelength mask
+        from concurrent.futures import ThreadPoolExecutor
+
+        def _fetch_and_reproj(target_w: float, ep: int, rec: dict) -> tuple[float, int, dict | None, int]:
+            s3_key = rec["s3_key"]
+            exp_bytes = 0
+            try:
+                cutout_res = fetch_ranged_cutout(
+                    s3_key,
+                    ra=ra,
+                    dec=dec,
+                    size_deg=size_deg,
+                    num_threads=settings.s3_parallel_threads,
+                    connect_timeout=settings.s3_connect_timeout,
+                    read_timeout=settings.s3_read_timeout,
+                    max_retries=settings.s3_max_retries,
+                    s3_client=s3_client,
+                )
+                exp_bytes += int(cutout_res.get("bytes_transferred", 0))
+
+                wave_interp = None
+                if "wavelength_cutout" not in cutout_res:
+                    wave_interp, wave_bytes = fetch_wcs_wave_interpolator(
+                        s3_key,
+                        s3_client=s3_client,
+                        max_retries=settings.s3_max_retries,
+                    )
+                    exp_bytes += int(wave_bytes)
+
+                reproj_res = reproject_wavelength_slice(
+                    cutout_res=cutout_res,
+                    target_wcs=target_wcs,
+                    shape_out=shape_out,
+                    shared_w_min=float(rec["shared_w_min"]),
+                    shared_w_max=float(rec["shared_w_max"]),
+                    wave_interp=wave_interp,
+                    mask_transient_and_outlier=settings.mask_transient_and_outlier_flags,
+                )
+                return target_w, ep, {"record": rec, "reproj": reproj_res}, exp_bytes
+            except Exception as exc:
+                logger.warning(
+                    "Failed ranged cutout or reprojection for %s (ep=%d, wave=%.1fum): %s",
+                    s3_key,
+                    ep,
+                    target_w,
+                    exc,
+                )
+                return target_w, ep, None, exp_bytes
+
+        fetch_tasks: list[tuple[float, int, dict]] = []
         for target_w in sorted(by_wave_epoch.keys()):
-            check_job_timeout(t0)
             ep_records = by_wave_epoch[target_w]
             if len(ep_records) < 2:
                 continue
-
-            raw_slices: dict[int, dict] = {}
             for ep in sorted(ep_records.keys()):
-                check_job_timeout(t0)
-                rec = ep_records[ep]
-                s3_key = rec["s3_key"]
-                try:
-                    cutout_res = fetch_ranged_cutout(
-                        s3_key,
-                        ra=ra,
-                        dec=dec,
-                        size_deg=size_deg,
-                        num_threads=settings.s3_parallel_threads,
-                        connect_timeout=settings.s3_connect_timeout,
-                        read_timeout=settings.s3_read_timeout,
-                        max_retries=settings.s3_max_retries,
-                        s3_client=s3_client,
-                    )
-                    total_bytes_transferred += int(cutout_res.get("bytes_transferred", 0))
+                fetch_tasks.append((target_w, ep, ep_records[ep]))
 
-                    wave_interp = None
-                    if "wavelength_cutout" not in cutout_res:
-                        wave_interp, wave_bytes = fetch_wcs_wave_interpolator(
-                            s3_key,
-                            s3_client=s3_client,
-                            max_retries=settings.s3_max_retries,
-                        )
-                        total_bytes_transferred += int(wave_bytes)
+        raw_by_wave: dict[float, dict[int, dict]] = {}
+        if fetch_tasks:
+            with ThreadPoolExecutor(max_workers=min(3, len(fetch_tasks))) as pool:
+                futures = [pool.submit(_fetch_and_reproj, tw, ep, rec) for tw, ep, rec in fetch_tasks]
+                for fut in futures:
+                    tw, ep, res_item, exp_b = fut.result()
+                    total_bytes_transferred += exp_b
+                    if res_item is not None:
+                        raw_by_wave.setdefault(tw, {})[ep] = res_item
+                    check_job_timeout(t0)
 
-                    reproj_res = reproject_wavelength_slice(
-                        cutout_res=cutout_res,
-                        target_wcs=target_wcs,
-                        shape_out=shape_out,
-                        shared_w_min=float(rec["shared_w_min"]),
-                        shared_w_max=float(rec["shared_w_max"]),
-                        wave_interp=wave_interp,
-                        mask_transient_and_outlier=settings.mask_transient_and_outlier_flags,
-                    )
-                    raw_slices[ep] = {
-                        "record": rec,
-                        "reproj": reproj_res,
-                    }
-                except Exception as exc:
-                    logger.warning(
-                        "Failed ranged cutout or reprojection for %s (ep=%d, wave=%.1fum): %s",
-                        s3_key,
-                        ep,
-                        target_w,
-                        exc,
-                    )
-
+        for target_w in sorted(by_wave_epoch.keys()):
+            check_job_timeout(t0)
+            raw_slices = raw_by_wave.get(target_w, {})
             if len(raw_slices) < 2:
                 continue
 
@@ -410,6 +424,8 @@ def process_job(payload: dict) -> dict:
                         "valid_fraction": round(1.0 - rgb_mask_frac, 6),
                     }
 
+        elapsed_s = round(time.perf_counter() - t0, 3)
+
         # Upload WCS JSON sidecar next to every produced tile
         for tile_key in tile_urls:
             sidecar_data = build_wcs_sidecar_dict(
@@ -418,6 +434,8 @@ def process_job(payload: dict) -> dict:
                 tiles_metadata=tiles_metadata,
                 tile_metadata=tiles_metadata.get(tile_key),
             )
+            sidecar_data["job_runtime_s"] = elapsed_s
+            sidecar_data["job_bytes_transferred"] = total_bytes_transferred
             sidecar_bytes = json.dumps(sidecar_data, indent=2).encode("utf-8")
             sidecar_key = f"{subject_id}/{tile_key}.wcs.json"
             upload_tile(sidecar_bytes, sidecar_key, content_type="application/json")
