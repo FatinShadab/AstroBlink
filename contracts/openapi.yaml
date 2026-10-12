@@ -175,6 +175,12 @@ paths:
             application/json:
               schema:
                 $ref: "./schemas/consensus.yaml#/ConsensusBatchResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
         "404":
           description: Subject not found or not retired
           content:
@@ -264,6 +270,12 @@ paths:
             application/x-votable+xml:
               schema:
                 type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/error.yaml#/ErrorResponse"
         "404":
           description: No candidates match filters
           content:

@@ -19,6 +19,12 @@ FastAPI backend providing REST endpoints for the AstroBlink citizen-science plat
 
 See `contracts/openapi.yaml` for full API contract.
 
+### Consensus & Candidate Notes
+- **Category:** The `category` on a new consensus candidate reflects volunteer majority vote / suggestions.
+- **Status:** Candidates are initialized with status `new`, indicating they are unreviewed until reviewed by an astronomer via `PATCH /api/v1/candidates/{id}`.
+- **Contributing Classifiers (`n_classifications`):** Tracks the number of distinct volunteers/users who placed marks contributing to the candidate tracklet.
+
+
 ## Development (standalone)
 
 ```bash

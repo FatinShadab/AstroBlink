@@ -56,7 +56,13 @@ async def submit_classification(
         )
 
     subj_res = await db.execute(
-        text("SELECT id, epochs, classification_count, retired FROM subjects WHERE id = :id"),
+        text(
+            """
+            SELECT id, epochs, classification_count, retired, is_gold_standard, gold_expected
+            FROM subjects
+            WHERE id = :id
+            """
+        ),
         {"id": str(body.subject_id)},
     )
     subj = subj_res.mappings().first()
@@ -91,20 +97,29 @@ async def submit_classification(
     )
     if existing.first() is None:
         user_id = DEMO_USER_ID
-        reliability = 0.8
+        user_res = await db.execute(
+            text("SELECT reliability, gold_total, gold_correct FROM users WHERE id = :uid"),
+            {"uid": DEMO_USER_ID},
+        )
+        user_row = user_res.mappings().one()
+        reliability = float(user_row["reliability"])
+        gold_total = int(user_row["gold_total"])
+        gold_correct = int(user_row["gold_correct"])
     else:
         guest_res = await db.execute(
             text(
                 """
                 INSERT INTO users (display_name, role, reliability)
                 VALUES ('guest-classifier', 'volunteer', 0.8)
-                RETURNING id, reliability
+                RETURNING id, reliability, gold_total, gold_correct
                 """
             )
         )
         guest_row = guest_res.mappings().one()
         user_id = str(guest_row["id"])
         reliability = float(guest_row["reliability"])
+        gold_total = int(guest_row["gold_total"])
+        gold_correct = int(guest_row["gold_correct"])
 
     cls_res = await db.execute(
         text(
@@ -153,6 +168,40 @@ async def submit_classification(
             },
         )
 
+    # Gold standard update if applicable (ARCHITECTURE.md §4.2 step 3)
+    if bool(subj.get("is_gold_standard")) and subj.get("gold_expected") is not None:
+        gold_total += 1
+        gold_exp = subj["gold_expected"]
+        if isinstance(gold_exp, str):
+            import json
+            try:
+                gold_exp = json.loads(gold_exp)
+            except Exception:
+                gold_exp = {}
+
+        from app.services.consensus import MarkInput, compute_updated_reliability, evaluate_gold_classification
+        mark_inputs = [
+            MarkInput(user_id=user_id, epoch=m.epoch, ra_deg=m.ra, dec_deg=m.dec)
+            for m in body.marks
+        ]
+        is_hit = evaluate_gold_classification(body.category, mark_inputs, gold_exp)
+        if is_hit:
+            gold_correct += 1
+
+        new_reliability = compute_updated_reliability(gold_total, gold_correct)
+        await db.execute(
+            text(
+                """
+                UPDATE users
+                SET gold_total = :gt,
+                    gold_correct = :gc,
+                    reliability = :rel
+                WHERE id = :uid
+                """
+            ),
+            {"gt": gold_total, "gc": gold_correct, "rel": new_reliability, "uid": user_id},
+        )
+
     upd_subj = await db.execute(
         text(
             """
@@ -171,6 +220,7 @@ async def submit_classification(
         text("UPDATE users SET classification_count = classification_count + 1 WHERE id = :uid"),
         {"uid": user_id},
     )
+
     await db.commit()
 
     new_count = int(subj_after["classification_count"])

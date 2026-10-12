@@ -34,11 +34,13 @@ async def get_next_subject(db: DbSession) -> Response:
             SELECT id, ra_deg, dec_deg, size_deg, epochs, tile_urls, classification_count, retired
             FROM subjects
             WHERE retired = FALSE
+              AND cardinality(epochs) >= 2
             ORDER BY classification_count ASC, created_at ASC
             LIMIT 1
             """
         )
     )
+
     row = result.mappings().first()
     if row is None:
         return Response(status_code=204)

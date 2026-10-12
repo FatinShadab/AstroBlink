@@ -9,8 +9,9 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncGenerator
 
 import redis.asyncio as aioredis
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.routers import candidates, classify, consensus, cutouts, health, subjects
@@ -31,6 +32,27 @@ app = FastAPI(
     description="Citizen-science blink comparator for NASA's SPHEREx mission.",
     lifespan=lifespan,
 )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    if isinstance(exc.detail, dict) and "code" in exc.detail:
+        err_content = {"error": exc.detail}
+    else:
+        code = "UNAUTHORIZED" if exc.status_code == 401 else "HTTP_ERROR"
+        err_content = {
+            "error": {
+                "code": code,
+                "message": str(exc.detail),
+                "details": [],
+            }
+        }
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=err_content,
+        headers=exc.headers,
+    )
+
 
 # -- Middleware --
 app.add_middleware(
