@@ -21,12 +21,17 @@ from astropy.wcs import WCS
 import numpy as np
 
 
-def build_wcs_sidecar_dict(wcs: WCS, shape: tuple[int, int]) -> dict[str, Any]:
-    """Build the WCS sidecar dictionary structure from an Astropy WCS and image shape.
+def build_wcs_sidecar_dict(
+    wcs: WCS,
+    shape: tuple[int, int],
+    tiles_metadata: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Build the WCS sidecar dictionary structure from an Astropy WCS, image shape, and per-tile metadata.
 
     Args:
         wcs: astropy.wcs.WCS instance.
         shape: (ny, nx) image shape in pixels.
+        tiles_metadata: Optional mapping of tile key (e.g. '1_1.0um') to exposure/wavelength metadata.
 
     Returns:
         Dictionary matching the contract schema.
@@ -47,27 +52,36 @@ def build_wcs_sidecar_dict(wcs: WCS, shape: tuple[int, int]) -> dict[str, Any]:
 
     ctype = [str(wcs.wcs.ctype[0]), str(wcs.wcs.ctype[1])]
 
-    return {
+    result: dict[str, Any] = {
         "crpix": crpix,
         "crval": crval,
         "cd": cd_matrix,
         "naxis": [int(nx), int(ny)],
         "ctype": ctype,
     }
+    if tiles_metadata is not None:
+        result["tiles"] = tiles_metadata
+    return result
 
 
-def write_wcs_sidecar(wcs: WCS, shape: tuple[int, int], output_path: str) -> str:
+def write_wcs_sidecar(
+    wcs: WCS,
+    shape: tuple[int, int],
+    output_path: str,
+    tiles_metadata: dict[str, dict[str, Any]] | None = None,
+) -> str:
     """Serialize WCS metadata as a JSON sidecar file.
 
     Args:
         wcs: astropy.wcs.WCS instance.
         shape: (ny, nx) image shape.
         output_path: Destination JSON file path.
+        tiles_metadata: Optional per-tile wavelength and exposure metadata dictionary.
 
     Returns:
         output_path written.
     """
-    data = build_wcs_sidecar_dict(wcs, shape)
+    data = build_wcs_sidecar_dict(wcs, shape, tiles_metadata=tiles_metadata)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
     return output_path

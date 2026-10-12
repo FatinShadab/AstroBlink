@@ -92,6 +92,7 @@ def render_tile_image(
     mask: np.ndarray,
     fmt: str = "webp",
     quality: int = 85,
+    flagged_visible_mask: np.ndarray | None = None,
 ) -> bytes:
     """Render image data + mask to compressed image bytes under 250 KB.
 
@@ -100,6 +101,9 @@ def render_tile_image(
         mask: 2D boolean array (True = masked).
         fmt: Target image format ('webp' or 'png').
         quality: Initial compression quality (for webp).
+        flagged_visible_mask: Optional 2D boolean array for 'flagged but visible' pixels
+            (e.g. Bit 0 MP_TRANSIENT / Bit 19 MP_OUTLIER) where underlying flux is kept
+            and highlighted with a distinct semi-transparent cyan overlay.
 
     Returns:
         Encoded image bytes, guaranteed < 250 KB.
@@ -124,6 +128,15 @@ def render_tile_image(
         base_img = Image.fromarray(rgb, mode="RGB").convert("RGBA")
     else:
         raise ValueError(f"Unsupported image shape {image_data.shape}")
+
+    # Draw distinct semi-transparent cyan highlight on 'flagged but visible' pixels (keeping flux visible)
+    if flagged_visible_mask is not None and np.any(flagged_visible_mask):
+        vis_mask = flagged_visible_mask & (~mask)
+        if np.any(vis_mask):
+            tint = Image.new("RGBA", (nx, ny), (0, 220, 255, 95))
+            alpha_layer = Image.fromarray((vis_mask * 95).astype(np.uint8), mode="L")
+            tint.putalpha(alpha_layer)
+            base_img = Image.alpha_composite(base_img, tint)
 
     # Draw hatching on masked pixels
     if np.any(mask):

@@ -46,6 +46,30 @@ class Settings(BaseSettings):
     # Heartbeat file path
     heartbeat_path: str = "/tmp/heartbeat"
 
+    # Data-driven survey epoch clustering thresholds
+    # [VERIFY] Empirical gap threshold separating 6-month survey passes (~140-195 days between sweeps)
+    survey_epoch_gap_days: float = 30.0
+    # [VERIFY] Half-year survey period for Continuous Viewing Zone (CVZ) targets where observations have no 30-day gap
+    cvz_epoch_span_days: float = 182.5
+
+    # Wavelength-matched exposure selection
+    # Target wavelengths in microns (mapped to D1 ~ 1.0um, D3 ~ 2.0um, D5 ~ 4.0um)
+    target_wavelengths_um: list[float] = [1.0, 2.0, 4.0]
+    # Per-detector tolerance factor k where tol = k * (lambda / R) using R from TAP
+    wavelength_tol_k: float = 1.0
+    # Use epochs 1 and 2 only for blinking by default; set True to include epoch 3
+    include_epoch_3: bool = False
+    # [VERIFY] Maximum evenly-spaced candidate exposures per detector per epoch to inspect (~18-20 steps per LVF sweep)
+    max_candidates_per_det_epoch: int = 30
+    min_cutout_coverage: float = 0.95
+    # Deterministic tie-break threshold (um) and marginal match criteria
+    tie_break_tol_um: float = 0.002
+    marginal_err_fraction: float = 0.60
+    marginal_min_overlap_um: float = 0.01
+
+    # FLAGS masking: whether to mask Bit 0 (MP_TRANSIENT) and Bit 19 (MP_OUTLIER) (default: True / masked)
+    mask_transient_and_outlier_flags: bool = True
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",
