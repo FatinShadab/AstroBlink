@@ -331,3 +331,27 @@ Consequently, **the naive proper-motion-only claim that objects at $d \gtrsim 40
 | Target 5 | `171.25` | Hypothetical 300 AU | `1.9885` | `1.93"` (`0.31 px`) | `9.52"` (`1.55 px`) | **`1367.7"`** | `116.9"` | **`1250.7"` (`0.347°`, `203.4 px`)** | `False / False` |
 | Target 5 | `171.25` | Hypothetical 500 AU | `1.9885` | `1.15"` (`0.19 px`) | `5.75"` (`0.93 px`) | **`820.5"`** | `54.4"` | **`766.1"` (`0.213°`, `124.6 px`)** | `False / False` |
 | Target 5 | `171.25` | Hypothetical 1000 AU | `1.9885` | `0.57"` (`0.09 px`) | `2.91"` (`0.47 px`) | **`410.2"`** | `19.2"` | **`391.0"` (`0.109°`, `63.6 px`)** | `False / False` |
+
+---
+
+## 8. Confirmed W11b & W12 Pipeline Facts (Header Blocks, `0.5°` Cutout Geometry, and End-to-End Ingestion)
+
+1. **`HDU 1 (IMAGE)` Header Block Length & Full-`END` Parsing:**
+   - SPHEREx Level 2 `HDU 1 (IMAGE)` headers span `5` FITS blocks (`14,400 B`, `>144` cards). Reading only `4` blocks (`11,520 B`) truncates the tail of the `SIP` distortion polynomial (`A_*_*`, `B_*_*`, `AP_*_*`, `BP_*_*`), shifting projected cutout pixel coordinates by up to `~2.5 px` and shifting evaluated `WCS-WAVE` wavelengths by `~0.0004 µm`. Reading in `2880 B` increments until the `END` card (`_read_header_until_end`) recovers the exact `TAN-SIP` solution.
+
+2. **`0.5°` Cutout Geometry, Shared-Wavelength Masking, and Parallax Containment:**
+   - At `size_deg = 0.5` (`1800" × 1800"` box, `900"` half-width from tile center), native `6.15"/px` TAN projection yields a `293 × 293 px` (`85,849 px`) output grid.
+   - Across `0.5°`, the SPHEREx Linear Variable Filter (LVF) gradient spans `0.068–0.088 µm` (`D1`, `1.0 µm`), `0.130–0.165 µm` (`D3`, `2.0 µm`), and `0.110–0.158 µm` (`D5`, `4.0 µm`).
+   - Enforcing the per-pixel shared-wavelength intersection mask (`apply_shared_wavelength_mask`) retains `14.29%–31.46%` of the `293 × 293` grid per narrow slice (and `5.01%–12.11%` on the 3-band RGB composite intersection), ensuring every unmasked pixel compares identical spectral bandpasses across Epoch 1 and Epoch 2.
+   - **Parallax & Proper Motion Containment in a `0.5°` (`900"` half-width) Tile:**
+     - **$1000\text{ AU}$ (`387.5"–407.8"` over 6 months):** Stays **inside** the `0.5°` tile across all 5 targets (`5/5`).
+     - **$500\text{ AU}$ (`756.9"–835.1"` over 6 months):** Stays **inside** the `0.5°` tile across all 5 targets (`5/5`).
+     - **$300\text{ AU}$ (`1231.6"–1423.9"` over 6 months):** Exceeds `900"` (`0/5` stay inside if starting at tile center; requires `size_deg >= 0.8°` or intra-epoch blinking).
+
+3. **Verified End-to-End W12 Redis Ingestion (`size_deg = 0.5`, Epochs 1 & 2, Native `293 × 293 px`):**
+   - Verified via live Redis job consumption (`astroblink:ingest_jobs`) on `ab-worker`:
+     - **Target 1 (`RA=15.0°, Dec=-20.0°`):** Subject `49a0816f-f681-4ac9-aa38-d21960625a21`, `epochs=[1, 2]`, `8` tiles (`1_1.0um`, `1_2.0um`, `1_4.0um`, `1_rgb`, `2_1.0um`, `2_2.0um`, `2_4.0um`, `2_rgb`), `20.20–28.84 KB`/tile (`191.60 KB` total WebP), `mask_fraction=0.8409`, `59,631,168 B` transferred via S3 ranged reads in `89.13 s`.
+     - **Target 3 (`RA=180.0°, Dec=0.0°`):** Subject `df527171-42ea-4d60-8736-7b6fdb17395d`, `epochs=[1, 2]`, `8` tiles, `21.68–23.85 KB`/tile (`179.46 KB` total WebP), `mask_fraction=0.8589`, `59,973,888 B` transferred via S3 ranged reads in `135.95 s`.
+     - **Target 4 (`RA=45.0°, Dec=-45.0°`):** Subject `d1cdf6e8-bb8a-4817-8e3c-b0ca8c8da892`, `epochs=[1, 2]`, `8` tiles, `21.23–30.60 KB`/tile (`201.40 KB` total WebP), `mask_fraction=0.8216`, `62,054,688 B` transferred via S3 ranged reads in `96.37 s`.
+   - **Peak Container Memory (`docker stats` on `ab-worker-worker-1` during `0.5°` job):** `175.5–199.0 MiB` (`< 2.6%` of 7.757 GiB limit).
+
