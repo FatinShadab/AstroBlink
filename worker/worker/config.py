@@ -67,8 +67,17 @@ class Settings(BaseSettings):
     marginal_err_fraction: float = 0.60
     marginal_min_overlap_um: float = 0.01
 
+    # Default cutout angular size in degrees (W12 assumed design: 0.5 deg at native 6.15"/px)
+    default_size_deg: float = 0.5
+
     # FLAGS masking: whether to mask Bit 0 (MP_TRANSIENT) and Bit 19 (MP_OUTLIER) (default: True / masked)
     mask_transient_and_outlier_flags: bool = True
+
+    # S3 ranged read & runtime settings
+    s3_connect_timeout: int = 10
+    s3_read_timeout: int = 30
+    s3_max_retries: int = 4
+    s3_parallel_threads: int = 6
 
     model_config = {
         "env_file": ".env",

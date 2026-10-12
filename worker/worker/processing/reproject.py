@@ -32,7 +32,13 @@ import numpy as np
 from reproject import reproject_interp
 
 from worker.processing.binning import get_band_pixels
-from worker.processing.masking import apply_airglow_mask, apply_flags_mask, combine_masks
+from worker.processing.masking import (
+    apply_airglow_mask,
+    apply_flags_mask,
+    apply_shared_wavelength_mask,
+    combine_masks,
+    extract_transient_outlier_overlay,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -190,3 +196,119 @@ def reproject_and_coadd(
     mask = ~has_data
 
     return coadd, mask
+
+
+def reproject_wavelength_slice(
+    cutout_res: dict[str, Any],
+    target_wcs: WCS,
+    shape_out: tuple[int, int],
+    shared_w_min: float,
+    shared_w_max: float,
+    wave_interp: Any | None = None,
+    mask_transient_and_outlier: bool | None = None,
+) -> dict[str, Any]:
+    """Reproject a ranged exposure cutout onto target_wcs and apply the per-pixel shared-wavelength mask.
+
+    Args:
+        cutout_res: Dict returned by `fetch_ranged_cutout` ('image_cutout', 'flags_cutout',
+            'variance_cutout', 'image_header', 'bbox').
+        target_wcs: Target TAN WCS grid.
+        shape_out: (ny, nx) dimensions of the target grid.
+        shared_w_min: Lower bound of shared wavelength interval (um) across matched epochs.
+        shared_w_max: Upper bound of shared wavelength interval (um) across matched epochs.
+        wave_interp: 2D RegularGridInterpolator mapping (y_1based, x_1based) -> wavelength_um.
+            If None, looks for 'wavelength_cutout' in `cutout_res`.
+        mask_transient_and_outlier: Optional override for masking Bits 0 and 19.
+
+    Returns:
+        Dictionary containing:
+        - 'image': 2D float32 array on target grid (np.nan where masked)
+        - 'mask': 2D bool array on target grid (True = masked)
+        - 'wavelength_map': 2D float64 array of wavelengths on target grid
+        - 'cutout_w_min': float (min wavelength on target grid before shared clip)
+        - 'cutout_w_max': float (max wavelength on target grid before shared clip)
+        - 'mask_fraction': float (fraction of masked pixels in [0.0, 1.0])
+        - 'valid_fraction': float (fraction of valid pixels in [0.0, 1.0])
+    """
+    img_cut = np.asarray(cutout_res["image_cutout"], dtype=np.float32)
+    flg_cut = np.asarray(cutout_res["flags_cutout"], dtype=np.uint32)
+    var_cut = np.asarray(cutout_res["variance_cutout"], dtype=np.float32)
+    img_hdr = cutout_res["image_header"]
+    bbox = cutout_res["bbox"]
+    x0, x1, y0, y1 = int(bbox["x0"]), int(bbox["x1"]), int(bbox["y0"]), int(bbox["y1"])
+    nx_det, ny_det = int(bbox["nx"]), int(bbox["ny"])
+
+    wcs_in = WCS(img_hdr)
+
+    # Evaluate native cutout wavelength map and target-grid wavelength map
+    if wave_interp is not None:
+        ny_g, nx_g = np.meshgrid(
+            np.arange(y0, y1, dtype=np.float64) + 1.0,
+            np.arange(x0, x1, dtype=np.float64) + 1.0,
+            indexing="ij",
+        )
+        w_native = np.asarray(wave_interp((ny_g, nx_g)), dtype=np.float64)
+
+        ty_g, tx_g = np.meshgrid(
+            np.arange(shape_out[0], dtype=np.float64),
+            np.arange(shape_out[1], dtype=np.float64),
+            indexing="ij",
+        )
+        sky_ra, sky_dec = target_wcs.pixel_to_world_values(tx_g, ty_g)
+        px_det, py_det = wcs_in.world_to_pixel_values(sky_ra, sky_dec)
+        in_det = (px_det >= 0) & (px_det < nx_det) & (py_det >= 0) & (py_det < ny_det)
+        w_target = np.full(shape_out, np.nan, dtype=np.float64)
+        if np.any(in_det):
+            w_target[in_det] = wave_interp((py_det[in_det] + 1.0, px_det[in_det] + 1.0))
+    elif "wavelength_cutout" in cutout_res:
+        w_native = np.asarray(cutout_res["wavelength_cutout"], dtype=np.float64)
+        full_w = np.full((ny_det, nx_det), np.nan, dtype=np.float32)
+        full_w[y0:y1, x0:x1] = w_native.astype(np.float32)
+        reproj_w, _ = reproject_interp((full_w, wcs_in), target_wcs, shape_out=shape_out)
+        w_target = np.asarray(reproj_w, dtype=np.float64)
+    else:
+        raise ValueError("Either wave_interp or cutout_res['wavelength_cutout'] must be provided")
+
+    finite_wt = w_target[np.isfinite(w_target)]
+    cutout_w_min = float(np.min(finite_wt)) if finite_wt.size > 0 else float("nan")
+    cutout_w_max = float(np.max(finite_wt)) if finite_wt.size > 0 else float("nan")
+
+    # Apply native defect flags, airglow mask, and variance sanity check
+    flags_m = apply_flags_mask(flg_cut, mask_transient_and_outlier=mask_transient_and_outlier)
+    airglow_m = apply_airglow_mask(w_native)
+    bad_native = (
+        combine_masks(flags_m, airglow_m)
+        | (~np.isfinite(img_cut))
+        | (~np.isfinite(var_cut))
+        | (var_cut <= 1e-12)
+    )
+
+    clean_cut = img_cut.copy()
+    clean_cut[bad_native] = np.nan
+
+    full_img = np.full((ny_det, nx_det), np.nan, dtype=np.float32)
+    full_img[y0:y1, x0:x1] = clean_cut
+
+    reproj_img, _ = reproject_interp((full_img, wcs_in), target_wcs, shape_out=shape_out)
+    reproj_img = np.asarray(reproj_img, dtype=np.float32)
+
+    # Apply per-pixel shared-wavelength mask on the target grid
+    sh_mask = apply_shared_wavelength_mask(w_target, shared_w_min, shared_w_max)
+    reproj_img[sh_mask] = np.nan
+
+    final_mask = ~np.isfinite(reproj_img)
+    total_px = int(final_mask.size)
+    masked_px = int(np.sum(final_mask))
+    mask_fraction = float(masked_px) / float(total_px) if total_px > 0 else 1.0
+    valid_fraction = 1.0 - mask_fraction
+
+    return {
+        "image": reproj_img,
+        "mask": final_mask,
+        "wavelength_map": w_target,
+        "cutout_w_min": cutout_w_min,
+        "cutout_w_max": cutout_w_max,
+        "mask_fraction": mask_fraction,
+        "valid_fraction": valid_fraction,
+    }
+

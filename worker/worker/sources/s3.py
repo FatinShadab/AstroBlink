@@ -306,6 +306,52 @@ def fetch_ranged_cutout(
     }
 
 
+def fetch_wcs_wave_interpolator(
+    key: str,
+    s3_client: Any | None = None,
+    max_retries: int = 4,
+    backoff_base: float = 1.0,
+) -> tuple[Any, int]:
+    """Fetch HDU 6 (WCS-WAVE binary table) from the tail of the S3 FITS file via Range GET
+    and return a 2D RegularGridInterpolator mapping (y_1based, x_1based) -> wavelength_um,
+    along with the number of bytes transferred.
+    """
+    from scipy.interpolate import RegularGridInterpolator
+
+    s3 = s3_client or get_spherex_s3_client(max_retries=max_retries)
+    bucket = settings.spherex_s3_bucket
+    last_exc: Exception | None = None
+    tail_bytes: bytes = b""
+    for attempt in range(max_retries + 1):
+        try:
+            resp = s3.get_object(Bucket=bucket, Key=key, Range="bytes=-11520")
+            tail_bytes = resp["Body"].read()
+            break
+        except Exception as exc:
+            last_exc = exc
+            if attempt >= max_retries:
+                raise RuntimeError(f"Failed WCS-WAVE tail read for {key} after {max_retries} retries") from last_exc
+            time.sleep(backoff_base * (2**attempt))
+
+    idx_wave = tail_bytes.find(b"XTENSION= 'BINTABLE'")
+    if idx_wave < 0:
+        raise ValueError(f"WCS-WAVE BINTABLE extension not found in tail of {key}")
+
+    hdu_wave = fits.BinTableHDU.fromstring(tail_bytes[idx_wave : idx_wave + 2880 * 2])
+    wt = hdu_wave.data
+    x_knots = np.squeeze(wt["X"]).astype(np.float64)
+    y_knots = np.squeeze(wt["Y"]).astype(np.float64)
+    wave_grid = np.squeeze(wt["VALUES"])[:, :, 0].astype(np.float64)
+    interp = RegularGridInterpolator(
+        (y_knots, x_knots),
+        wave_grid,
+        method="linear",
+        bounds_error=False,
+        fill_value=None,
+    )
+    return interp, len(tail_bytes)
+
+
 def list_level2_exposures(prefix: str = "qr2/level2/", max_keys: int = 100) -> list[dict[str, Any]]:
     """List Level 2 FITS file keys under the given prefix.
 
@@ -372,14 +418,9 @@ def find_candidate_files(
 
 
 def download_fits(key: str, local_path: str) -> str:
-    """Download a FITS file from SPHEREx S3 to local scratch.
+    """[DEPRECATED] Download a full 71.6 MB FITS file from SPHEREx S3 to local scratch.
 
-    Args:
-        key: S3 object key.
-        local_path: Destination path on local filesystem.
-
-    Returns:
-        The local path of the downloaded file.
+    Deprecated in W12 in favor of `fetch_ranged_cutout` (boto3 row-strip reads).
     """
     os.makedirs(os.path.dirname(os.path.abspath(local_path)), exist_ok=True)
     s3 = get_spherex_s3_client()
@@ -395,15 +436,10 @@ def fetch_fits_to_scratch(
     size_deg: float = 0.1,
     scratch_dir: str | None = None,
 ) -> Generator[str, None, None]:
-    """Fetch a SPHEREx Level 2 FITS file into scratch space, with automatic cleanup.
+    """[DEPRECATED] Fetch a SPHEREx Level 2 FITS file into scratch space, with automatic cleanup.
 
-    Attempt strategy:
-    1. Prefer IRSA Cutout Service when available and coordinates are provided.
-    2. Fall back to downloading the full Level 2 file from anonymous S3.
-    3. Guarantees scratch cleanup on context exit.
-
-    Yields:
-        Local filesystem path to the FITS file.
+    Deprecated in W12: production ingestion uses `fetch_ranged_cutout` (boto3 row-strip Range GETs).
+    Retained for backward compatibility and scratch-cleanup unit tests.
     """
     base_scratch = scratch_dir or settings.fits_scratch_dir
     os.makedirs(base_scratch, exist_ok=True)
