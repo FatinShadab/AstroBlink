@@ -310,13 +310,25 @@ def find_exposures_at_position(
         "QUERY": adql_query.strip(),
     }
     encoded = urllib.parse.urlencode(params)
-    req = urllib.request.Request(f"{IRSA_TAP_SYNC_URL}?{encoded}")
+    tap_url = f"{IRSA_TAP_SYNC_URL}?{encoded}"
 
-    try:
-        with urllib.request.urlopen(req, timeout=timeout_sec) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except Exception as exc:
-        logger.warning("IRSA TAP spatial query failed: %s", exc)
+    import time
+
+    data = None
+    max_tap_retries = settings.tap_max_retries
+    for attempt in range(max_tap_retries + 1):
+        try:
+            req = urllib.request.Request(tap_url)
+            with urllib.request.urlopen(req, timeout=timeout_sec) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            break
+        except Exception as exc:
+            if attempt >= max_tap_retries:
+                logger.warning("IRSA TAP spatial query failed after %d retries: %s", max_tap_retries, exc)
+                return {}
+            time.sleep(1.0 * (2**attempt))
+
+    if data is None:
         return {}
 
     resources = data.get("VOTABLE", {}).get("RESOURCE_ARRAY", [])
@@ -393,7 +405,13 @@ def find_exposures_at_position(
         s3_client = boto3.client(
             "s3",
             region_name=settings.spherex_s3_region,
-            config=Config(signature_version=UNSIGNED, max_pool_connections=25),
+            config=Config(
+                signature_version=UNSIGNED,
+                connect_timeout=settings.s3_connect_timeout,
+                read_timeout=settings.s3_read_timeout,
+                retries={"max_attempts": settings.s3_max_retries + 1, "mode": "standard"},
+                max_pool_connections=25,
+            ),
         )
 
     def _inspect_one(item: dict[str, Any]) -> dict[str, Any] | None:

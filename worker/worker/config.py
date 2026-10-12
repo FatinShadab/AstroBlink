@@ -73,11 +73,15 @@ class Settings(BaseSettings):
     # FLAGS masking: whether to mask Bit 0 (MP_TRANSIENT) and Bit 19 (MP_OUTLIER) (default: True / masked)
     mask_transient_and_outlier_flags: bool = True
 
-    # S3 ranged read & runtime settings
+    # S3 ranged read & runtime limits
     s3_connect_timeout: int = 10
     s3_read_timeout: int = 30
     s3_max_retries: int = 4
     s3_parallel_threads: int = 6
+    tap_timeout_sec: float = 30.0
+    tap_max_retries: int = 3
+    max_scratch_bytes: int = 500 * 1024 * 1024  # 500 MiB total scratch budget
+    job_timeout_sec: float = 180.0  # Per-job execution time cap in seconds
 
     model_config = {
         "env_file": ".env",

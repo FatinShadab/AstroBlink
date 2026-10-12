@@ -233,3 +233,43 @@ def test_process_job_partial_slices_no_rgb_and_dedup():
         assert dedup_res["status"] == "deduped"
         assert dedup_res["subject_id"] == "existing-uuid"
 
+
+def test_scratch_budget_enforcement():
+    """Verify enforce_scratch_budget raises RuntimeError when total scratch usage exceeds max_bytes."""
+    import os
+    import tempfile
+    import pytest
+    from worker.sources.s3 import enforce_scratch_budget
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        f1 = os.path.join(tmpdir, "chunk1.bin")
+        with open(f1, "wb") as f:
+            f.write(b"x" * 1024)
+
+        # Within 2048 B budget -> returns current usage (1024 B)
+        used = enforce_scratch_budget(required_bytes=512, scratch_dir=tmpdir, max_bytes=2048)
+        assert used == 1024
+
+        # Exceeds 2048 B budget -> raises RuntimeError
+        with pytest.raises(RuntimeError, match="Scratch budget exceeded"):
+            enforce_scratch_budget(required_bytes=1500, scratch_dir=tmpdir, max_bytes=2048)
+
+
+def test_job_timeout_cap():
+    """Verify process_job aborts and inserts no subject when per-job time cap is exceeded."""
+    mock_conn = MagicMock()
+    with patch("worker.main.get_db_connection", return_value=mock_conn), patch(
+        "worker.main.find_existing_subject_nearby", return_value=None
+    ), patch("worker.main.settings.job_timeout_sec", 0.001), patch(
+        "worker.main.find_candidate_files",
+        side_effect=lambda *a, **kw: (__import__("time").sleep(0.02) or {1: [], 2: []}),
+    ), patch("worker.main.insert_subject") as mock_insert, patch(
+        "worker.main.update_job_status"
+    ) as mock_update:
+        res = process_job({"job_id": "55555555-6666-7777-8888-999999999999", "ra": 15.0, "dec": -20.0})
+        assert res["status"] == "failed"
+        assert "exceeded per-job time cap" in res["reason"]
+        mock_insert.assert_not_called()
+        mock_update.assert_called()
+
+

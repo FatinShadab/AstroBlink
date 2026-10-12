@@ -51,6 +51,7 @@ from worker.processing.reproject import (
 from worker.render.tiles import render_tile_image, upload_tile
 from worker.render.wcs_sidecar import build_wcs_sidecar_dict
 from worker.sources.s3 import (
+    enforce_scratch_budget,
     fetch_ranged_cutout,
     fetch_wcs_wave_interpolator,
     find_candidate_files,
@@ -83,6 +84,14 @@ def _handle_signal(signum: int, _frame: object) -> None:
     _shutdown.set()
 
 
+def check_job_timeout(t0: float, timeout_sec: float | None = None) -> None:
+    """Raise TimeoutError if the elapsed job execution time exceeds the per-job time cap."""
+    cap = timeout_sec if timeout_sec is not None else settings.job_timeout_sec
+    elapsed = time.perf_counter() - t0
+    if elapsed > cap:
+        raise TimeoutError(f"Job exceeded per-job time cap ({elapsed:.2f}s > {cap:.2f}s)")
+
+
 def process_job(payload: dict) -> dict:
     """Process a single ingestion job end-to-end using wavelength-matched ranged cutouts.
 
@@ -104,6 +113,10 @@ def process_job(payload: dict) -> dict:
     conn = get_db_connection()
     try:
         update_job_status(conn, job_id, "running")
+
+        # Enforce total scratch directory budget and per-job time cap
+        enforce_scratch_budget()
+        check_job_timeout(t0)
 
         # Step 1: Idempotency check before heavy work (within 1 arcsecond via pgSphere)
         existing = find_existing_subject_nearby(conn, ra, dec)
@@ -138,6 +151,7 @@ def process_job(payload: dict) -> dict:
             include_epoch_3=settings.include_epoch_3,
             max_candidates_per_det_epoch=settings.max_candidates_per_det_epoch,
         )
+        check_job_timeout(t0)
         discovered_epochs = sorted(candidates_by_epoch.keys())
         if len(discovered_epochs) < 2:
             reason = f"fewer_than_2_matched_epochs: found {len(discovered_epochs)} matched epochs ({discovered_epochs})"
@@ -177,12 +191,14 @@ def process_job(payload: dict) -> dict:
 
         # Step 4: Fetch ranged cutouts and reproject with per-pixel shared-wavelength mask
         for target_w in sorted(by_wave_epoch.keys()):
+            check_job_timeout(t0)
             ep_records = by_wave_epoch[target_w]
             if len(ep_records) < 2:
                 continue
 
             raw_slices: dict[int, dict] = {}
             for ep in sorted(ep_records.keys()):
+                check_job_timeout(t0)
                 rec = ep_records[ep]
                 s3_key = rec["s3_key"]
                 try:

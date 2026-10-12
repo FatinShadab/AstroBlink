@@ -417,6 +417,42 @@ def find_candidate_files(
     return {}
 
 
+def get_scratch_usage_bytes(scratch_dir: str | None = None) -> int:
+    """Calculate total bytes currently used inside the scratch directory."""
+    base_scratch = scratch_dir or settings.fits_scratch_dir
+    if not os.path.exists(base_scratch):
+        return 0
+    total = 0
+    for root, _dirs, files in os.walk(base_scratch):
+        for fname in files:
+            fpath = os.path.join(root, fname)
+            try:
+                total += os.path.getsize(fpath)
+            except OSError:
+                pass
+    return total
+
+
+def enforce_scratch_budget(
+    required_bytes: int = 0,
+    scratch_dir: str | None = None,
+    max_bytes: int | None = None,
+) -> int:
+    """Enforce total scratch directory budget (default 500 MiB).
+
+    Returns current scratch usage in bytes, or raises RuntimeError if budget is exceeded.
+    """
+    base_scratch = scratch_dir or settings.fits_scratch_dir
+    budget = max_bytes if max_bytes is not None else settings.max_scratch_bytes
+    os.makedirs(base_scratch, exist_ok=True)
+    current = get_scratch_usage_bytes(base_scratch)
+    if current + required_bytes > budget:
+        raise RuntimeError(
+            f"Scratch budget exceeded in {base_scratch}: used={current} B + required={required_bytes} B > max={budget} B"
+        )
+    return current
+
+
 def download_fits(key: str, local_path: str) -> str:
     """[DEPRECATED] Download a full 71.6 MB FITS file from SPHEREx S3 to local scratch.
 
@@ -442,7 +478,7 @@ def fetch_fits_to_scratch(
     Retained for backward compatibility and scratch-cleanup unit tests.
     """
     base_scratch = scratch_dir or settings.fits_scratch_dir
-    os.makedirs(base_scratch, exist_ok=True)
+    enforce_scratch_budget(required_bytes=SPHEREX_FILE_BYTES, scratch_dir=base_scratch)
     temp_dir = tempfile.mkdtemp(dir=base_scratch, prefix="spx_job_")
     filename = os.path.basename(key)
     dest_path = os.path.join(temp_dir, filename)
@@ -468,3 +504,4 @@ def fetch_fits_to_scratch(
         # Guarantee cleanup after use
         shutil.rmtree(temp_dir, ignore_errors=True)
         logger.debug("Cleaned up scratch directory: %s", temp_dir)
+
