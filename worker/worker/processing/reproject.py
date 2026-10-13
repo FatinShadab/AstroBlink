@@ -202,20 +202,20 @@ def reproject_wavelength_slice(
     cutout_res: dict[str, Any],
     target_wcs: WCS,
     shape_out: tuple[int, int],
-    shared_w_min: float,
-    shared_w_max: float,
+    shared_w_min: float | None = None,
+    shared_w_max: float | None = None,
     wave_interp: Any | None = None,
     mask_transient_and_outlier: bool | None = None,
 ) -> dict[str, Any]:
-    """Reproject a ranged exposure cutout onto target_wcs and apply the per-pixel shared-wavelength mask.
+    """Reproject a ranged exposure cutout onto target_wcs and optionally apply the shared-wavelength mask.
 
     Args:
         cutout_res: Dict returned by `fetch_ranged_cutout` ('image_cutout', 'flags_cutout',
             'variance_cutout', 'image_header', 'bbox').
         target_wcs: Target TAN WCS grid.
         shape_out: (ny, nx) dimensions of the target grid.
-        shared_w_min: Lower bound of shared wavelength interval (um) across matched epochs.
-        shared_w_max: Upper bound of shared wavelength interval (um) across matched epochs.
+        shared_w_min: Optional lower bound of shared wavelength interval (um) across matched epochs.
+        shared_w_max: Optional upper bound of shared wavelength interval (um) across matched epochs.
         wave_interp: 2D RegularGridInterpolator mapping (y_1based, x_1based) -> wavelength_um.
             If None, looks for 'wavelength_cutout' in `cutout_res`.
         mask_transient_and_outlier: Optional override for masking Bits 0 and 19.
@@ -298,9 +298,10 @@ def reproject_wavelength_slice(
     if np.any(in_det):
         reproj_img[in_det] = img_rgi((py_det[in_det], px_det[in_det])).astype(np.float32)
 
-    # Apply per-pixel shared-wavelength mask on the target grid
-    sh_mask = apply_shared_wavelength_mask(w_target, shared_w_min, shared_w_max)
-    reproj_img[sh_mask] = np.nan
+    # Apply per-pixel shared-wavelength mask on the target grid if bounds are provided
+    if shared_w_min is not None and shared_w_max is not None:
+        sh_mask = apply_shared_wavelength_mask(w_target, shared_w_min, shared_w_max)
+        reproj_img[sh_mask] = np.nan
 
     final_mask = ~np.isfinite(reproj_img)
     total_px = int(final_mask.size)

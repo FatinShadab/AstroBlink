@@ -222,8 +222,8 @@ def process_job(payload: dict) -> dict:
                     cutout_res=cutout_res,
                     target_wcs=target_wcs,
                     shape_out=shape_out,
-                    shared_w_min=float(rec["shared_w_min"]),
-                    shared_w_max=float(rec["shared_w_max"]),
+                    shared_w_min=None,
+                    shared_w_max=None,
                     wave_interp=wave_interp,
                     mask_transient_and_outlier=settings.mask_transient_and_outlier_flags,
                 )

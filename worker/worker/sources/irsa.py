@@ -490,9 +490,15 @@ def find_exposures_at_position(
                 else None
             )
             best_copy = dict(best)
+            if float(size_deg) > core_size_deg:
+                wide_res = fetch_cutout_wavelength_range(
+                    s3_client, settings.spherex_s3_bucket, best["s3_key"], ra, dec, size_deg=float(size_deg)
+                )
+                if wide_res is not None:
+                    best_copy["w_min"], best_copy["w_max"], _ = wide_res
             best_copy["target_wavelength_um"] = target_w
-            best_copy["wavelength_min_um"] = best["w_min"]
-            best_copy["wavelength_max_um"] = best["w_max"]
+            best_copy["wavelength_min_um"] = best_copy["w_min"]
+            best_copy["wavelength_max_um"] = best_copy["w_max"]
             best_copy["observation_mjd"] = obs_mjd
             best_copy["observation_date_utc"] = obs_date_utc
             best_copy["exposure_filename"] = os.path.basename(best["s3_key"])

@@ -273,3 +273,61 @@ def test_job_timeout_cap():
         mock_update.assert_called()
 
 
+def test_half_degree_target_grid_coverage_before_wavelength_and_flags_masks():
+    """W13 Item 3: For a synthetic WCS, a 0.5 deg target grid must be >= 95% covered before wavelength/FLAGS masks."""
+    from worker.processing.reproject import build_target_wcs, reproject_wavelength_slice
+    from worker.sources.s3 import compute_cutout_bbox
+
+    ra, dec, size_deg = 15.0, -20.0, 0.5
+    # Synthetic rotated TAN-SIP WCS with non-zero SIP distortion coefficients
+    hdr = _make_mock_img_header(ra=ra + 0.15, dec=dec - 0.12)
+    hdr["CTYPE1"] = "RA---TAN-SIP"
+    hdr["CTYPE2"] = "DEC--TAN-SIP"
+    angle = np.radians(25.0)
+    scale = 6.15 / 3600.0
+    hdr["CD1_1"] = -scale * float(np.cos(angle))
+    hdr["CD1_2"] = scale * float(np.sin(angle))
+    hdr["CD2_1"] = scale * float(np.sin(angle))
+    hdr["CD2_2"] = scale * float(np.cos(angle))
+    hdr["A_ORDER"] = 2
+    hdr["A_0_2"] = 1.5e-5
+    hdr["A_2_0"] = -1.2e-5
+    hdr["B_ORDER"] = 2
+    hdr["B_0_2"] = -2.0e-5
+    hdr["B_2_0"] = 1.8e-5
+    hdr["AP_ORDER"] = 2
+    hdr["AP_0_2"] = -1.5e-5
+    hdr["AP_2_0"] = 1.2e-5
+    hdr["BP_ORDER"] = 2
+    hdr["BP_0_2"] = 2.0e-5
+    hdr["BP_2_0"] = -1.8e-5
+
+    bbox = compute_cutout_bbox(hdr, ra=ra, dec=dec, size_deg=size_deg, margin=8)
+    ny_cut = bbox["y1"] - bbox["y0"]
+    nx_cut = bbox["x1"] - bbox["x0"]
+
+    target_wcs, shape_out = build_target_wcs(ra, dec, size_deg=size_deg)
+    assert shape_out == (293, 293)
+
+    # Linearly varying wavelength across cutout [0.95, 1.03] um
+    w_cut = np.linspace(0.95, 1.03, ny_cut * nx_cut, dtype=np.float32).reshape(ny_cut, nx_cut)
+    cutout_res = {
+        "image_cutout": np.full((ny_cut, nx_cut), 42.0, dtype=np.float32),
+        "flags_cutout": np.zeros((ny_cut, nx_cut), dtype=np.uint32),
+        "variance_cutout": np.ones((ny_cut, nx_cut), dtype=np.float32),
+        "wavelength_cutout": w_cut,
+        "image_header": hdr,
+        "bbox": bbox,
+    }
+
+    reproj = reproject_wavelength_slice(
+        cutout_res=cutout_res,
+        target_wcs=target_wcs,
+        shape_out=shape_out,
+        shared_w_min=None,
+        shared_w_max=None,
+    )
+    assert reproj["valid_fraction"] >= 0.95
+
+
+

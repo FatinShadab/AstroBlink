@@ -116,25 +116,51 @@ def compute_cutout_bbox(
 ) -> dict[str, Any]:
     """Compute the native detector bounding box [x0:x1, y0:y1] for a sky cutout.
 
-    Projects the 4 sky corners (and center) of the North-up `size_deg x size_deg` square
-    through the exposure's full TAN-SIP WCS into native detector coordinates, then pads
-    by `margin` pixels on each edge and clips to [0, NAXIS1] x [0, NAXIS2].
+    Projects the boundary and center of the North-up `size_deg x size_deg` target TAN
+    WCS grid through the exposure's full TAN-SIP WCS (`world_to_pixel_values`, including
+    SIP distortion polynomials) into native detector coordinates, then pads by `margin`
+    pixels on each edge and clips to [0, NAXIS1] x [0, NAXIS2].
     """
+    from worker.processing.reproject import build_target_wcs
+
     w = WCS(img_hdr)
     nx = int(img_hdr.get("NAXIS1", 2040))
     ny = int(img_hdr.get("NAXIS2", 2040))
-    half = size_deg / 2.0
-    cos_dec = max(float(np.cos(np.radians(dec))), 0.05)
-    dra = half / cos_dec
 
-    corners_ra = [ra - dra, ra + dra, ra + dra, ra - dra, ra]
-    corners_dec = [dec - half, dec - half, dec + half, dec + half, dec]
-    px, py = w.wcs_world2pix(corners_ra, corners_dec, 0)
+    target_wcs, shape_out = build_target_wcs(ra, dec, size_deg=size_deg)
+    th, tw = int(shape_out[0]), int(shape_out[1])
 
-    raw_xmin = float(np.min(px[:4]))
-    raw_xmax = float(np.max(px[:4]))
-    raw_ymin = float(np.min(py[:4]))
-    raw_ymax = float(np.max(py[:4]))
+    # Sample target grid perimeter + center so curved SIP distortion is fully bounded
+    n_edge = max(17, min(65, max(th, tw)))
+    tx_edge = np.linspace(0.0, float(tw - 1), n_edge, dtype=np.float64)
+    ty_edge = np.linspace(0.0, float(th - 1), n_edge, dtype=np.float64)
+    bx = np.concatenate([
+        np.array([0.0, float(tw - 1), float(tw - 1), 0.0, (tw - 1) / 2.0], dtype=np.float64),
+        tx_edge,
+        tx_edge,
+        np.zeros_like(ty_edge),
+        np.full_like(ty_edge, float(tw - 1)),
+    ])
+    by = np.concatenate([
+        np.array([0.0, 0.0, float(th - 1), float(th - 1), (th - 1) / 2.0], dtype=np.float64),
+        np.zeros_like(tx_edge),
+        np.full_like(tx_edge, float(th - 1)),
+        ty_edge,
+        ty_edge,
+    ])
+
+    sky_ra, sky_dec = target_wcs.pixel_to_world_values(bx, by)
+    px, py = w.world_to_pixel_values(sky_ra, sky_dec)
+
+    finite = np.isfinite(px) & np.isfinite(py)
+    if not np.any(finite):
+        px, py = w.wcs_world2pix(sky_ra, sky_dec, 0)
+        finite = np.isfinite(px) & np.isfinite(py)
+
+    raw_xmin = float(np.min(px[finite]))
+    raw_xmax = float(np.max(px[finite]))
+    raw_ymin = float(np.min(py[finite]))
+    raw_ymax = float(np.max(py[finite]))
 
     x0 = max(0, int(np.floor(raw_xmin)) - margin)
     x1 = min(nx, int(np.ceil(raw_xmax)) + margin + 1)
