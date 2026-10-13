@@ -1,5 +1,7 @@
 # 🔭 AstroBlink
 
+> For a comprehensive audit and developer handoff, see [audit/README.md](audit/README.md).
+
 **A citizen-science blink comparator for NASA's SPHEREx mission — spot the next Pluto.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
