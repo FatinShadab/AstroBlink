@@ -442,3 +442,36 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 The test stack `ab-audit` was destroyed with volumes purged cleanly, and no changes were made to root configuration or production state.
+
+---
+
+## 8. Post-Audit Remediation: Push Unpushed Git Artifacts (Executed 2026-10-13)
+
+### 8.1 Push Branch `feat/api-consensus` and Milestone Tags
+```powershell
+# Command:
+git push origin feat/api-consensus; git push origin scaffold-v0 scaffold-v1
+# Output:
+remote: Create a pull request for 'feat/api-consensus' on GitHub by visiting:
+remote:      https://github.com/FatinShadab/AstroBlink/pull/new/feat/api-consensus
+To https://github.com/FatinShadab/AstroBlink.git
+ * [new branch]      feat/api-consensus -> feat/api-consensus
+To https://github.com/FatinShadab/AstroBlink.git
+ * [new tag]         scaffold-v0 -> scaffold-v0
+ * [new tag]         scaffold-v1 -> scaffold-v1
+```
+
+### 8.2 Verify Remote Synchronization (`git ls-remote origin`)
+```powershell
+# Command:
+git ls-remote origin
+# Output:
+6d54bf125f6920e359eac1b7b1c7e621a7a65b2b	HEAD
+f9f39cab3b653dacc5a3b66ce7ef323442caeaa3	refs/heads/feat/api-consensus
+f8b4fd34abac16879585bec4737dc340d91bfe99	refs/heads/feat/worker-ingestion
+6d54bf125f6920e359eac1b7b1c7e621a7a65b2b	refs/heads/main
+370c8b6ff4f82134ee4797bc1ab30ac1e7ab1ba2	refs/tags/scaffold-v0
+7497625e6185bce15b4bff492c35e55084f011e7	refs/tags/scaffold-v1
+cc3999120f9da1b88125c3a3797dad5d3282415c	refs/tags/scaffold-v3
+```
+

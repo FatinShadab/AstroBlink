@@ -37,19 +37,19 @@
   - Full suite of unit and contract validation tests passing on API [VERIFIED: `api/tests/`].
 - **Database Schema & Migrations (`infra/`, `api/alembic/`):**
   - PostgreSQL 16 schema with pgSphere extension, tables for `users`, `subjects`, `classifications`, `marks`, `candidates`, `candidate_epochs`, `badges`, `user_badges`, `candidate_reviews` [VERIFIED: `api/alembic/versions/001_initial_schema.py`].
+- **Remote Synchronization & Git History:**
+  - All development branches (`main`, `feat/api-consensus`, `feat/worker-ingestion`) and milestone tags (`scaffold-v0`, `scaffold-v1`, `scaffold-v3`) have been pushed to `origin` [VERIFIED: `git ls-remote`].
 
 ### What Does Not Work / Is Incomplete [VERIFIED]
 - **Client Application (`client/`):** Only a scaffold exists. `client/src/components/BandSelector.tsx` and `client/src/app/classify/page.tsx` still reference obsolete broad-band keys (`swir`, `mwir`) instead of narrow-slice keys (`1.0um`, `2.0um`, `4.0um`). Coordinate deprojection in `client/src/app/classify/page.tsx` is hardcoded to a 128×128 box instead of parsing the 293×293 WCS JSON sidecar. Gamification, tutorial modals, and discovery feeds are stubs [VERIFIED].
 - **API `wcs_urls` Field:** `api/app/routers/subjects.py` hardcodes `wcs_urls={}` when returning subjects, preventing the client from receiving the WCS sidecar URLs written by the worker [VERIFIED: `api/app/routers/subjects.py` L43].
 - **Contract Schema Mismatches:** `contracts/openapi.yaml` and `contracts/schemas/subject.yaml` define strict regex patterns (`^[1-4]_[a-z0-9_]+$`) and sidecar schemas with `additionalProperties: false` that reject the worker's narrow-slice tile keys (e.g. `1_1.0um`) and extra WCS fields [VERIFIED: `contracts/schemas/`].
 - **Default Admin Token Security:** `ADMIN_TOKEN` defaults to the public placeholder `"astroblink-admin-secret"` in `api/app/config.py` and does not reject startup in production mode [VERIFIED: `api/app/config.py` L27].
-- **Unpushed Git Artifacts:** Tags `scaffold-v0` and `scaffold-v1`, as well as branch `feat/api-consensus`, are local only and have not been pushed to `origin` [VERIFIED: `git ls-remote`].
 
 ### What Is Next [VERIFIED]
 1. Update API router to populate `wcs_urls` from `subjects.wcs_urls` column.
 2. Update OpenAPI schemas to permit floating-point wavelength slice keys (`1_1.0um`, etc.) and relaxed sidecar fields.
 3. Rebuild the Next.js client (`client/`) to consume 293×293 tiles, support narrow-slice band selection, apply client-side WCS TAN deprojection, and display consensus badges.
-4. Push all branches and tags to GitHub remote.
 
 ---
 

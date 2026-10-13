@@ -21,7 +21,7 @@
 | **ISS-09** | **MEDIUM** | Ingestion Performance | `worker/worker/config.py` L84 | 600-second job timeout cap (`job_timeout_sec`) is exceeded on slower internet connections (<100 KB/s to AWS S3). | [VERIFIED] |
 | **ISS-10** | **MEDIUM** | Scientific Science View | `worker/worker/main.py` L395-425 | RGB composite has low valid fraction (5–12%) due to 3-detector overlap; weak comparison compared to narrow slices. | [VERIFIED] |
 | **ISS-11** | **LOW** | Astronomical Calibration| `worker/worker/config.py` L51-53 | Survey epoch gap (30d) and CVZ epoch span (182.5d) are unverified empirical estimates (`[VERIFY]`). | [VERIFIED] |
-| **ISS-12** | **LOW** | Git Hygiene | Local Git repository | Local tags `scaffold-v0`, `scaffold-v1` and branch `feat/api-consensus` exist locally only (unpushed). | [VERIFIED] |
+| **ISS-12** | **LOW** | Git Hygiene | Git remote origin | Milestone tags `scaffold-v0`, `scaffold-v1` and branch `feat/api-consensus` were unpushed; now pushed and synchronized. | [RESOLVED] |
 | **ISS-13** | **LOW** | Documentation | `docs/ARCHITECTURE.md`, `docs/PRD.md` | Legacy references to old folder names (`backend/`, `frontend/`, `docker/`) persist in documentation. | [VERIFIED] |
 | **ISS-14** | **LOW** | CI Execution | `.github/workflows/ci-api.yml`, `ci-worker.yml` | Workflows run pytest on the host runner rather than inside built Docker containers, missing container-specific failures. | [VERIFIED] |
 
@@ -155,12 +155,20 @@
 
 ---
 
-### ISS-12: Unpushed Git Branches and Tags [VERIFIED]
+### ISS-12: Unpushed Git Branches and Tags [RESOLVED]
 - **Severity:** **LOW**
-- **Location:** Local git repository (`D:\GITHUB\ME\AstroBlink`).
-- **Evidence:**
-  `git ls-remote --tags origin` confirms that only `scaffold-v3` exists on GitHub. Tags `scaffold-v0` and `scaffold-v1` are local only. Branch `feat/api-consensus` is also local only (though its commits are merged into `main`).
-- **Suggested Fix:** Run `git push origin scaffold-v0 scaffold-v1` and push any desired tracking branches.
+- **Location:** Git repository (`D:\GITHUB\ME\AstroBlink`), `origin` remote (`https://github.com/FatinShadab/AstroBlink.git`).
+- **Initial Finding:**
+  `git ls-remote --tags origin` previously showed that only `scaffold-v3` existed on GitHub. Tags `scaffold-v0` and `scaffold-v1` were local only. Branch `feat/api-consensus` was also local only.
+- **Resolution (Executed 2026-10-13):**
+  Pushed branch `feat/api-consensus` (`git push origin feat/api-consensus`) and milestone tags `scaffold-v0` and `scaffold-v1` (`git push origin scaffold-v0 scaffold-v1`).
+  Confirmed via `git ls-remote origin`:
+  - `refs/heads/feat/api-consensus` (`f9f39ca...`)
+  - `refs/heads/feat/worker-ingestion` (`f8b4fd3...`)
+  - `refs/heads/main` (`6d54bf1...`)
+  - `refs/tags/scaffold-v0` (`370c8b6...`)
+  - `refs/tags/scaffold-v1` (`7497625...`)
+  - `refs/tags/scaffold-v3` (`cc39991...`)
 
 ---
 
