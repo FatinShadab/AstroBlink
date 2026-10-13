@@ -13,3 +13,8 @@ select = ["E", "F", "I", "W", "UP", "B", "SIM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "real_data: integration tests that fetch real SPHEREx data (excluded from default CI)",
+]
+addopts = "-m 'not real_data'"
+

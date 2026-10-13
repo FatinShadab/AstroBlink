@@ -159,31 +159,38 @@ Verified directly from `HDU 2 (EXTNAME='FLAGS')` header cards (`MP_*` keywords) 
 ('MP_SOURCE', 21, 'Pixel mapped to a known source')
 ```
 
-| Bit | Header Keyword | Verified Meaning (from FITS Header Comment) |
-|----:|----------------|---------------------------------------------|
-| 0 | `MP_TRANSIENT` | Transient detected during SUR |
-| 1 | `MP_OVERFLOW` | Overflow detected during SUR |
-| 2 | `MP_SUR_ERROR` | Error in onboard processing |
-| 3 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 4 | `MP_PHANTOM` | Phantom pixel |
-| 5 | `MP_REFERENCE` | Reference pixel |
-| 6 | `MP_NONFUNC` | Permanently unusable |
-| 7 | `MP_DICHROIC` | Low efficiency due to dichroic |
-| 8 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 9 | `MP_MISSING_DATA` | Onboard data lost |
-| 10 | `MP_HOT` | Hot pixel |
-| 11 | `MP_COLD` | Anomalously low signal |
-| 12 | `MP_FULLSAMPLE` | Pixel full sample history is available |
-| 13 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 14 | `MP_PHANMISS` | Phantom correction was not applied |
-| 15 | `MP_NONLINEAR` | Nonlinearity correction cannot be applied reliably |
-| 16 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 17 | `MP_PERSIST` | Persistent charge above threshold |
-| 18 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 19 | `MP_OUTLIER` | Pixel flagged by Detect Outliers |
-| 20 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) |
-| 21 | `MP_SOURCE` | Pixel mapped to a known source |
-| 22–31 | — | **UNCONFIRMED** in Level 2 `FLAGS` FITS header (not present as `MP_*` cards in this QR2 file) |
+| Bit | Header Keyword | Verified Meaning (from FITS Header Comment) | Masked by Default (`DEFECT_MASK_BITS`)? |
+|----:|----------------|---------------------------------------------|:---------------------------------------:|
+| 0 | `MP_TRANSIENT` | Transient detected during SUR | `True` (configurable via `mask_transient_and_outlier_flags`) |
+| 1 | `MP_OVERFLOW` | Overflow detected during SUR | `True` |
+| 2 | `MP_SUR_ERROR` | Error in onboard processing | `True` |
+| 3 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 4 | `MP_PHANTOM` | Phantom pixel | `True` |
+| 5 | `MP_REFERENCE` | Reference pixel | `True` |
+| 6 | `MP_NONFUNC` | Permanently unusable | `True` |
+| 7 | `MP_DICHROIC` | Low efficiency due to dichroic | `True` |
+| 8 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 9 | `MP_MISSING_DATA` | Onboard data lost | `True` |
+| 10 | `MP_HOT` | Hot pixel | `True` |
+| 11 | `MP_COLD` | Anomalously low signal | `True` |
+| 12 | `MP_FULLSAMPLE` | Pixel full sample history is available | `False` (informational quality flag) |
+| 13 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 14 | `MP_PHANMISS` | Phantom correction was not applied | `True` |
+| 15 | `MP_NONLINEAR` | Nonlinearity correction cannot be applied reliably | `True` |
+| 16 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 17 | `MP_PERSIST` | Persistent charge above threshold | `True` |
+| 18 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 19 | `MP_OUTLIER` | Pixel flagged by Detect Outliers | `True` (configurable via `mask_transient_and_outlier_flags`) |
+| 20 | — | **UNCONFIRMED** (not present in Level 2 `FLAGS` header) | `False` |
+| 21 | `MP_SOURCE` | Pixel mapped to a known source | `False` (informational catalog source flag) |
+| 22–31 | — | **UNCONFIRMED** in Level 2 `FLAGS` FITS header (not present as `MP_*` cards in this QR2 file) | `False` |
+
+- **Unsigned 32-Bit FITS Encoding (`BZERO`):**
+  The `FLAGS` extension header specifies `BITPIX = 32`, `BSCALE = 1`, `BZERO = 2147483648` ($2^{31}$), representing unsigned `uint32` bitmasks via the standard FITS signed-integer offset convention. When slicing raw binary strips directly from S3 (bypassing `astropy.io.fits` automatic scaling), the raw big-endian signed `>i4` values must be converted via `(raw_i32.astype(np.int64) + 2147483648).astype(np.uint32)` before bitwise testing.
+- **Do Bits 0 (`MP_TRANSIENT`) or 19 (`MP_OUTLIER`) Mark Moving Objects? (`UNPROVEN`):**
+  - **Bit 0 (`MP_TRANSIENT`, `"Transient detected during SUR"`):** Flagged onboard during a single ~112.5 s Sample-Up-the-Ramp (SUR) integration when a single readout sample jumps (e.g., cosmic-ray hit or electronic spike).
+  - **Bit 19 (`MP_OUTLIER`, `"Pixel flagged by Detect Outliers"`):** Set by the Level 2 pipeline's spatial/ramp outlier detector (`Detect Outliers`), predominantly flagging sharp high-contrast PSF gradients around stationary bright stars in both epochs.
+  - **Moving-Object Claim Status:** **UNPROVEN.** No IRSA/SPHEREx documentation or empirical evidence shows that Bit 0 or Bit 19 selectively marks moving Solar System objects across epochs.
 
 ---
 
@@ -218,3 +225,133 @@ Verified directly from `HDU 1 (IMAGE)` and `HDU 5 (PSF)` headers of `s3://nasa-i
    ```text
    IMAGE Pixel scales (arcsec/px): [6.1341444  6.14109365]
    ```
+
+---
+
+## 6. Live Ingestion & S3 Object Verification (Phase W9)
+
+Verified via live ingestion through worker pipeline on real targets in `s3://nasa-irsa-spherex`:
+
+1. **IRSA TAP Spatial Discovery Query:**
+   ```sql
+   SELECT TOP {limit} p.energy_bandpassname, a.uri, p.time_bounds_lower
+   FROM spherex.artifact a
+   JOIN spherex.plane p ON a.planeid = p.planeid
+   WHERE 1 = CONTAINS(POINT('ICRS', {ra}, {dec}), p.poly)
+   ORDER BY p.time_bounds_lower
+   ```
+   Directly returns valid Level 2 FITS object URIs matching bucket keys under `qr2/level2/`.
+
+2. **Real Target Position Results:**
+   - **Target 1:** RA `160.61529°`, Dec `30.66915°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-241/1/level2_2025W17_4B_0001_1D1_spx_l2b-v20-2025-241.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/4/level2_2025W17_4B_0001_1D4_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `66.68%`
+     - Tile Sizes: SWIR: `1.6 KiB`, MWIR: `1.0 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `7cd1e61f-eb1d-4e57-931b-ca603a959900`
+   - **Target 2:** RA `276.26139°`, Dec `64.82577°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-240/5/level2_2025W17_4B_0030_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0030_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.81%`
+     - Tile Sizes: SWIR: `618 B`, MWIR: `360 B`, RGB: `1.0 KiB`
+     - Subject ID: `72ea4cc3-d374-480e-9ed3-0e1b7df389bc`
+   - **Target 3:** RA `349.78099°`, Dec `-56.49399°`
+     - Files: `qr2/level2/2025W18_1B/l2b-v20-2025-241/1/level2_2025W18_1B_0112_2D1_spx_l2b-v20-2025-241.fits`, `qr2/level2/2025W18_1B/l2b-v20-2025-240/4/level2_2025W18_1B_0112_2D4_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `90.21%`
+     - Tile Sizes: SWIR: `1.6 KiB`, MWIR: `1.0 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `5571684b-f5b5-4613-93c1-b5bbe8998fcc`
+   - **Target 4:** RA `207.74854°`, Dec `64.95670°`
+     - Files: `qr2/level2/2025W18_1B/l2b-v20-2025-240/5/level2_2025W18_1B_0418_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W18_1B/l2b-v20-2025-240/2/level2_2025W18_1B_0418_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.45%`
+     - Tile Sizes: SWIR: `1.7 KiB`, MWIR: `2.2 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `b1dbddf3-c52b-4949-bfd3-d82836ed6ea2`
+   - **Target 5:** RA `158.73328°`, Dec `45.46230°`
+     - Files: `qr2/level2/2025W17_4B/l2b-v20-2025-240/5/level2_2025W17_4B_0146_1D5_spx_l2b-v20-2025-240.fits`, `qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0146_1D2_spx_l2b-v20-2025-240.fits`
+     - Epochs: `[1]`
+     - Mask Fraction: `33.36%`
+     - Tile Sizes: SWIR: `1.7 KiB`, MWIR: `2.1 KiB`, RGB: `1.0 KiB`
+     - Subject ID: `d9e856e4-e6f8-43ea-809f-935edcd7fc19`
+
+3. **Status of Unconfirmed Items:**
+   - Future DR1/DR2 release prefixes: **UNCONFIRMED** (only QR2 present in bucket).
+   - Live IRSA IBE Cutout Service HDU preservation: **UNCONFIRMED** (service returned 502/503; anonymous S3 download fallback functioning reliably).
+   - FLAGS bits 3, 8, 13, 16, 18, 20, 22–31: **UNCONFIRMED** (absent in Level 2 header MP cards).
+
+---
+
+## 7. Sky Displacements & Earth-Orbit Parallax Across Survey Epochs (`ASSUMED` vs `COMPUTED`, Phase W11b)
+
+Because SPHEREx observes near solar elongation $\sim 90^\circ$ (quadrature), two survey passes separated by $\Delta t_{\text{ep}} \approx 171\text{--}238\text{ d}$ ($\sim 6\text{ months}$) are taken from opposite sides of Earth's orbit (`[COMPUTED]` perpendicular Earth-baseline shift $|\Delta\mathbf{r}_{\oplus,\perp}| = 1.7817\text{--}1.9885\text{ AU}$ via `astropy.coordinates.get_body_barycentric('earth', t)`).
+
+Consequently, **the naive proper-motion-only claim that objects at $d \gtrsim 400\text{ AU}$ stay inside a `0.1°` (`360"`) cutout over 6 months does NOT hold** once Earth-orbit parallax ($\Delta\theta_{\text{par}} \approx |\Delta\mathbf{r}_{\oplus,\perp}| / d \approx 399"/d_{1000\text{AU}}$) is included: even at $d = 1000\text{ AU}$, the 6-month topocentric shift is `387.5"–407.8"` (`0.108°–0.113°`), exceeding a `0.1°` (`360"`) cutout.
+
+### 7A. Real Horizons Objects Queried at Exact Target Epoch 1 & Epoch 2 Dates (`[COMPUTED: JPL Horizons]`)
+
+| Target | Epoch 1 MJD | Epoch 2 MJD | $\Delta t_{\text{ep}}$ (d) | Object & Provenance | $\Delta\theta$ (`1 d`) | $\Delta\theta$ (`5 d`) | $\Delta\theta$ (`6 mo`) | Inside `0.1°` (`360"`) Over `1d / 5d / 6mo`? |
+| :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
+| Target 1 | `60842.8502` | `61038.0203` | `195.17` | MBA: (1) Ceres (a=2.77 AU [COMPUTED: JPL Horizons]) | `894.4"` (`145.4 px`) | `4369.6"` (`710.5 px`) | `10057.4"` (`2.794°`, `1635.4 px`) | `False / False / False` |
+| Target 1 | `60842.8502` | `61038.0203` | `195.17` | NEO: (433) Eros (a=1.46 AU [COMPUTED: JPL Horizons]) | `1811.6"` (`294.6 px`) | `9026.4"` (`1467.7 px`) | `101320.9"` (`28.145°`, `16474.9 px`) | `False / False / False` |
+| Target 1 | `60842.8502` | `61038.0203` | `195.17` | KBO (~40 AU): (134340) Pluto (a=39.5 AU [COMPUTED: JPL Horizons]) | `64.2"` (`10.4 px`) | `331.8"` (`53.9 px`) | `2836.4"` (`0.788°`, `461.2 px`) | `True / True / False` |
+| Target 2 (CVZ) | `60799.6540` | `61038.0725` | `238.42` | MBA: (1) Ceres (a=2.77 AU [COMPUTED: JPL Horizons]) | `1210.3"` (`196.8 px`) | `5999.1"` (`975.5 px`) | `37197.2"` (`10.332°`, `6048.3 px`) | `False / False / False` |
+| Target 2 (CVZ) | `60799.6540` | `61038.0725` | `238.42` | NEO: (433) Eros (a=1.46 AU [COMPUTED: JPL Horizons]) | `1921.4"` (`312.4 px`) | `9584.0"` (`1558.4 px`) | `174867.2"` (`48.574°`, `28433.7 px`) | `False / False / False` |
+| Target 2 (CVZ) | `60799.6540` | `61038.0725` | `238.42` | KBO (~40 AU): (134340) Pluto (a=39.5 AU [COMPUTED: JPL Horizons]) | `11.3"` (`1.8 px`) | `60.4"` (`9.8 px`) | `4350.9"` (`1.209°`, `707.5 px`) | `True / True / False` |
+| Target 3 | `60816.3292` | `61030.7289` | `214.40` | MBA: (1) Ceres (a=2.77 AU [COMPUTED: JPL Horizons]) | `1113.5"` (`181.1 px`) | `5498.7"` (`894.1 px`) | `13039.7"` (`3.622°`, `2120.3 px`) | `False / False / False` |
+| Target 3 | `60816.3292` | `61030.7289` | `214.40` | NEO: (433) Eros (a=1.46 AU [COMPUTED: JPL Horizons]) | `1883.8"` (`306.3 px`) | `9393.9"` (`1527.5 px`) | `143287.3"` (`39.802°`, `23298.8 px`) | `False / False / False` |
+| Target 3 | `60816.3292` | `61030.7289` | `214.40` | KBO (~40 AU): (134340) Pluto (a=39.5 AU [COMPUTED: JPL Horizons]) | `30.3"` (`4.9 px`) | `165.9"` (`27.0 px`) | `4838.5"` (`1.344°`, `786.7 px`) | `True / True / False` |
+| Target 4 | `60856.6186` | `61034.4316` | `177.81` | MBA: (1) Ceres (a=2.77 AU [COMPUTED: JPL Horizons]) | `740.9"` (`120.5 px`) | `3580.0"` (`582.1 px`) | `23294.0"` (`6.471°`, `3787.6 px`) | `False / False / False` |
+| Target 4 | `60856.6186` | `61034.4316` | `177.81` | NEO: (433) Eros (a=1.46 AU [COMPUTED: JPL Horizons]) | `1762.7"` (`286.6 px`) | `8774.1"` (`1426.7 px`) | `80889.3"` (`22.469°`, `13152.7 px`) | `False / False / False` |
+| Target 4 | `60856.6186` | `61034.4316` | `177.81` | KBO (~40 AU): (134340) Pluto (a=39.5 AU [COMPUTED: JPL Horizons]) | `76.4"` (`12.4 px`) | `389.0"` (`63.2 px`) | `2241.6"` (`0.623°`, `364.5 px`) | `True / False / False` |
+| Target 5 | `60967.7946` | `61139.0427` | `171.25` | MBA: (1) Ceres (a=2.77 AU [COMPUTED: JPL Horizons]) | `691.4"` (`112.4 px`) | `3334.0"` (`542.1 px`) | `125000.6"` (`34.722°`, `20325.3 px`) | `False / False / False` |
+| Target 5 | `60967.7946` | `61139.0427` | `171.25` | NEO: (433) Eros (a=1.46 AU [COMPUTED: JPL Horizons]) | `1324.2"` (`215.3 px`) | `6629.1"` (`1077.9 px`) | `292248.5"` (`81.180°`, `47520.1 px`) | `False / False / False` |
+| Target 5 | `60967.7946` | `61139.0427` | `171.25` | KBO (~40 AU): (134340) Pluto (a=39.5 AU [COMPUTED: JPL Horizons]) | `10.9"` (`1.8 px`) | `72.0"` (`11.7 px`) | `14215.4"` (`3.949°`, `2311.4 px`) | `True / True / False` |
+
+### 7B. Distant Objects (40, 300, 500, 1000 AU) at Each Target's Exact `(RA, Dec)` Including 3D Earth-Orbit Parallax
+
+| Target | $\Delta t_{\text{ep}}$ (d) | Object ($d$ `[ASSUMED]`) | $|\Delta\mathbf{r}_{\oplus,\perp}|$ (AU `[COMPUTED]`) | $\Delta\theta$ (`1 d`) | $\Delta\theta$ (`5 d`) | 6-mo Parallax Only (`[COMPUTED]`) | 6-mo Proper Motion (`[COMPUTED]`) | 6-mo Total Displacement (`[COMPUTED]`) | Stays in `0.1°` (`360"` box / `180"` half) Over 6 mo? |
+| :--- | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Target 1 | `195.17` | KBO at 40 AU | `1.9843` | `45.59"` (`7.41 px`) | `220.07"` (`35.78 px`) | **`10258.3"`** | `2737.2"` | **`7518.6"` (`2.088°`, `1222.5 px`)** | `False / False` |
+| Target 1 | `195.17` | Hypothetical 300 AU | `1.9843` | `5.41"` (`0.88 px`) | `26.24"` (`4.27 px`) | **`1364.9"`** | `133.3"` | **`1231.6"` (`0.342°`, `200.3 px`)** | `False / False` |
+| Target 1 | `195.17` | Hypothetical 500 AU | `1.9843` | `3.20"` (`0.52 px`) | `15.55"` (`2.53 px`) | **`818.8"`** | `61.9"` | **`756.9"` (`0.210°`, `123.1 px`)** | `False / False` |
+| Target 1 | `195.17` | Hypothetical 1000 AU | `1.9843` | `1.58"` (`0.26 px`) | `7.68"` (`1.25 px`) | **`409.4"`** | `21.9"` | **`387.5"` (`0.108°`, `63.0 px`)** | `False / False` |
+| Target 2 (CVZ) | `238.42` | KBO at 40 AU | `1.7817` | `75.76"` (`12.32 px`) | `379.70"` (`61.74 px`) | **`9180.7"`** | `3343.6"` | **`12026.6"` (`3.341°`, `1955.5 px`)** | `False / False` |
+| Target 2 (CVZ) | `238.42` | Hypothetical 300 AU | `1.7817` | `11.13"` (`1.81 px`) | `55.64"` (`9.05 px`) | **`1225.0"`** | `162.8"` | **`1359.3"` (`0.378°`, `221.0 px`)** | `False / False` |
+| Target 2 (CVZ) | `238.42` | Hypothetical 500 AU | `1.7817` | `6.76"` (`1.10 px`) | `33.78"` (`5.49 px`) | **`735.0"`** | `75.7"` | **`797.1"` (`0.221°`, `129.6 px`)** | `False / False` |
+| Target 2 (CVZ) | `238.42` | Hypothetical 1000 AU | `1.7817` | `3.42"` (`0.56 px`) | `17.09"` (`2.78 px`) | **`367.5"`** | `26.8"` | **`389.3"` (`0.108°`, `63.3 px`)** | `False / False` |
+| Target 3 | `214.40` | KBO at 40 AU | `1.8616` | `29.82"` (`4.85 px`) | `135.74"` (`22.07 px`) | **`9472.0"`** | `3006.8"` | **`12432.9"` (`3.454°`, `2021.6 px`)** | `False / False` |
+| Target 3 | `214.40` | Hypothetical 300 AU | `1.8616` | `5.16"` (`0.84 px`) | `24.06"` (`3.91 px`) | **`1277.7"`** | `146.4"` | **`1423.9"` (`0.396°`, `231.5 px`)** | `False / False` |
+| Target 3 | `214.40` | Hypothetical 500 AU | `1.8616` | `3.19"` (`0.52 px`) | `14.90"` (`2.42 px`) | **`767.2"`** | `68.0"` | **`835.1"` (`0.232°`, `135.8 px`)** | `False / False` |
+| Target 3 | `214.40` | Hypothetical 1000 AU | `1.8616` | `1.64"` (`0.27 px`) | `7.68"` (`1.25 px`) | **`383.8"`** | `24.1"` | **`407.8"` (`0.113°`, `66.3 px`)** | `False / False` |
+| Target 4 | `177.81` | KBO at 40 AU | `1.9826` | `78.65"` (`12.79 px`) | `390.08"` (`63.43 px`) | **`10278.4"`** | `2493.8"` | **`7839.4"` (`2.178°`, `1274.7 px`)** | `False / False` |
+| Target 4 | `177.81` | Hypothetical 300 AU | `1.9826` | `10.10"` (`1.64 px`) | `50.22"` (`8.17 px`) | **`1364.3"`** | `121.4"` | **`1245.4"` (`0.346°`, `202.5 px`)** | `False / False` |
+| Target 4 | `177.81` | Hypothetical 500 AU | `1.9826` | `6.03"` (`0.98 px`) | `30.03"` (`4.88 px`) | **`818.3"`** | `56.4"` | **`763.0"` (`0.212°`, `124.1 px`)** | `False / False` |
+| Target 4 | `177.81` | Hypothetical 1000 AU | `1.9826` | `3.00"` (`0.49 px`) | `14.96"` (`2.43 px`) | **`409.1"`** | `19.9"` | **`389.5"` (`0.108°`, `63.3 px`)** | `False / False` |
+| Target 5 | `171.25` | KBO at 40 AU | `1.9885` | `18.30"` (`2.98 px`) | `82.80"` (`13.46 px`) | **`10275.6"`** | `2401.7"` | **`7871.5"` (`2.187°`, `1279.9 px`)** | `False / False` |
+| Target 5 | `171.25` | Hypothetical 300 AU | `1.9885` | `1.93"` (`0.31 px`) | `9.52"` (`1.55 px`) | **`1367.7"`** | `116.9"` | **`1250.7"` (`0.347°`, `203.4 px`)** | `False / False` |
+| Target 5 | `171.25` | Hypothetical 500 AU | `1.9885` | `1.15"` (`0.19 px`) | `5.75"` (`0.93 px`) | **`820.5"`** | `54.4"` | **`766.1"` (`0.213°`, `124.6 px`)** | `False / False` |
+| Target 5 | `171.25` | Hypothetical 1000 AU | `1.9885` | `0.57"` (`0.09 px`) | `2.91"` (`0.47 px`) | **`410.2"`** | `19.2"` | **`391.0"` (`0.109°`, `63.6 px`)** | `False / False` |
+
+---
+
+## 8. Confirmed W11b & W12 Pipeline Facts (Header Blocks, `0.5°` Cutout Geometry, and End-to-End Ingestion)
+
+1. **`HDU 1 (IMAGE)` Header Block Length & Full-`END` Parsing:**
+   - SPHEREx Level 2 `HDU 1 (IMAGE)` headers span `5` FITS blocks (`14,400 B`, `>144` cards). Reading only `4` blocks (`11,520 B`) truncates the tail of the `SIP` distortion polynomial (`A_*_*`, `B_*_*`, `AP_*_*`, `BP_*_*`), shifting projected cutout pixel coordinates by up to `~2.5 px` and shifting evaluated `WCS-WAVE` wavelengths by `~0.0004 µm`. Reading in `2880 B` increments until the `END` card (`_read_header_until_end`) recovers the exact `TAN-SIP` solution.
+
+2. **`0.5°` Cutout Geometry, Shared-Wavelength Masking, and Parallax Containment:**
+   - At `size_deg = 0.5` (`1800" × 1800"` box, `900"` half-width from tile center), native `6.15"/px` TAN projection yields a `293 × 293 px` (`85,849 px`) output grid.
+   - Across `0.5°`, the SPHEREx Linear Variable Filter (LVF) gradient spans `0.068–0.088 µm` (`D1`, `1.0 µm`), `0.130–0.165 µm` (`D3`, `2.0 µm`), and `0.110–0.158 µm` (`D5`, `4.0 µm`).
+   - Enforcing the per-pixel shared-wavelength intersection mask (`apply_shared_wavelength_mask`) retains `14.29%–31.46%` of the `293 × 293` grid per narrow slice (and `5.01%–12.11%` on the 3-band RGB composite intersection), ensuring every unmasked pixel compares identical spectral bandpasses across Epoch 1 and Epoch 2.
+   - **Parallax & Proper Motion Containment in a `0.5°` (`900"` half-width) Tile:**
+     - **$1000\text{ AU}$ (`387.5"–407.8"` over 6 months):** Stays **inside** the `0.5°` tile across all 5 targets (`5/5`).
+     - **$500\text{ AU}$ (`756.9"–835.1"` over 6 months):** Stays **inside** the `0.5°` tile across all 5 targets (`5/5`).
+     - **$300\text{ AU}$ (`1231.6"–1423.9"` over 6 months):** Exceeds `900"` (`0/5` stay inside if starting at tile center; requires `size_deg >= 0.8°` or intra-epoch blinking).
+
+3. **Verified End-to-End W12 Redis Ingestion (`size_deg = 0.5`, Epochs 1 & 2, Native `293 × 293 px`):**
+   - Verified via live Redis job consumption (`astroblink:ingest_jobs`) on `ab-worker`:
+     - **Target 1 (`RA=15.0°, Dec=-20.0°`):** Subject `49a0816f-f681-4ac9-aa38-d21960625a21`, `epochs=[1, 2]`, `8` tiles (`1_1.0um`, `1_2.0um`, `1_4.0um`, `1_rgb`, `2_1.0um`, `2_2.0um`, `2_4.0um`, `2_rgb`), `20.20–28.84 KB`/tile (`191.60 KB` total WebP), `mask_fraction=0.8409`, `59,631,168 B` transferred via S3 ranged reads in `89.13 s`.
+     - **Target 3 (`RA=180.0°, Dec=0.0°`):** Subject `df527171-42ea-4d60-8736-7b6fdb17395d`, `epochs=[1, 2]`, `8` tiles, `21.68–23.85 KB`/tile (`179.46 KB` total WebP), `mask_fraction=0.8589`, `59,973,888 B` transferred via S3 ranged reads in `135.95 s`.
+     - **Target 4 (`RA=45.0°, Dec=-45.0°`):** Subject `d1cdf6e8-bb8a-4817-8e3c-b0ca8c8da892`, `epochs=[1, 2]`, `8` tiles, `21.23–30.60 KB`/tile (`201.40 KB` total WebP), `mask_fraction=0.8216`, `62,054,688 B` transferred via S3 ranged reads in `96.37 s`.
+   - **Peak Container Memory (`docker stats` on `ab-worker-worker-1` during `0.5°` job):** `175.5–199.0 MiB` (`< 2.6%` of 7.757 GiB limit).
+
