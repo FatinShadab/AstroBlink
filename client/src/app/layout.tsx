@@ -15,8 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-astro-bg text-white antialiased min-h-screen">
-        {/* TODO: Add navigation bar — see ARCHITECTURE.md §2.1 */}
+      <body className="min-h-screen antialiased">
         <main>{children}</main>
       </body>
     </html>

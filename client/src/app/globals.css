@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Deep-space observatory background: #050811 → #0B1021 radial field with
+ * faint 2D coordinate hairlines. Everything stays 2D; no WebGL.
+ */
+:root {
+  --space-0: #050811;
+  --space-1: #0b1021;
+  --accent-cyan: #38bdf8;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: var(--space-0);
+}
+
+body {
+  background: radial-gradient(120% 90% at 50% -10%, var(--space-1) 0%, var(--space-0) 62%, #030409 100%) fixed;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse at center, #000 40%, transparent 85%);
+}
+
+main,
+#__next,
+body > div {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tabular numerals for every readout. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
