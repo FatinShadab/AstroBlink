@@ -70,7 +70,7 @@ export const api = {
   getOverlays: (p: ViewParams, epochIndex: number): Promise<OverlaysResponse> =>
     USE_MOCK_DATA ? mock.getOverlays(p, epochIndex) : Promise.reject(NOT_SERVED("Catalog overlays")),
 
-  getSpectrum: (p: ViewParams, epochIndex: number, x: number, y: number): Promise<SpectrumResponse> =>
+  getSpectrum: (p: ViewParams, epochIndex: number, x: number, y: number): Promise<SpectrumResponse | null> =>
     USE_MOCK_DATA ? mock.getSpectrum(p, epochIndex, x, y) : Promise.reject(NOT_SERVED("Spectrophotometry")),
 
   getFrame: (p: ViewParams, epochIndex: number, band: BandKey): Promise<Frame | null> =>

@@ -275,14 +275,14 @@ export default function BlinkCanvas({
 
   const updateCursor = (clientX: number, clientY: number) => {
     const p = toFramePixel(clientX, clientY);
-    if (!p || !display) return;
+    if (!p) return;
     const world = wcs.pixelToWorld(p.x, p.y);
     const next: CursorReadout = {
       x: p.x,
       y: p.y,
       ra: world.ra,
       dec: world.dec,
-      flux: pixelValue(display.field, FRAME_SIZE, p.x, p.y),
+      flux: display ? pixelValue(display.field, FRAME_SIZE, p.x, p.y) : Number.NaN,
     };
     setCursor(next);
     onCursorChange?.(next);
@@ -311,7 +311,7 @@ export default function BlinkCanvas({
       className={`group relative mx-auto select-none overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_0_60px_-18px_rgba(56,189,248,0.45)] ${
         tagMode ? "cursor-crosshair" : "cursor-pointer"
       }`}
-      style={{ width: "min(100%, 68vh, 640px)", aspectRatio: "1 / 1" }}
+      style={{ width: compact ? "min(100%, 640px)" : "min(100%, max(300px, calc(100dvh - 300px)), 720px)", aspectRatio: "1 / 1" }}
     >
       <canvas
         ref={canvasRef}
@@ -443,13 +443,18 @@ export default function BlinkCanvas({
       </div>
 
       {status !== "ready" && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1 px-6 text-center">
           <span
             role={status === "error" ? "alert" : "status"}
-            className="rounded-md border border-white/10 bg-slate-900/80 px-3 py-1.5 font-mono text-xs text-slate-300 backdrop-blur-md"
+            className="rounded-lg border border-white/10 bg-slate-900/70 px-3 py-2 text-xs text-slate-300 backdrop-blur-md"
           >
-            {status === "loading" && "Loading frames…"}
-            {status === "missing" && "No tile available for this epoch / band"}
+            {status === "loading" && "Loading…"}
+            {status === "missing" && (
+              <>
+                <span className="block font-medium text-slate-200">No image data loaded</span>
+                <span className="block text-[11px] text-slate-500">Frames appear here once SPHEREx tiles are connected.</span>
+              </>
+            )}
             {status === "error" && "Frame failed to load"}
           </span>
         </div>

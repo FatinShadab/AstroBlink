@@ -1,15 +1,12 @@
 /**
  * Frame loading for the blink comparator.
  *
- * Two sources share one interface:
- *  - Procedural frames from the mock engine (when the subject has no tile URLs).
- *  - Real PNG tiles from the backend (`subject.tile_urls["<epoch>_<band>"]`),
- *    decoded to 128×128 luminance so the same pixel pipeline applies.
+ * Real PNG tiles from the backend (`subject.tile_urls["<epoch>_<band>"]`) are
+ * decoded to 128×128 luminance. Without tiles there are no frames: the loader
+ * resolves to null and the canvas stays empty. No sky imagery is synthesised.
  */
 
 import type { SubjectResponse } from "./generated/types";
-import { api } from "./client";
-import type { ViewParams } from "./mockService";
 import { FRAME_SIZE, type BandKey, type Frame } from "@/lib/mock/spherexMockEngine";
 
 export type FrameLoader = (epochIndex: number, band: BandKey) => Promise<Frame | null>;
@@ -23,7 +20,6 @@ function cached(loader: FrameLoader): FrameLoader {
     const key = `${epochIndex}|${band}`;
     const hit = store.get(key);
     if (hit) {
-      // Refresh recency.
       store.delete(key);
       store.set(key, hit);
       return hit;
@@ -39,11 +35,6 @@ function cached(loader: FrameLoader): FrameLoader {
     }
     return pending;
   };
-}
-
-/** Procedural loader for mock mode. */
-export function createProceduralLoader(p: ViewParams): FrameLoader {
-  return cached((epochIndex, band) => api.getFrame(p, epochIndex, band));
 }
 
 /** Decodes a PNG/JPEG tile to a 128×128 luminance field (0–255 scale). */
@@ -87,8 +78,10 @@ export function createTileLoader(subject: SubjectResponse): FrameLoader {
   });
 }
 
-/** Picks the loader for a subject: real tiles when the backend supplied them, otherwise procedural. */
-export function createFrameLoader(subject: SubjectResponse | null, p: ViewParams): FrameLoader {
+const NO_FRAMES: FrameLoader = () => Promise.resolve(null);
+
+/** Real tiles when the backend supplied them; otherwise an empty source (no demo imagery). */
+export function createFrameLoader(subject: SubjectResponse | null): FrameLoader {
   if (subject && Object.keys(subject.tile_urls).length > 0) return createTileLoader(subject);
-  return createProceduralLoader(p);
+  return NO_FRAMES;
 }

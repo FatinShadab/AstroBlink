@@ -43,7 +43,7 @@ describe("BlinkCanvas", () => {
 
   it("reports a missing tile when the loader has no frame", async () => {
     render(<BlinkCanvas {...baseProps({ loadFrame: () => Promise.resolve(null) })} />);
-    expect(await screen.findByText("No tile available for this epoch / band")).toBeTruthy();
+    expect(await screen.findByText("No image data loaded")).toBeTruthy();
   });
 
   it("requests the frames each display mode needs", async () => {

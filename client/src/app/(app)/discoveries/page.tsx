@@ -58,8 +58,8 @@ export default function DiscoveriesPage() {
             Crowd candidates from the community consensus pipeline, and your own saved tags.
           </p>
         </div>
-        <Link href="/" className="rounded-lg border border-white/10 bg-slate-800/60 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700/70">
-          ← Back to observatory
+        <Link href="/projects" className="rounded-lg border border-white/10 bg-slate-800/60 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700/70">
+          ← Back to projects
         </Link>
       </header>
 
@@ -127,7 +127,7 @@ export default function DiscoveriesPage() {
           </ul>
         ) : (
           <p className="text-sm text-slate-400">
-            No tags yet. Open the <Link className="text-cyan-300 underline-offset-2 hover:underline" href="/">observatory</Link>, enable tag mode and click a source.
+            No tags yet. Open a <Link className="text-cyan-300 underline-offset-2 hover:underline" href="/projects">project</Link>, pick a picture and tag a source.
           </p>
         )}
       </GlassPanel>

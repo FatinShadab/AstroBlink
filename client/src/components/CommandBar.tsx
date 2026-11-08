@@ -50,15 +50,8 @@ export default function CommandBar({
   };
 
   return (
-    <header className="flex flex-col gap-2.5 border-b border-white/10 bg-slate-950/60 px-3 py-2.5 backdrop-blur-xl sm:px-4">
+    <header className="flex flex-col gap-2 border-b border-white/10 bg-slate-950/80 px-4 py-2.5 backdrop-blur-xl">
       <div className="flex flex-wrap items-center gap-2.5">
-        <div className="flex items-center gap-2 pr-1">
-          <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400/30 to-amber-400/20 ring-1 ring-white/10">
-            <span className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(56,189,248,0.9)]" />
-          </span>
-          <span className="text-sm font-semibold tracking-tight text-slate-100">AstroBlink</span>
-        </div>
-
         <form onSubmit={handleSubmit} className="relative min-w-[220px] flex-1" role="search">
           <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
           <input
@@ -69,7 +62,7 @@ export default function CommandBar({
               setLocalError(null);
               onInputChange(e.target.value);
             }}
-            placeholder="RA, Dec · 08h55m10.8s −07d14m42.5s · or a name"
+            placeholder="RA, Dec, or a target name"
             className="w-full rounded-xl border border-white/10 bg-slate-900/70 py-2 pl-9 pr-3 font-mono text-xs tabular-nums text-slate-100 placeholder:text-slate-500 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
           />
         </form>
@@ -80,12 +73,13 @@ export default function CommandBar({
           className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-800/60 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700/70"
         >
           <Share2 size={14} aria-hidden="true" />
-          Share / Embed
+          <span className="hidden sm:inline">Share / Embed</span>
+          <span className="sr-only sm:hidden">Share or embed</span>
         </button>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div role="group" aria-label="Benchmark targets" className="flex flex-wrap gap-1.5">
+        <div role="group" aria-label="Benchmark targets" className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible">
           {benchmarks.map((b) => {
             const on = activeBenchmarkId === b.id;
             return (
@@ -95,7 +89,7 @@ export default function CommandBar({
                 title={b.description}
                 aria-pressed={on}
                 onClick={() => onPickBenchmark(b)}
-                className={`rounded-full border px-3 py-1 text-[11px] font-medium transition ${
+                className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-medium transition ${
                   on
                     ? "border-amber-400/60 bg-amber-500/15 text-amber-100"
                     : "border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-slate-100"

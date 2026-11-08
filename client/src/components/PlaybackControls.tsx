@@ -53,8 +53,8 @@ export default function PlaybackControls({
           <SkipForward size={16} />
         </button>
 
-        <div className="ml-1 flex min-w-0 flex-1 items-center gap-2">
-          <span className="font-mono text-[11px] text-slate-400">{speed.toFixed(1)} fps</span>
+        <div className="flex min-w-[140px] flex-1 items-center gap-2 pl-1">
+          <span className="w-12 shrink-0 font-mono text-[11px] tabular-nums text-slate-400">{speed.toFixed(1)} fps</span>
           <input
             type="range"
             aria-label="Playback speed"
@@ -63,7 +63,7 @@ export default function PlaybackControls({
             step={0.5}
             value={speed}
             onChange={(e) => onSpeedChange(Number(e.target.value))}
-            className="h-1 min-w-0 flex-1 cursor-pointer accent-cyan-400"
+            className="h-1 w-full min-w-0 cursor-pointer accent-cyan-400"
           />
         </div>
 

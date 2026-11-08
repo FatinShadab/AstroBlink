@@ -41,6 +41,31 @@ import ConsensusBadge from "@/components/ConsensusBadge";
 import GlassPanel from "@/components/GlassPanel";
 import ShareModal from "@/components/ShareModal";
 import type { OverlayFlags } from "@/lib/url-state";
+import { useSession } from "@/lib/auth/session";
+import { addContribution } from "@/lib/contributions";
+import { getPicture, getProject } from "@/lib/mock/projectCatalog";
+import Link from "next/link";
+
+/** Shows which project and sky field this observatory session is contributing to. */
+function ProjectBreadcrumb({ projectId, subjectId }: { projectId: string; subjectId: string | null }) {
+  const project = getProject(projectId);
+  const picture = getPicture(subjectId);
+  if (!project) return null;
+  return (
+    <nav aria-label="Contribution context" className="flex flex-wrap items-center gap-1.5 border-b border-white/10 bg-cyan-950/30 px-4 py-1.5 text-xs text-slate-300">
+      <Link href={`/projects/${project.id}`} className="text-cyan-200 hover:underline">
+        {project.name}
+      </Link>
+      {picture && (
+        <>
+          <span aria-hidden="true" className="text-slate-600">/</span>
+          <span className="text-slate-200">{picture.title}</span>
+        </>
+      )}
+      <span className="ml-auto text-slate-400">Tags you save here count toward this project.</span>
+    </nav>
+  );
+}
 
 const TAG_STORAGE_KEY = "astroblink.tags.v1";
 
@@ -67,10 +92,12 @@ function labelForPosition(ra: number, dec: number, benchmarks: BenchmarkView[]):
   return hit ? hit.name : null;
 }
 
-export default function Observatory() {
+export default function Observatory({ embedOnly = false }: { embedOnly?: boolean }) {
   const [state, setState] = useState<ObservatoryState>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [baseUrl, setBaseUrl] = useState("");
+  const [ctx, setCtx] = useState<{ projectId: string | null; subjectId: string | null }>({ projectId: null, subjectId: null });
+  const session = useSession();
   const [input, setInput] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
   const [resolvedLabel, setResolvedLabel] = useState<string | null>(null);
@@ -82,7 +109,8 @@ export default function Observatory() {
   const [pendingMark, setPendingMark] = useState<PendingMark | null>(null);
   const [selected, setSelected] = useState<{ x: number; y: number } | null>(null);
   const [spectra, setSpectra] = useState<EpochSpectrum[]>([]);
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [spectraLoading, setSpectraLoading] = useState(false);
   const [visibleEpochs, setVisibleEpochs] = useState<boolean[]>([true, true, true, true]);
   const [templates, setTemplates] = useState<TemplateId[]>([]);
   const [candidates, setCandidates] = useState<TaggedCandidate[]>([]);
@@ -98,21 +126,21 @@ export default function Observatory() {
 
   const view = useMemo(() => ({ ra: state.ra, dec: state.dec, fovArcmin: state.fov }), [state.ra, state.dec, state.fov]);
   const wcs = useMemo(() => makeWcs({ ra: state.ra, dec: state.dec }, state.fov), [state.ra, state.dec, state.fov]);
-  const loadFrame = useMemo(() => createFrameLoader(subject, view), [subject, view]);
+  const loadFrame = useMemo(() => createFrameLoader(subject), [subject]);
 
   const activeBenchmarkId = useMemo(
     () => benchmarks.find((b) => Math.abs(b.ra - state.ra) < 1e-3 && Math.abs(b.dec - state.dec) < 1e-3)?.id ?? null,
     [benchmarks, state.ra, state.dec],
   );
 
-  // â”€â”€ URL hydration and write-back â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── URL hydration and write-back ───────────────────────────────────────────
   useEffect(() => {
-    const parsed = parseState(new URLSearchParams(window.location.search));
+    const search = new URLSearchParams(window.location.search);
+    const parsed = parseState(search);
+    setCtx({ projectId: search.get("project"), subjectId: search.get("subject") });
     setState(parsed);
-    setBaseUrl(`${window.location.origin}${window.location.pathname}`);
+    setBaseUrl(window.location.origin);
     setInput(labelForPosition(parsed.ra, parsed.dec, api.listBenchmarks()) ?? `${parsed.ra.toFixed(4)}, ${parsed.dec.toFixed(4)}`);
-    // The spectrum drawer starts open on desktop and closed on phones, where it would cover the image.
-    setDrawerOpen(window.innerWidth >= 1024);
     setHydrated(true);
   }, []);
 
@@ -123,10 +151,13 @@ export default function Observatory() {
   useEffect(() => {
     if (!hydrated) return;
     const qs = serializeState(state).toString();
-    window.history.replaceState(null, "", `${window.location.pathname}?${qs}`);
-  }, [state, hydrated]);
+    const withContext = new URLSearchParams(qs);
+    if (ctx.projectId) withContext.set("project", ctx.projectId);
+    if (ctx.subjectId) withContext.set("subject", ctx.subjectId);
+    window.history.replaceState(null, "", `${window.location.pathname}?${withContext.toString()}`);
+  }, [state, hydrated, ctx]);
 
-  // â”€â”€ Persisted tags (per viewer) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Persisted tags (per viewer) ────────────────────────────────────────────
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(TAG_STORAGE_KEY);
@@ -146,7 +177,7 @@ export default function Observatory() {
     }
   }, [candidates, tagsLoaded]);
 
-  // â”€â”€ Data loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Data loading ───────────────────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false;
     api
@@ -184,19 +215,24 @@ export default function Observatory() {
       return;
     }
     let cancelled = false;
+    setSpectraLoading(true);
     Promise.all(epochs.map((e) => api.getSpectrum(view, e.index, selected.x, selected.y)))
-      .then((list: SpectrumResponse[]) => {
-        if (!cancelled) setSpectra(list.map((s, i) => ({ epochIndex: i, label: epochs[i].label, spectrum: s })));
+      .then((list: Array<SpectrumResponse | null>) => {
+        if (cancelled) return;
+        setSpectra(list.map((s, i) => ({ epochIndex: i, label: epochs[i].label, spectrum: s })));
+        setSpectraLoading(false);
       })
       .catch(() => {
-        if (!cancelled) setSpectra([]);
+        if (cancelled) return;
+        setSpectra([]);
+        setSpectraLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, [selected, view, epochs]);
 
-  // â”€â”€ Playback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Playback ───────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!playing) return;
     const id = window.setInterval(() => {
@@ -208,7 +244,7 @@ export default function Observatory() {
     return () => window.clearInterval(id);
   }, [playing, state.speed, epochs.length]);
 
-  // â”€â”€ Keyboard shortcuts (ignored while typing) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Keyboard shortcuts (ignored while typing) ──────────────────────────────
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement | null)?.tagName;
@@ -233,7 +269,7 @@ export default function Observatory() {
     return () => window.removeEventListener("keydown", onKey);
   }, [epochs.length]);
 
-  // â”€â”€ Derived view data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Derived view data ──────────────────────────────────────────────────────
   const epochCount = epochs.length;
   const currentEpoch = epochs[state.epochIndex];
   const currentSpectrum = spectra[state.epochIndex]?.spectrum ?? null;
@@ -274,10 +310,10 @@ export default function Observatory() {
     return saved;
   }, [candidates, subject?.id, currentEpoch, pendingMark, state.epochIndex]);
 
-  const shareUrl = `${baseUrl}?${serializeState({ ...state, embed: false }).toString()}`;
-  const embedUrl = `${baseUrl}?${serializeState({ ...state, embed: true }).toString()}`;
+  const shareUrl = `${baseUrl}/observatory?${serializeState({ ...state, embed: false }).toString()}`;
+  const embedUrl = `${baseUrl}/embed?${serializeState({ ...state, embed: true }).toString()}`;
 
-  // â”€â”€ Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Actions ────────────────────────────────────────────────────────────────
   const navigate = (ra: number, dec: number) => {
     setState((prev) => ({ ...prev, ra: normalizeRa(ra), dec }));
     setSelected(null);
@@ -316,6 +352,16 @@ export default function Observatory() {
   };
 
   const onSaved = (candidate: TaggedCandidate, result: { subject_classification_count: number; subject_retired: boolean }) => {
+    if (session.status === "authenticated" && ctx.projectId && ctx.subjectId) {
+      addContribution({
+        userId: session.user.id,
+        projectId: ctx.projectId,
+        pictureId: ctx.subjectId,
+        category: candidate.category,
+        ra: candidate.ra,
+        dec: candidate.dec,
+      });
+    }
     setCandidates((prev) => [candidate, ...prev]);
     setSubject((prev) => (prev ? { ...prev, classification_count: result.subject_classification_count, retired: result.subject_retired } : prev));
   };
@@ -368,8 +414,8 @@ export default function Observatory() {
     />
   );
 
-  // â”€â”€ Embed layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  if (state.embed) {
+  // -- Embed layout ----------------------------------------
+  if (embedOnly || state.embed) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-2 p-2">
         {canvas(true)}
@@ -386,7 +432,7 @@ export default function Observatory() {
             {currentEpoch?.label} · {currentEpoch?.iso_date}
           </span>
           <a
-            href={`${baseUrl}?${serializeState({ ...state, embed: false }).toString()}`}
+            href={`${baseUrl}/observatory?${serializeState({ ...state, embed: false }).toString()}`}
             target="_blank"
             rel="noopener noreferrer"
             className="ml-auto text-cyan-300 underline-offset-2 hover:underline"
@@ -398,9 +444,10 @@ export default function Observatory() {
     );
   }
 
-  // â”€â”€ Full observatory layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Full observatory layout ────────────────────────────────────────────────
   return (
-    <div className="flex min-h-screen flex-col lg:h-screen lg:overflow-hidden">
+    <div className="flex min-h-screen flex-col lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
+      {ctx.projectId && <ProjectBreadcrumb projectId={ctx.projectId} subjectId={ctx.subjectId} />}
       <CommandBar
         input={input}
         onInputChange={(v) => {
@@ -424,8 +471,8 @@ export default function Observatory() {
         resolvedLabel={resolvedLabel}
       />
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 p-3 lg:grid-cols-[272px_minmax(0,1fr)_300px]">
-        <div className="flex min-h-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 p-4 pb-28 lg:grid-cols-[272px_minmax(0,1fr)_300px] lg:p-3 lg:pb-3">
+        <div className="order-2 flex min-h-0 flex-col gap-3 lg:order-none lg:overflow-y-auto lg:pr-1">
           <GlassPanel eyebrow="Display" title="Arithmetic & transfer">
             <TransferControls
               mode={state.mode}
@@ -439,7 +486,7 @@ export default function Observatory() {
           </GlassPanel>
         </div>
 
-        <main className="flex min-h-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
+        <main className="order-1 flex min-h-0 flex-col gap-3 lg:order-none lg:overflow-y-auto lg:pr-1">
           <div className="flex flex-col items-center gap-1">
             {canvas(false)}
             <p className="font-mono text-[10px] text-slate-500">
@@ -476,7 +523,7 @@ export default function Observatory() {
           </GlassPanel>
         </main>
 
-        <aside className="flex min-h-0 flex-col gap-3 lg:overflow-y-auto">
+        <aside className="order-3 flex min-h-0 flex-col gap-3 lg:order-none lg:overflow-y-auto">
           <GlassPanel
             eyebrow="Citizen science"
             title="Annotate & export"
@@ -516,7 +563,7 @@ export default function Observatory() {
               <dt className="text-slate-500">FoV</dt>
               <dd>{state.fov}′ · {wcs.arcsecPerPx.toFixed(2)}″/px</dd>
               <dt className="text-slate-500">Span</dt>
-              <dd>{currentEpoch?.iso_date} â†’ {epochs[epochCount - 1]?.iso_date}</dd>
+              <dd>{currentEpoch?.iso_date} → {epochs[epochCount - 1]?.iso_date}</dd>
             </dl>
             {subject && consensus && (
               <div className="mt-3">
@@ -539,6 +586,7 @@ export default function Observatory() {
           ra={selected ? wcs.pixelToWorld(selected.x, selected.y).ra : null}
           dec={selected ? wcs.pixelToWorld(selected.x, selected.y).dec : null}
           epochSpectra={spectra}
+          loading={spectraLoading}
           visibleEpochs={visibleEpochs}
           onToggleEpoch={toggleEpochVisible}
           templates={templates}

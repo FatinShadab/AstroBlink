@@ -34,6 +34,7 @@ export interface SpectrumPlotterProps {
   ra: number | null;
   dec: number | null;
   epochSpectra: EpochSpectrum[];
+  loading?: boolean;
   visibleEpochs: boolean[];
   onToggleEpoch: (index: number) => void;
   templates: TemplateId[];
@@ -68,6 +69,7 @@ export default function SpectrumPlotter({
   ra,
   dec,
   epochSpectra,
+  loading = false,
   visibleEpochs,
   onToggleEpoch,
   templates,
@@ -129,7 +131,7 @@ export default function SpectrumPlotter({
   return (
     <section
       aria-label="Spectrophotometry"
-      className="pointer-events-auto flex max-h-[70vh] flex-col overflow-y-auto rounded-t-2xl border border-b-0 border-white/10 bg-slate-950/85 shadow-[0_-20px_60px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl lg:max-h-none lg:overflow-visible"
+      className="pointer-events-auto flex max-h-[55vh] flex-col overflow-y-auto rounded-t-2xl border border-b-0 border-white/10 bg-slate-950/90 shadow-[0_-20px_60px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl lg:max-h-[38vh]"
     >
       <header className="flex flex-wrap items-center gap-2 px-4 py-2.5">
         <button
@@ -227,8 +229,17 @@ export default function SpectrumPlotter({
                 )}
               </svg>
             ) : (
-              <div className="flex h-40 items-center justify-center rounded-xl border border-dashed border-white/10 text-sm text-slate-400">
-                Loading spectrum…
+              <div className="flex h-24 flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-white/10 px-4 text-center text-sm text-slate-400">
+                {loading ? (
+                  "Reading spectrum…"
+                ) : pixel ? (
+                  <>
+                    <span className="text-slate-200">No spectrophotometry for this pixel</span>
+                    <span className="text-xs text-slate-500">102-band photometry appears once SPHEREx data is connected.</span>
+                  </>
+                ) : (
+                  "Click the image to inspect a pixel."
+                )}
               </div>
             )}
           </div>
