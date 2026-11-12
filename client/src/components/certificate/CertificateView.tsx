@@ -47,21 +47,26 @@ export function CertificateView() {
     const usedProjects = PROJECTS.filter((p) => (stats.byProject[p.slug] ?? 0) > 0).map((p) =>
       t(p.titleKey),
     );
-    drawCertificate(
-      ctx,
-      {
-        brand: t("brand.name"),
-        title: t("cert.title"),
-        name,
-        body: fill(t("cert.body"), { count: stats.fieldsChecked }),
-        projectsLabel: t("cert.projects"),
-        projects: usedProjects.length > 0 ? usedProjects : [t("cert.none")],
-        dateLabel: t("cert.date"),
-        dateText: formatDate(today, lang),
-        credit: t("cert.credit"),
-      },
-      colours,
-    );
+    const content = {
+      brand: t("brand.name"),
+      title: t("cert.title"),
+      name,
+      body: fill(t("cert.body"), { count: stats.fieldsChecked }),
+      projectsLabel: t("cert.projects"),
+      projects: usedProjects.length > 0 ? usedProjects : [t("cert.none")],
+      dateLabel: t("cert.date"),
+      dateText: formatDate(today, lang),
+      credit: t("cert.credit"),
+    };
+    // Draw at once, then again with the AstroBlink logo when it has loaded (same origin, so the
+    // canvas stays exportable).
+    drawCertificate(ctx, content, colours);
+    const logo = new Image();
+    logo.onload = () => drawCertificate(ctx, content, colours, logo);
+    logo.src = "/brand/astroblink-logo.png";
+    return () => {
+      logo.onload = null;
+    };
   }, [name, stats.fieldsChecked, stats.byProject, lang, t, today]);
 
   function download() {

@@ -9,8 +9,7 @@ export default function MePage() {
   return (
     <Container className="flex flex-col gap-8 py-10 md:py-12">
       <RequireSignIn>
-        \n <StatsView />
-        \n{" "}
+        <StatsView />
       </RequireSignIn>
     </Container>
   );

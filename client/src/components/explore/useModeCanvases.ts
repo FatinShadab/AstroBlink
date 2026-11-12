@@ -12,6 +12,7 @@ import {
   type DiffStyle,
   type RGB,
 } from "@/lib/sky/modes";
+import { fillEnclosedNaN } from "@/lib/sky/fill";
 import { makeFrameCanvas, makeRgbaCanvas } from "@/lib/sky/render";
 import { percentileRange, stretchToU8, type Adjust, type StretchKind } from "@/lib/sky/stretch";
 
@@ -75,7 +76,9 @@ export function useModeCanvases(inputs: ModeInputs): ModeCanvases {
     const { frames, range } = loaded;
     const n = frames.length;
     const { width, height } = frames[0].meta;
-    const grey = (i: number) => stretchToU8(frames[i].data, range, stretch, adjust);
+    // Display copies with saturated (NaN) star cores filled; photometry elsewhere uses the raw data.
+    const shown = frames.map((f) => fillEnclosedNaN(f.data, f.meta.width, f.meta.height));
+    const grey = (i: number) => stretchToU8(shown[i], range, stretch, adjust);
     const clampIndex = (i: number) => Math.min(n - 1, Math.max(0, i));
 
     switch (mode) {
@@ -97,7 +100,7 @@ export function useModeCanvases(inputs: ModeInputs): ModeCanvases {
       }
 
       case "diff": {
-        const diff = difference(frames[clampIndex(b)].data, frames[clampIndex(a)].data);
+        const diff = difference(shown[clampIndex(b)], shown[clampIndex(a)]);
         const scale = differenceScale(diff);
         const pos = cssRgb("--data-2", "#e69f00");
         const neg = cssRgb("--data-1", "#56b4e9");
@@ -106,7 +109,7 @@ export function useModeCanvases(inputs: ModeInputs): ModeCanvases {
 
       case "stack": {
         const ids = stackIds.length > 0 ? stackIds.filter((i) => i < n) : frames.map((_, i) => i);
-        const mean = meanStack(ids.map((i) => frames[i].data));
+        const mean = meanStack(ids.map((i) => shown[i]));
         const stackRange = percentileRange([mean]);
         return [makeFrameCanvas(stretchToU8(mean, stackRange, stretch, adjust), width, height)];
       }

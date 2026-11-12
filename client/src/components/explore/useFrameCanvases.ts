@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import type { LoadedField } from "@/lib/data/useFieldFrames";
+import { fillEnclosedNaN } from "@/lib/sky/fill";
 import { makeFrameCanvas } from "@/lib/sky/render";
 import { stretchToU8, type Adjust, type StretchKind } from "@/lib/sky/stretch";
 
@@ -16,9 +17,15 @@ export function useFrameCanvases(
 ): HTMLCanvasElement[] {
   return useMemo(() => {
     if (!loaded) return [];
+    // Saturated (NaN) star cores are filled for display only, so bright stars look solid.
     return loaded.frames.map((frame) =>
       makeFrameCanvas(
-        stretchToU8(frame.data, loaded.range, stretch, adjust),
+        stretchToU8(
+          fillEnclosedNaN(frame.data, frame.meta.width, frame.meta.height),
+          loaded.range,
+          stretch,
+          adjust,
+        ),
         frame.meta.width,
         frame.meta.height,
       ),

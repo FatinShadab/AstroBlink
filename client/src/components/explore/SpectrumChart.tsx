@@ -2,8 +2,9 @@
 
 import {
   CartesianGrid,
+  ComposedChart,
+  ErrorBar,
   Line,
-  LineChart,
   ReferenceArea,
   ResponsiveContainer,
   Tooltip,
@@ -13,26 +14,31 @@ import {
 import type { SpectrumPoint } from "@/lib/data/types";
 import { useT } from "@/lib/i18n/LangProvider";
 
-/** Molecule bands from design §8.2: H₂O 3.0 μm, CH₄ 3.3 μm, CO₂ 4.27 μm, CO 4.67 μm. */
+/**
+ * Molecule bands from design §8.2: H₂O 3.0 μm, CH₄ 3.3 μm, CO₂ 4.27 μm, CO 4.67 μm.
+ * Labels are short and alternate between two heights, so neighbouring bands never overlap.
+ */
 export const MOLECULE_BANDS = [
-  { label: "H₂O 3.0 μm", centre: 3.0 },
-  { label: "CH₄ 3.3 μm", centre: 3.3 },
-  { label: "CO₂ 4.27 μm", centre: 4.27 },
-  { label: "CO 4.67 μm", centre: 4.67 },
+  { label: "H₂O", title: "H₂O 3.0 μm", centre: 3.0, row: 0 },
+  { label: "CH₄", title: "CH₄ 3.3 μm", centre: 3.3, row: 1 },
+  { label: "CO₂", title: "CO₂ 4.27 μm", centre: 4.27, row: 0 },
+  { label: "CO", title: "CO 4.67 μm", centre: 4.67, row: 1 },
 ] as const;
 
 const BAND_HALF_WIDTH_UM = 0.05;
 
-/** Relative brightness against wavelength, with shaded molecule bands (design §11). Client-only. */
+/**
+ * Brightness against wavelength (design §11): one marker per measurement with its error bar, joined by a
+ * thin straight line (no smoothing, which would invent values between points). Client-only.
+ */
 export function SpectrumChart({ points }: { points: SpectrumPoint[] }) {
   const { t } = useT();
-  const summary = points
-    .map((p) => `${p.wavelengthUm.toFixed(2)} μm ${p.flux.toFixed(2)}`)
-    .join("; ");
+  const sorted = [...points].sort((a, b) => a.wavelengthUm - b.wavelengthUm);
+  const summary = sorted.map((p) => `${p.wavelengthUm.toFixed(2)} μm ${p.flux.toFixed(2)}`).join("; ");
   return (
     <div className="h-64 w-full" role="img" aria-label={`${t("explore.spectrum")}. ${summary}`}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={points} margin={{ top: 16, right: 16, bottom: 4, left: 0 }}>
+        <ComposedChart data={sorted} margin={{ top: 30, right: 16, bottom: 4, left: 0 }}>
           <CartesianGrid horizontal vertical={false} stroke="var(--border)" />
           {MOLECULE_BANDS.map((band) => (
             <ReferenceArea
@@ -40,11 +46,13 @@ export function SpectrumChart({ points }: { points: SpectrumPoint[] }) {
               x1={band.centre - BAND_HALF_WIDTH_UM}
               x2={band.centre + BAND_HALF_WIDTH_UM}
               fill="var(--accent)"
-              fillOpacity={0.14}
+              fillOpacity={0.12}
               stroke="none"
+              ifOverflow="visible"
               label={{
                 value: band.label,
-                position: "insideTop",
+                position: "top",
+                offset: band.row === 0 ? 4 : 16,
                 fill: "var(--text-secondary)",
                 fontSize: 11,
               }}
@@ -58,11 +66,7 @@ export function SpectrumChart({ points }: { points: SpectrumPoint[] }) {
             tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
             stroke="var(--border)"
           />
-          <YAxis
-            tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-            stroke="var(--border)"
-            width={48}
-          />
+          <YAxis tick={{ fill: "var(--text-secondary)", fontSize: 12 }} stroke="var(--border)" width={48} />
           <Tooltip
             contentStyle={{
               background: "var(--surface-3)",
@@ -71,17 +75,21 @@ export function SpectrumChart({ points }: { points: SpectrumPoint[] }) {
               color: "var(--text-primary)",
               fontSize: 12,
             }}
+            labelFormatter={(value) => `${Number(value).toFixed(3)} μm`}
             formatter={(value) => [Number(value).toFixed(3), t("explore.relativeBrightness")]}
           />
           <Line
             dataKey="flux"
-            type="monotone"
+            type="linear"
             stroke="var(--data-1)"
-            strokeWidth={2}
-            dot={false}
+            strokeWidth={1}
+            dot={{ r: 3, fill: "var(--data-1)", stroke: "var(--data-1)" }}
+            activeDot={{ r: 4 }}
             isAnimationActive={false}
-          />
-        </LineChart>
+          >
+            <ErrorBar dataKey="fluxErr" width={4} strokeWidth={1} stroke="var(--data-1)" direction="y" />
+          </Line>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );

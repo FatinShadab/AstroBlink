@@ -34,6 +34,9 @@ import { SearchPanel } from "./SearchPanel";
 import { SkyViewer } from "./SkyViewer";
 import { ViewerToolbar } from "./ViewerToolbar";
 
+/** Stable placeholder pixel: the real-data spectrum is of the target star, whatever was clicked. */
+const TARGET_PIXEL = { x: 0, y: 0 } as const;
+
 const LightCurveChart = dynamic(() => import("./LightCurveChart").then((m) => m.LightCurveChart), {
   ssr: false,
   loading: () => <Skeleton className="h-56 w-full" />,
@@ -180,8 +183,10 @@ export function ExploreView() {
     [frames, realField],
   );
 
-  // Spectrum for the picked pixel (design §8.2).
-  const spectrum = useSpectrum(target, pick);
+  // Spectrum (design §8.2). Real data has the target star's spectrum, so it loads without a click;
+  // the simulated sky gives the clicked pixel's spectrum.
+  const realTarget = target !== null && hasRealData(target);
+  const spectrum = useSpectrum(target, realTarget ? TARGET_PIXEL : pick);
 
   // ---- Actions. Each user action may write the URL; autoplay never does. ----
   function newTarget(next: Partial<ViewerParams>) {
@@ -283,6 +288,8 @@ export function ExploreView() {
       <h1 className="font-display text-h1 font-semibold text-text-primary">{t("explore.title")}</h1>
 
       <SearchPanel
+        // Remount when the target changes, so the box shows the chosen preset's coordinates.
+        key={`${raDeg ?? ""},${decDeg ?? ""}`}
         raDeg={raDeg}
         decDeg={decDeg}
         fov={fov}
@@ -302,7 +309,8 @@ export function ExploreView() {
         }
       />
 
-      <PresetChips selected={(params.preset as PresetId | null) ?? null} onSelect={onPreset} />
+      {/* Highlighted for a chosen preset and for typed coordinates that land on one. */}
+      <PresetChips selected={preset?.id ?? null} onSelect={onPreset} />
 
       {errorKey && (
         <Banner tone="danger" icon="⚠">
@@ -332,9 +340,7 @@ export function ExploreView() {
         </Banner>
       )}
       {showFewFrames && (
-        <Banner tone="warning" icon="⚠">
-          {fill(t("explore.fewFrames"), { count })}
-        </Banner>
+        <p className="text-caption text-text-muted">{fill(t("explore.fewFrames"), { count })}</p>
       )}
       {load.status === "error" && (
         <Banner
@@ -514,6 +520,7 @@ export function ExploreView() {
             flagCount={ready && frames[current] ? countFlagged(frames[current].flags) : 0}
             spectrum={spectrum}
             pick={pick}
+            spectrumOfTarget={realTarget}
             shareUrl={`${origin}/explore${search}`}
             embedSnippet={embedSnippet(origin, search)}
             onCopy={(text, doneKey) => void copyText(text, doneKey)}

@@ -9,8 +9,7 @@ export default function CertificatePage() {
   return (
     <Container className="flex flex-col gap-8 py-10 md:py-12">
       <RequireSignIn>
-        \n <CertificateView />
-        \n{" "}
+        <CertificateView />
       </RequireSignIn>
     </Container>
   );

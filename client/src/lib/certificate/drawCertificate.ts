@@ -36,11 +36,19 @@ function ring(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, co
   ctx.fill();
 }
 
-/** Draws the certificate onto a 2480×1754 canvas. The brand mark is geometric; no NASA marks (rules §2.3). */
+/** AstroBlink logo proportions (public/brand/astroblink-logo.png, 705 × 445). */
+const LOGO_RATIO = 705 / 445;
+
+/**
+ * Draws the certificate onto a 2480×1754 canvas. With `logo`, the AstroBlink logo sits on a dark badge
+ * (the logo is light on transparent, so it needs a dark ground on the paper); without it, a geometric
+ * mark and the brand name are drawn instead. No NASA marks (rules §2.3).
+ */
 export function drawCertificate(
   ctx: CanvasRenderingContext2D,
   text: CertificateText,
   c: CertificateColours,
+  logo?: CanvasImageSource,
 ): void {
   ctx.fillStyle = c.paper;
   ctx.fillRect(0, 0, CERT_W, CERT_H);
@@ -51,11 +59,24 @@ export function drawCertificate(
   ctx.lineWidth = 2;
   ctx.strokeRect(150, 150, CERT_W - 300, CERT_H - 300);
 
-  ring(ctx, 260, 260, 42, c.accent);
-  ctx.fillStyle = c.ink;
-  ctx.textAlign = "left";
-  ctx.font = '600 56px "Space Grotesk", system-ui, sans-serif';
-  ctx.fillText(text.brand, 330, 285);
+  if (logo) {
+    const logoH = 170;
+    const logoW = logoH * LOGO_RATIO;
+    const pad = 22;
+    const x = 200;
+    const y = 190;
+    ctx.fillStyle = c.ink;
+    ctx.beginPath();
+    ctx.roundRect(x - pad, y - pad, logoW + pad * 2, logoH + pad * 2, 24);
+    ctx.fill();
+    ctx.drawImage(logo, x, y, logoW, logoH);
+  } else {
+    ring(ctx, 260, 260, 42, c.accent);
+    ctx.fillStyle = c.ink;
+    ctx.textAlign = "left";
+    ctx.font = '600 56px "Space Grotesk", system-ui, sans-serif';
+    ctx.fillText(text.brand, 330, 285);
+  }
 
   ctx.textAlign = "center";
   ctx.fillStyle = c.accent;

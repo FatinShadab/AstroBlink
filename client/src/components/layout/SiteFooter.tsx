@@ -14,7 +14,7 @@ const PAGES = [
   { href: "/explore", key: "nav.explore" },
   { href: "/guide", key: "nav.guide" },
   { href: "/about", key: "nav.about" },
-  { href: "/embed", key: "footer.embed" },
+  { href: "/embed?preset=barnard", key: "footer.embed" },
 ] as const;
 
 /** Copyright year. Fixed, because a live date cannot be prerendered in a client component. */

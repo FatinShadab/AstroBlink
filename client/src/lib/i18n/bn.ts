@@ -215,6 +215,7 @@ export const bn: Record<DictKey, string> = {
   "explore.flagLegend": "অনির্ভরযোগ্য পিক্সেল (কসমিক রে বা স্যাচুরেশন)", // TODO bn review
   "explore.flagCount": "এই ফ্রেমে {count}টি চিহ্নিত পিক্সেল", // TODO bn review
   "explore.spectrumHint": "ব্লিংক ভিউয়ের যেকোনো তারায় ক্লিক করে তার বর্ণালি দেখুন।", // TODO bn review
+  "explore.spectrumTarget": "লক্ষ্য নক্ষত্রের বর্ণালি: প্রতিটি SPHEREx পর্যবেক্ষণের জন্য একটি বিন্দু, প্রতিটি নিজ নিজ তরঙ্গদৈর্ঘ্যে।",
   "explore.spectrumWaiting": "এখনও কোনো তারা বাছা হয়নি।", // TODO bn review
   "explore.spectrumError": "এই পিক্সেলের বর্ণালি লোড করা যায়নি।", // TODO bn review
   "explore.exportCsv": "CSV রপ্তানি", // TODO bn review
@@ -424,7 +425,7 @@ export const bn: Record<DictKey, string> = {
     "Astronomers have used blink comparators for a long time. Two pictures of the same patch of sky are shown one after another. Anything that moved or changed stands out, while the still stars stay put. Pluto was found this way in 1930 by Clyde Tombaugh, who compared photographic plates by eye.", // TODO bn
   "about.data.title": "About our data", // TODO bn
   "about.data.body":
-    "By default the viewer uses a simulated sky. It is generated in your browser from a seeded model, so the same spot always looks the same. Every simulated view says so. Real SPHEREx cutouts can be added later as static files. There is no live archive connection in this version.", // TODO bn
+    "পাঁচটি পরীক্ষামূলক লক্ষ্যবস্তু (WISE 0855, Barnard's Star, Epsilon Indi B, R Draconis ও RW Aurigae) আসল NASA SPHEREx পর্যবেক্ষণ দেখায়: NASA/IPAC IRSA-র Quick Release স্পেকট্রাল ছবি, প্রতিটির নিজস্ব পর্যবেক্ষণের তারিখ ও তরঙ্গদৈর্ঘ্যসহ। Explore পাতার বাকি সব জায়গায় এবং প্রতিটি প্রজেক্টে (অনুশীলন ও শ্রেণিবিন্যাস) আপনি সিমুলেটেড আকাশ দেখবেন, যা আপনার ব্রাউজারে তৈরি হয় যাতে উত্তরগুলো জানা থাকে। প্রতিটি সিমুলেটেড দৃশ্যে তা লেখা থাকে।",
   "about.credits.title": "Credits and acknowledgements", // TODO bn
   "data.credit": "ডেটা: NASA SPHEREx Quick Release স্পেকট্রাল ছবি, NASA/IPAC Infrared Science Archive (IRSA)। DOI: 10.26131/IRSA652 (QR2), 10.26131/IRSA662 (QR3)।",
   "data.tools": "Astropy ও Astroquery দিয়ে তৈরি।",
@@ -435,7 +436,13 @@ export const bn: Record<DictKey, string> = {
     "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. Shown without changes.", // TODO bn
   "about.team.title": "Team", // TODO bn
   "about.team.body":
-    "TODO: team name, members and credits. To be filled in by the team (brain §10).", // TODO bn
+    "Team OP NASA Space Apps Challenge 2026-এর জন্য AstroBlink তৈরি করেছে।",
+  "about.loginImage": "লগইন পাতার ছবি: চাঁদে দাঁড়ানো একজন নভোচারী, আকাশে পৃথিবী। আলোকচিত্রী ও লাইসেন্স: দল যোগ করবে।",
+  "team.role.builder": "নির্মাতা",
+  "team.role.presenter": "উপস্থাপক",
+  "team.role.data": "ডেটা",
+  "team.role.video": "ভিডিও",
+  "team.role.designer": "ডিজাইনার",
 
   "me.guest": "Guest", // TODO bn
   "me.volunteer": "Volunteer", // TODO bn
@@ -471,7 +478,7 @@ export const bn: Record<DictKey, string> = {
   "cert.projects": "Projects", // TODO bn
   "cert.none": "No projects yet", // TODO bn
   "cert.date": "Date", // TODO bn
-  "cert.credit": "Built with NASA SPHEREx data. Not an official NASA certificate.", // TODO bn
+  "cert.credit": "AstroBlink NASA SPHEREx ডেটা দিয়ে তৈরি। অনুশীলন ও প্রজেক্টের ফিল্ডগুলোতে সিমুলেটেড আকাশ ব্যবহার করা হয়। এটি NASA-র কোনো অফিসিয়াল সনদ নয়।",
   "cert.preview": "Preview of your certificate", // TODO bn
   "cert.demoNote": "The certificate is drawn from your answers in this browser.", // TODO bn
   "cert.download": "Download PNG", // TODO bn

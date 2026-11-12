@@ -28,6 +28,8 @@ interface ManifestFrame {
   /** Aperture photometry at the target (mJy); null when the aperture is saturated or off the image. */
   flux?: number | null;
   fluxErr?: number | null;
+  /** Older data: the target pixel's value (MJy/sr), null when saturated. */
+  centreFlux?: number | null;
   files: { pixels: string; flags: string };
 }
 
@@ -41,7 +43,6 @@ interface Manifest {
 
 const DATA_ROOT = "/data";
 const manifestCache = new Map<string, Promise<Manifest>>();
-const spectrumCache = new Map<string, Promise<SpectrumPoint[]>>();
 
 async function fetchOk(url: string, signal?: AbortSignal): Promise<Response> {
   // "no-cache" revalidates with the server (a cheap 304 when unchanged), so a data refresh is never
@@ -117,11 +118,7 @@ export function wavelengthTolerance(detector: FrameMeta["detector"]): number {
  * matches within the tolerance; ties go to the group that spans the longest time. Fewer than two matching
  * frames returns an empty list, and the caller reports it.
  */
-export function selectMatchedWavelength<T extends Pick<FrameMeta, "obsDate" | "wavelengthUm" | "detector">>(
-  frames: T[],
-): T[] {
-  if (frames.length < 2) return [];
-  const tol = wavelengthTolerance(frames[0].detector);
+function bestGroup<T extends Pick<FrameMeta, "obsDate" | "wavelengthUm">>(frames: T[], tol: number): T[] {
   let best: T[] = [];
   let bestSpan = -1;
   for (const anchor of frames) {
@@ -135,7 +132,42 @@ export function selectMatchedWavelength<T extends Pick<FrameMeta, "obsDate" | "w
       bestSpan = span;
     }
   }
-  return best.length >= 2 ? [...best].sort((a, b) => a.obsDate.localeCompare(b.obsDate)) : [];
+  return best;
+}
+
+/** Tolerance steps tried in order: strict first, then up to four times wider (≈ 2 resolution elements). */
+export const TOLERANCE_STEPS = [1, 2, 3, 4] as const;
+
+export function selectMatchedWavelength<T extends Pick<FrameMeta, "obsDate" | "wavelengthUm" | "detector">>(
+  frames: T[],
+): T[] {
+  if (frames.length < 2) return [];
+  const base = wavelengthTolerance(frames[0].detector);
+  let fallback: T[] = [];
+  for (const step of TOLERANCE_STEPS) {
+    const group = bestGroup(frames, base * step);
+    if (group.length >= 3) return [...group].sort((a, b) => a.obsDate.localeCompare(b.obsDate));
+    if (fallback.length < 2 && group.length >= 2) fallback = group; // strictest pair, if nothing reaches 3
+  }
+  return fallback.length >= 2 ? [...fallback].sort((a, b) => a.obsDate.localeCompare(b.obsDate)) : [];
+}
+
+/**
+ * SPHEREx FLAGS bits that mean an unreliable pixel and fit in the low byte: TRANSIENT (0, cosmic ray),
+ * OVERFLOW (1, saturated), SUR_ERROR (2), PHANTOM (4), NONFUNC (6). Informational bits are ignored.
+ * Data written before the glitch mask existed stores the 32-bit flags clipped to one byte: 1–254 are the
+ * exact low bits, and 255 means "something above bit 7", which is almost always MP_SOURCE (bit 21,
+ * "part of a detected star"), so it is not counted as a glitch. Newer data stores 0 or 1 and passes through.
+ */
+const GLITCH_LOW_BITS = 0b0101_0111;
+
+export function glitchMask(raw: Uint8Array): Uint8Array {
+  const out = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) {
+    const v = raw[i];
+    out[i] = v !== 255 && (v & GLITCH_LOW_BITS) !== 0 ? 1 : 0;
+  }
+  return out;
 }
 
 /** The preset id is the first part of a frame id ("wise-0855-D2-6080151418" → "wise-0855"). */
@@ -212,7 +244,7 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
         fetchOk(`${DATA_ROOT}/${presetId}/${entry.files.flags}`, signal),
       ]);
       const full = new Float32Array(await pixelsRes.arrayBuffer());
-      const fullFlags = new Uint8Array(await flagsRes.arrayBuffer());
+      const fullFlags = glitchMask(new Uint8Array(await flagsRes.arrayBuffer()));
       const { data, flags } = cropAround(full, fullFlags, entry.width, entry.height, entry.centrePixel, frame.width);
       return { frameId: frame.id, width: frame.width, height: frame.height, data, flags };
     },
@@ -220,16 +252,20 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
     async getSpectrum(target, _pixel, signal) {
       const presetId = presetIdOf(target);
       if (!presetId) throw new Error("No real spectrum is available for these coordinates.");
-      let cached = spectrumCache.get(presetId);
-      if (!cached) {
-        cached = fetchOk(`${DATA_ROOT}/${presetId}/spectrum.json`).then(
-          (r) => r.json() as Promise<SpectrumPoint[]>,
-        );
-        spectrumCache.set(presetId, cached);
-        cached.catch(() => spectrumCache.delete(presetId));
-      }
-      // One point per detector at the target pixel. The pixel argument is not used yet.
-      const points = await cached;
+      // One point per frame (each frame sees the target at its own wavelength), sorted by wavelength.
+      // Newer data has aperture photometry (`flux`); older data has the target pixel's value (`centreFlux`).
+      // Saturated frames have no value and are left out. The spectrum is of the target star, not the
+      // clicked pixel.
+      const manifest = await loadManifest(presetId, signal);
+      const points: SpectrumPoint[] = manifest.frames
+        .map((f) => {
+          const flux = typeof f.flux === "number" ? f.flux : f.centreFlux;
+          return typeof flux === "number" && Number.isFinite(flux)
+            ? { wavelengthUm: f.wavelengthUm, flux, fluxErr: typeof f.fluxErr === "number" ? f.fluxErr : 0 }
+            : null;
+        })
+        .filter((p): p is SpectrumPoint => p !== null)
+        .sort((a, b) => a.wavelengthUm - b.wavelengthUm);
       checkAborted(signal);
       return points;
     },

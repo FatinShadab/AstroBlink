@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { cropAround, presetIdOfFrame, selectMatchedWavelength } from "./staticProvider";
+import { cropAround, glitchMask, presetIdOfFrame, selectMatchedWavelength } from "./staticProvider";
+
+describe("glitchMask", () => {
+  it("keeps unreliable bits and ignores informational and clipped values", () => {
+    // 0 ok; 1 cosmic ray; 2 saturated; 8 (bit 3, unused) ignored; 32 (bit 5 reference) ignored;
+    // 64 non-functional; 255 clipped (mostly "part of a star") ignored.
+    const raw = Uint8Array.from([0, 1, 2, 8, 32, 64, 255]);
+    expect(Array.from(glitchMask(raw))).toEqual([0, 1, 1, 0, 0, 1, 0]);
+  });
+});
 
 describe("selectMatchedWavelength", () => {
   const f = (obsDate: string, wavelengthUm: number, detector: "D2" | "D6" = "D6") => ({
@@ -29,6 +38,21 @@ describe("selectMatchedWavelength", () => {
     ];
     const picked = selectMatchedWavelength(frames).map((x) => x.obsDate);
     expect(picked).toEqual(["2025-08-30", "2026-09-22"]);
+  });
+
+  it("widens the tolerance to reach at least three frames", () => {
+    // D2 base tolerance 1.2 %: only pairs match; at 2.4 % three frames group together.
+    const frames = [
+      f("2025-01-01", 1.1, "D2"),
+      f("2025-06-01", 1.12, "D2"),
+      f("2026-01-01", 1.13, "D2"),
+      f("2026-06-01", 1.5, "D2"),
+    ];
+    expect(selectMatchedWavelength(frames).map((x) => x.obsDate)).toEqual([
+      "2025-01-01",
+      "2025-06-01",
+      "2026-01-01",
+    ]);
   });
 
   it("returns nothing when no two frames match", () => {

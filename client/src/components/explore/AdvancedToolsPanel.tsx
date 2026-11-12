@@ -39,6 +39,8 @@ export interface AdvancedProps {
   flagCount: number;
   spectrum: { points: SpectrumPoint[] | null; loading: boolean; error: string | null };
   pick: { x: number; y: number } | null;
+  /** True when the spectrum is of the target star (real data), not of a clicked pixel. */
+  spectrumOfTarget?: boolean;
   shareUrl: string;
   embedSnippet: string;
   onCopy: (text: string, doneKey: DictKey) => void;
@@ -187,8 +189,12 @@ export function AdvancedToolsPanel({ expanded = false, ...props }: AdvancedProps
         {show("spectrum") && (
           <TabsContent value="spectrum" {...contentProps("spectrum", "flex flex-col gap-4 pt-4")}>
             {heading("spectrum")}
-            <p className="text-body-sm text-text-secondary">{t("explore.spectrumHint")}</p>
-            {props.pick === null && <p className="text-body-sm text-text-muted">{t("explore.spectrumWaiting")}</p>}
+            <p className="text-body-sm text-text-secondary">
+              {props.spectrumOfTarget ? t("explore.spectrumTarget") : t("explore.spectrumHint")}
+            </p>
+            {!props.spectrumOfTarget && props.pick === null && (
+              <p className="text-body-sm text-text-muted">{t("explore.spectrumWaiting")}</p>
+            )}
             {props.spectrum.loading && <p className="text-body-sm text-text-muted">{t("common.loading")}</p>}
             {props.spectrum.error && <p className="text-body-sm text-danger">{t("explore.spectrumError")}</p>}
             {props.spectrum.points && (
