@@ -55,10 +55,10 @@ export function SiteFooter() {
               <li key={page.href}>
                 <Link
                   href={page.href}
-                  className="flex h-11 items-center gap-2 text-body-sm text-text-secondary hover:text-text-primary"
+                  className="group flex h-11 items-center gap-2 text-body-sm text-text-secondary transition-colors hover:text-text-primary focus-visible:text-text-primary"
                 >
                   <ChevronRight aria-hidden="true" className="size-4 text-border-strong" />
-                  {t(page.key)}
+                  <span className="link-flow">{t(page.key)}</span>
                 </Link>
               </li>
             ))}

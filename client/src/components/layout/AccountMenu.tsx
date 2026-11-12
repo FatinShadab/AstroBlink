@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { UserProfile } from "@/lib/state/useUserStore";
-import { useUserStore } from "@/lib/state/useUserStore";
+import { useSignOut } from "./useSignOut";
 import { cn } from "@/lib/utils/cn";
 
 const ITEM =
@@ -29,8 +28,7 @@ export function initialsOf(name: string): string {
  */
 export function AccountMenu({ user, onSettings }: { user: UserProfile; onSettings: () => void }) {
   const { t } = useT();
-  const router = useRouter();
-  const signOut = useUserStore((s) => s.signOut);
+  const signOut = useSignOut();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -96,7 +94,6 @@ export function AccountMenu({ user, onSettings }: { user: UserProfile; onSetting
             onClick={() => {
               setOpen(false);
               signOut();
-              router.push("/");
             }}
             className={cn(ITEM, "text-danger hover:bg-danger-subtle")}
           >

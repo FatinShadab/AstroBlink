@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Field";
 import { Card } from "@/components/ui/Surfaces";
 import { useT } from "@/lib/i18n/LangProvider";
 import { useUserStore } from "@/lib/state/useUserStore";
+import { useSignOut } from "@/components/layout/useSignOut";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -21,7 +22,7 @@ export function LoginView({ next }: { next?: string }) {
   const router = useRouter();
   const user = useUserStore((s) => s.user);
   const signIn = useUserStore((s) => s.signIn);
-  const signOut = useUserStore((s) => s.signOut);
+  const signOut = useSignOut();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export function LoginView({ next }: { next?: string }) {
           <Link href="/me" className={buttonStyles({ variant: "primary" })}>
             {t("login.toStats")}
           </Link>
-          <Button variant="secondary" onClick={signOut}>
+          <Button variant="secondary" onClick={() => signOut({ stay: true })}>
             {t("login.signOut")}
           </Button>
         </div>

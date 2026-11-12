@@ -8,6 +8,8 @@ interface ToastItem {
   id: number;
   title: string;
   description?: string;
+  /** Adds a lime line that flows across the toast while it is shown (used for sign out). */
+  flow?: boolean;
 }
 
 interface ToastContextValue {
@@ -55,6 +57,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <ToastPrimitive.Description className="text-caption text-text-secondary">
                 {item.description}
               </ToastPrimitive.Description>
+            )}
+            {item.flow && (
+              <span aria-hidden="true" className="mt-1 block h-0.5 rounded-full bg-primary animate-line-flow" />
             )}
           </ToastPrimitive.Root>
         ))}

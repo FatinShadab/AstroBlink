@@ -12,7 +12,7 @@ import type { DictKey } from "@/lib/i18n/en";
 import type { Answer, QueueField } from "@/lib/data/types";
 import { useProjectQueue } from "@/lib/projects/useProjectQueue";
 import { useUserStore } from "@/lib/state/useUserStore";
-import { AnswerButtons } from "./AnswerButtons";
+import { AnswerButtons, STEP_CARD } from "./AnswerButtons";
 import { BlinkPanel } from "./BlinkPanel";
 import { useAnswerKeys } from "./useAnswerKeys";
 import { FieldGuideDialog } from "@/components/projects/FieldGuideDialog";
@@ -78,19 +78,23 @@ export function TrainFlow({ project }: { project: ProjectDef }) {
           </div>
         </Card>
       ) : fields && fields[index] ? (
-        <>
-          <BlinkPanel key={fields[index].fieldId} target={fields[index].target} advanced />
-          <TrainStep
-            key={index}
-            project={project}
-            field={fields[index]}
-            index={index}
-            onDone={(correct) => {
-              setResults((r) => [...r, correct]);
-              setIndex((i) => i + 1);
-            }}
-          />
-        </>
+        <BlinkPanel
+          key={fields[index].fieldId}
+          target={fields[index].target}
+          advanced
+          actions={
+            <TrainStep
+              key={index}
+              project={project}
+              field={fields[index]}
+              index={index}
+              onDone={(correct) => {
+                setResults((r) => [...r, correct]);
+                setIndex((i) => i + 1);
+              }}
+            />
+          }
+        />
       ) : (
         <Card>
           <p className="text-body-sm text-text-muted">{t("common.loading")}</p>
@@ -152,7 +156,7 @@ function TrainStep({
   });
 
   return (
-    <Card className="mx-auto flex w-full max-w-[960px] flex-col gap-4">
+    <Card className={STEP_CARD}>
       <AnswerButtons
         answers={project.answers}
         selected={answer}

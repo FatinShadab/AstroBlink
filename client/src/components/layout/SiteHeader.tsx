@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button, buttonStyles } from "@/components/ui/Button";
@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils/cn";
 import { AccountMenu } from "./AccountMenu";
 import { Container } from "./Container";
 import { Logo } from "./Logo";
+import { useSignOut } from "./useSignOut";
 
 const NAV: { href: string; key: DictKey }[] = [
   { href: "/", key: "nav.home" },
@@ -35,8 +36,7 @@ function isActive(pathname: string, href: string) {
 export function SiteHeader() {
   const { t } = useT();
   const pathname = usePathname();
-  const router = useRouter();
-  const signOut = useUserStore((s) => s.signOut);
+  const signOut = useSignOut();
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -175,7 +175,6 @@ export function SiteHeader() {
                   onClick={() => {
                     setMenuOpen(false);
                     signOut();
-                    router.push("/");
                   }}
                   className="flex h-14 items-center px-4 text-left text-body text-danger hover:bg-danger-subtle"
                 >

@@ -229,6 +229,46 @@
   }
 }
 
+/*
+  Line flow: a thin line that grows from the left, the same scaleX motion as the landing scroll bar.
+  - .link-flow: underline on hover / keyboard focus of the closest .group (footer links).
+  - animate-line-flow: a one-off line across a notice (the sign-out toast), as long as the toast stays.
+  Reduced motion (OS or in-app setting) shortens both to an instant change via the rules below.
+*/
+@utility link-flow {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms ease;
+  }
+  :where(.group):hover &::after,
+  :where(.group):focus-visible &::after {
+    transform: scaleX(1);
+  }
+}
+
+@utility animate-line-flow {
+  transform-origin: left;
+  animation: line-flow 4s linear both;
+}
+
+@keyframes line-flow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 /* Landing hero: a soft cobalt glow behind the headline (static, no animation). */
 .hero-glow {
   background: radial-gradient(ellipse 55% 50% at 28% 45%, var(--hero-glow), transparent 70%);

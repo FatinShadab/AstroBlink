@@ -336,6 +336,22 @@ export const bn: Record<DictKey, string> = {
   "guide.title": "Field guide", // TODO bn
   "guide.intro": "Five things you will see, and how to tell them apart.", // TODO bn
   "guide.open": "Field guide", // TODO bn
+  "thumb.realCaption": "আসল SPHEREx ছবি · {target}", // TODO bn review
+  "thumb.simulatedCaption": "সিমুলেটেড ছবি · গ্লিচ ওভারলেসহ কসমিক-রে আঘাত", // TODO bn review
+  "thumb.simulated": "সিমুলেটেড", // TODO bn review
+  "thumb.failed": "ছবি পাওয়া যাচ্ছে না", // TODO bn review
+  "thumb.label.barnard": "২০২৫ সালের আগস্ট ও ২০২৬ সালের সেপ্টেম্বরের আসল SPHEREx ছবিতে বার্নার্ডের তারা: তারাটি সরে, চারপাশের তারা স্থির থাকে।", // TODO bn review
+  "thumb.label.epsIndiB": "আসল SPHEREx ছবিতে এপসাইলন ইন্ডি বি, একটি ক্ষীণ বাদামী বামন।", // TODO bn review
+  "thumb.label.rDra": "আসল SPHEREx ছবিতে আর ড্রাকোনিস, একটি উজ্জ্বল পরিবর্তনশীল তারা।", // TODO bn review
+  "thumb.label.wide": "বার্নার্ডের তারার চারপাশে ১৫ আর্কমিনিট চওড়া একটি আসল SPHEREx ক্ষেত্র।", // TODO bn review
+  "thumb.label.glitch": "কসমিক-রে আঘাতসহ একটি সিমুলেটেড ক্ষেত্র, গ্লিচ পিক্সেল গোলাপি রঙে চিহ্নিত।", // TODO bn review
+  "thumb.label.static": "দুই তারিখের বার্নার্ডের তারার কাছের একটি আসল SPHEREx ক্ষেত্র: কিছুই সরে না।", // TODO bn review
+  "guide.kind.signal": "আসল সংকেত", // TODO bn review
+  "guide.kind.artefact": "কৃত্রিম ত্রুটি", // TODO bn review
+  "guide.kind.none": "কোনো পরিবর্তন নেই", // TODO bn review
+  "signout.title": "আপনি সাইন আউট করেছেন", // TODO bn review
+  "signout.body": "আপনার প্রোফাইল এই ব্রাউজার থেকে সরানো হয়েছে।", // TODO bn review
+  "classify.answerArea": "আপনার উত্তর", // TODO bn review
   "guide.howTo": "How to tell", // TODO bn
   "guide.real.title": "A real mover", // TODO bn
   "guide.real.body": "A star that is in a slightly different place in each picture.", // TODO bn

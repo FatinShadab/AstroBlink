@@ -4,6 +4,8 @@ import Link from "next/link";
 import { buttonStyles } from "@/components/ui/Button";
 import { Badge, Card } from "@/components/ui/Surfaces";
 import type { ProjectDef } from "@/data/projects";
+import { LOOK_FOR_IMAGES, PROJECT_IMAGES } from "@/data/projectImages";
+import { ProjectImageView } from "./ProjectImageView";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
 import { useUserStore } from "@/lib/state/useUserStore";
@@ -16,6 +18,7 @@ export function ProjectOverview({ project }: { project: ProjectDef }) {
   const { t } = useT();
   const trained = useUserStore((s) => s.trainingDone[project.slug] === true);
   const difficulty = t(`projects.filter.${project.difficulty}` as DictKey);
+  const headerImage = PROJECT_IMAGES[project.slug];
 
   return (
     <div className="flex flex-col gap-10">
@@ -23,7 +26,8 @@ export function ProjectOverview({ project }: { project: ProjectDef }) {
         ← {t("projects.back")}
       </Link>
 
-      <Card className="flex flex-col gap-4 rounded-[var(--radius-lg)] p-6 md:p-8">
+      <Card className="grid gap-6 rounded-[var(--radius-lg)] p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] md:items-start md:p-8">
+        <div className="flex flex-col gap-4">
         <Badge tone="primary" className="self-start">
           {difficulty}
         </Badge>
@@ -50,6 +54,8 @@ export function ProjectOverview({ project }: { project: ProjectDef }) {
             </Link>
           )}
         </div>
+        </div>
+        {headerImage && <ProjectImageView image={headerImage} />}
       </Card>
 
       <section aria-labelledby="steps" className="flex flex-col gap-4">
@@ -74,8 +80,9 @@ export function ProjectOverview({ project }: { project: ProjectDef }) {
           {t("project.lookTitle")}
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {LOOK_FOR.map((key) => (
+          {LOOK_FOR.map((key, i) => (
             <Card key={key} className="flex flex-col gap-2">
+              <ProjectImageView image={LOOK_FOR_IMAGES[i]} aspect="wide" className="mb-2" />
               <h3 className="font-sans text-h4 font-medium text-text-primary">
                 {t(`${key}.title` as DictKey)}
               </h3>

@@ -41,6 +41,7 @@ export function BlinkPanel({
   autoplay = true,
   label,
   advanced = false,
+  actions,
 }: {
   target: SkyTarget;
   showPlayer?: boolean;
@@ -51,6 +52,8 @@ export function BlinkPanel({
   label?: string;
   /** Shows the advanced features beside the viewer. */
   advanced?: boolean;
+  /** Answer buttons and confirm, kept in view next to the media (with `advanced`). */
+  actions?: React.ReactNode;
 }) {
   const { t, lang } = useT();
   const router = useRouter();
@@ -164,7 +167,7 @@ export function BlinkPanel({
           onPan={pan}
           onPick={(x, y) => setPick({ x, y })}
           onKeyDown={() => undefined}
-          className="h-[min(60vh,640px)]"
+          className="h-[min(50vh,560px)] lg:h-[min(60vh,640px)]"
         >
           {load.status === "loading" && count === 0 && (
             <div className="absolute inset-0 grid place-items-center">
@@ -194,7 +197,21 @@ export function BlinkPanel({
   return (
     <div className={cn("grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start")}>
       {viewer}
-      <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+      {/*
+        Answers and the confirm button stay in view while the media plays: on wide screens they sit at the
+        top of the sticky right column; on narrow screens (where the column is "contents") they are a bar
+        stuck to the bottom of the screen until the viewer has scrolled past.
+      */}
+      <aside
+        aria-label={t("classify.answerArea")}
+        className="contents lg:sticky lg:top-20 lg:flex lg:max-h-[calc(100vh-6rem)] lg:min-w-0 lg:flex-col lg:gap-6 lg:self-start lg:overflow-y-auto lg:overscroll-contain"
+      >
+        {actions && (
+          <div className="sticky bottom-0 z-20 -mx-4 border-t border-border bg-surface-1/95 px-4 py-3 backdrop-blur-[12px] sm:-mx-6 sm:px-6 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+            {actions}
+          </div>
+        )}
+        <div className="min-w-0">
         <AdvancedSidePanel
           tabs={CONTRIBUTE_TABS}
           detector={target.detector}
@@ -221,6 +238,7 @@ export function BlinkPanel({
             if (source) downloadCanvasPng(source, `astroblink-${target.detector}-${current + 1}.png`);
           }}
         />
+        </div>
       </aside>
     </div>
   );

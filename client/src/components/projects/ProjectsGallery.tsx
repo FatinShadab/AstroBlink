@@ -6,6 +6,8 @@ import { buttonStyles } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Field";
 import { Badge, Card, ProgressBar } from "@/components/ui/Surfaces";
 import { PROJECTS, type ProjectDef } from "@/data/projects";
+import { FREE_EXPLORE_IMAGE, PROJECT_IMAGES } from "@/data/projectImages";
+import { ProjectImageView } from "./ProjectImageView";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
 import { progressFor } from "@/lib/projects/progress";
@@ -45,6 +47,9 @@ export function ProjectsGallery() {
           const trained = trainingDone[project.slug] === true;
           return (
             <Card key={project.slug} className="flex flex-col gap-3">
+              {PROJECT_IMAGES[project.slug] && (
+                <ProjectImageView image={PROJECT_IMAGES[project.slug]} aspect="wide" />
+              )}
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   tone={
@@ -91,6 +96,7 @@ export function ProjectsGallery() {
         })}
 
         <Card className="flex flex-col gap-3">
+          <ProjectImageView image={FREE_EXPLORE_IMAGE} aspect="wide" />
           <h2 className="font-display text-h3 font-medium text-text-primary">
             {t("projects.free")}
           </h2>
