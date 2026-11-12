@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, Settings, X } from "lucide-react";
 import { Button, buttonStyles } from "@/components/ui/Button";
-import { LanguageToggle } from "@/components/settings/LanguageToggle";
 import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import { useT } from "@/lib/i18n/LangProvider";
+import { useUserStore } from "@/lib/state/useUserStore";
+import { useHasHydrated } from "@/lib/state/useHasHydrated";
 import type { DictKey } from "@/lib/i18n/en";
 import { cn } from "@/lib/utils/cn";
 import { Container } from "./Container";
@@ -19,6 +20,18 @@ const NAV: { href: string; key: DictKey }[] = [
   { href: "/guide", key: "nav.guide" },
   { href: "/about", key: "nav.about" },
 ];
+
+function initialsOf(name: string): string {
+  return (
+    name
+      .split(" ")
+      .filter(Boolean)
+      .map((p) => p[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "?"
+  );
+}
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -34,6 +47,10 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Persisted state is shown only after hydration, so server and client markup match (architecture §7.3).
+  const storeUser = useUserStore((s) => s.user);
+  const hydrated = useHasHydrated();
+  const user = hydrated ? storeUser : null;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -56,7 +73,8 @@ export function SiteHeader() {
         scrolled && "bg-surface-glass backdrop-blur-[12px]",
       )}
     >
-      <Container className="flex h-full items-center gap-6">
+      {/* Three columns: logo left, navigation and settings centred, profile right (mobile: menu right). */}
+      <Container className="grid h-full grid-cols-[auto_1fr_auto] items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"
           className="flex items-center gap-2 rounded-[var(--radius-sm)] font-display text-h4 font-semibold text-text-primary"
@@ -65,7 +83,7 @@ export function SiteHeader() {
           <span>{t("brand.name")}</span>
         </Link>
 
-        <nav aria-label="Main" className="hidden flex-1 items-center gap-1 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-1 justify-self-center md:flex">
           {NAV.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -84,10 +102,6 @@ export function SiteHeader() {
               </Link>
             );
           })}
-        </nav>
-
-        <div className="ml-auto hidden items-center gap-2 md:flex">
-          <LanguageToggle />
           <Button
             variant="icon"
             aria-label={t("header.settings")}
@@ -95,14 +109,27 @@ export function SiteHeader() {
           >
             <Settings aria-hidden="true" className="size-5" />
           </Button>
-          <Link href="/login" className={buttonStyles({ variant: "secondary", size: "sm" })}>
-            {t("header.signIn")}
-          </Link>
+        </nav>
+
+        <div className="hidden items-center gap-2 justify-self-end md:flex">
+          {user ? (
+            <Link
+              href="/me"
+              aria-label={t("header.myStats")}
+              className="grid size-11 place-items-center rounded-full bg-primary-subtle font-display text-body-sm font-semibold text-primary"
+            >
+              {initialsOf(user.name)}
+            </Link>
+          ) : (
+            <Link href="/login" className={buttonStyles({ variant: "secondary", size: "sm" })}>
+              {t("header.signIn")}
+            </Link>
+          )}
         </div>
 
         <Button
           variant="icon"
-          className="ml-auto md:hidden"
+          className="justify-self-end md:hidden"
           aria-label={menuOpen ? t("header.menuClose") : t("header.menuOpen")}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
@@ -134,7 +161,6 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="flex flex-wrap items-center gap-3 border-t border-border px-4 py-4">
-            <LanguageToggle />
             <Button
               variant="icon"
               aria-label={t("header.settings")}

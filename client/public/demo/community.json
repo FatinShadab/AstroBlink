@@ -1,0 +1,24 @@
+{
+  "_note": "DEMO DATA. These numbers are placeholders for layout and review. They are not measured from volunteers. Every screen that shows them carries a Demo data badge.",
+  "totals": {
+    "volunteers": 1284,
+    "classifications": 48210,
+    "flagged": 912,
+    "agreementRate": 0.78
+  },
+  "byProject": [
+    { "slug": "hunt-moving-stars", "classifications": 19840 },
+    { "slug": "brown-dwarfs", "classifications": 8120 },
+    { "slug": "variable-watch", "classifications": 12410 },
+    { "slug": "glitch-patrol", "classifications": 7840 }
+  ],
+  "monthly": [
+    { "month": "2026-04", "classifications": 4120, "volunteers": 210 },
+    { "month": "2026-05", "classifications": 5430, "volunteers": 262 },
+    { "month": "2026-06", "classifications": 6010, "volunteers": 301 },
+    { "month": "2026-07", "classifications": 6880, "volunteers": 334 },
+    { "month": "2026-08", "classifications": 7340, "volunteers": 358 },
+    { "month": "2026-09", "classifications": 8270, "volunteers": 396 },
+    { "month": "2026-10", "classifications": 10160, "volunteers": 452 }
+  ]
+}

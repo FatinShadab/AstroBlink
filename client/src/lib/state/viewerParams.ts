@@ -27,6 +27,8 @@ export const viewerParsers = {
   b: parseAsInteger,
   st: parseAsStringLiteral(STRETCHES).withDefault("asinh"),
   fl: parseAsInteger.withDefault(0),
+  /** Difference style: grey (default) or colour. Not in architecture §7.1; added for Phase 3. */
+  ds: parseAsStringLiteral(["grey", "colour"] as const).withDefault("grey"),
 };
 
 export type ViewerParams = {
@@ -41,6 +43,7 @@ export type ViewerParams = {
   b: number | null;
   st: StretchKind;
   fl: number;
+  ds: "grey" | "colour";
 };
 
 export type TargetResult =

@@ -1,22 +1,29 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import dynamic from "next/dynamic";
 import { useQueryStates } from "nuqs";
 import { Button } from "@/components/ui/Button";
 import { Banner, Card, EmptyState, Skeleton } from "@/components/ui/Surfaces";
 import { useToast } from "@/components/ui/Toast";
 import type { PresetId } from "@/data/presets";
 import { useFieldFrames } from "@/lib/data/useFieldFrames";
-import type { Detector, SkyTarget, ViewMode } from "@/lib/data/types";
+import type { Detector, SkyTarget, StretchKind, ViewMode } from "@/lib/data/types";
 import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
 import { fill, formatDate } from "@/lib/i18n/format";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
+import { countFlagged, type DiffStyle } from "@/lib/sky/modes";
+import { centreAperture } from "@/lib/sky/lightCurve";
+import { downloadCanvasPng, embedSnippet } from "@/lib/sky/export";
 import { useUserStore } from "@/lib/state/useUserStore";
 import { useViewerUiStore } from "@/lib/state/useViewerUiStore";
 import { resolveTarget, viewerParsers, type ViewerParams } from "@/lib/state/viewerParams";
 import { useFrameCanvases } from "./useFrameCanvases";
+import { useModeCanvases } from "./useModeCanvases";
+import { useSpectrum } from "./useSpectrum";
 import { usePlayback } from "./usePlayback";
+import { AdvancedToolsPanel } from "./AdvancedToolsPanel";
 import { FrameMetaStrip } from "./FrameMetaStrip";
 import { ObjectCard } from "./ObjectCard";
 import { PlayerBar } from "./PlayerBar";
@@ -25,15 +32,28 @@ import { SearchPanel } from "./SearchPanel";
 import { SkyViewer } from "./SkyViewer";
 import { ViewerToolbar } from "./ViewerToolbar";
 
+const LightCurveChart = dynamic(() => import("./LightCurveChart").then((m) => m.LightCurveChart), {
+  ssr: false,
+  loading: () => <Skeleton className="h-56 w-full" />,
+});
+
 const ERROR_KEY: Partial<Record<string, DictKey>> = {
   "ra-range": "explore.err.ra-range",
   "dec-range": "explore.err.dec-range",
   "bad-fov": "explore.err.format",
 };
 
+const MODE_LABEL: Record<ViewMode, DictKey> = {
+  blink: "explore.mode.blink",
+  side: "explore.mode.side",
+  merge: "explore.mode.merge",
+  diff: "explore.mode.diff",
+  stack: "explore.mode.stack",
+};
+
 /**
  * The Explore page (design §8.2). URL state is the source of truth; this component turns it into
- * a field, loads every frame, and plays them. Client-only, because it uses canvas.
+ * a field, loads every frame, and shows it in the chosen view mode. Client-only, because it uses canvas.
  */
 export function ExploreView() {
   const { t, lang } = useT();
@@ -45,7 +65,7 @@ export function ExploreView() {
   const raDeg = resolved.ok ? resolved.target.raDeg : null;
   const decDeg = resolved.ok ? resolved.target.decDeg : null;
   const fov = resolved.ok ? resolved.target.fovArcmin : (params.fov ?? 5);
-  const detector = resolved.ok ? resolved.target.detector : (params.det ?? "D2");
+  const detector: Detector = resolved.ok ? resolved.target.detector : (params.det ?? "D2");
   // A string key keeps the memo dependency primitive, so the target object is stable.
   const targetKey =
     raDeg === null || decDeg === null ? null : `${raDeg}|${decDeg}|${fov}|${detector}`;
@@ -62,9 +82,39 @@ export function ExploreView() {
 
   const { load, retry } = useFieldFrames(target);
   const loaded = load.status === "ready" ? load.data : null;
-  const frames = loaded?.frames ?? [];
+  const frames = useMemo(() => loaded?.frames ?? [], [loaded]);
   const count = frames.length;
-  const canvases = useFrameCanvases(loaded, params.st);
+  const colourblind = useUserStore((s) => s.settings.colorblindMerge);
+  const mode = params.mode as ViewMode;
+  const a = Math.min(params.a ?? 0, Math.max(0, count - 1));
+  const b = Math.min(params.b ?? Math.max(0, count - 1), Math.max(0, count - 1));
+
+  const brightness = useViewerUiStore((s) => s.brightness);
+  const contrast = useViewerUiStore((s) => s.contrast);
+  const adjust = useMemo(() => ({ brightness, contrast }), [brightness, contrast]);
+  const stackIds = useViewerUiStore((s) => s.stackIds);
+  const pick = useViewerUiStore((s) => s.pick);
+  const setPick = useViewerUiStore((s) => s.setPick);
+  const showFlags = params.fl === 1;
+
+  const { views, flags } = useModeCanvases({
+    loaded,
+    mode,
+    a,
+    b,
+    stackIds,
+    diffStyle: params.ds as DiffStyle,
+    colourblind,
+    stretch: params.st as StretchKind,
+    adjust,
+    showFlags,
+  });
+  const blinkCanvases = useFrameCanvases(
+    mode === "blink" ? loaded : null,
+    params.st as StretchKind,
+    adjust,
+  );
+  const frameCanvases = mode === "blink" ? blinkCanvases : views;
 
   const [index, setIndex] = useState(() => params.f ?? 0);
   const current = count > 0 ? Math.min(index, count - 1) : 0;
@@ -73,6 +123,8 @@ export function ExploreView() {
   const reducedMotion = useReducedMotion();
   const fps = useUserStore((s) => s.settings.blinkFps);
   const setBlinkFps = useUserStore((s) => s.setBlinkFps);
+  const advancedOpen = useUserStore((s) => s.settings.advancedOpen);
+  const setAdvancedOpen = useUserStore((s) => s.setAdvancedOpen);
   const playing = useViewerUiStore((s) => s.playing);
   const setPlaying = useViewerUiStore((s) => s.setPlaying);
   const zoom = useViewerUiStore((s) => s.zoom);
@@ -82,13 +134,14 @@ export function ExploreView() {
   const pan = useViewerUiStore((s) => s.pan);
   const fit = useViewerUiStore((s) => s.fit);
 
+  const blinking = mode === "blink" && count > 1;
   usePlayback({
-    count,
+    count: blinking ? count : 0,
     fps,
     onTick: () => setIndex((i) => (count > 0 ? (i + 1) % count : 0)),
   });
 
-  // Autoplay once frames are ready, unless reduced motion is on (rules §3.3). Never during reduced motion.
+  // Autoplay once frames are ready in Blink, unless reduced motion is on (rules §3.3).
   const autoStarted = useRef(false);
   useEffect(() => {
     if (reducedMotion) {
@@ -111,10 +164,24 @@ export function ExploreView() {
         })
       : "";
 
-  // ---- Actions. Each one that the user takes may write the URL; autoplay never does. ----
+  // Light curve from the centre of every frame (design §11).
+  const lightPoints = useMemo(
+    () =>
+      frames.map((f) => ({
+        obsDate: f.meta.obsDate,
+        ...centreAperture(f.data, f.meta.width),
+      })),
+    [frames],
+  );
+
+  // Spectrum for the picked pixel (design §8.2).
+  const spectrum = useSpectrum(target, pick);
+
+  // ---- Actions. Each user action may write the URL; autoplay never does. ----
   function newTarget(next: Partial<ViewerParams>) {
     setIndex(0);
     setPlaying(false);
+    setPick(null);
     void setParams({ f: null, ...next });
   }
 
@@ -149,15 +216,15 @@ export function ExploreView() {
     switch (event.key) {
       case " ":
         event.preventDefault();
-        togglePlay();
+        if (blinking) togglePlay();
         break;
       case "ArrowLeft":
         event.preventDefault();
-        step(-1);
+        if (blinking) step(-1);
         break;
       case "ArrowRight":
         event.preventDefault();
-        step(1);
+        if (blinking) step(1);
         break;
       case "+":
       case "=":
@@ -173,10 +240,10 @@ export function ExploreView() {
     }
   }
 
-  async function copyLink() {
+  async function copyText(text: string, doneKey: DictKey) {
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({ title: t("explore.linkCopied") });
+      await navigator.clipboard.writeText(text);
+      toast({ title: t(doneKey) });
     } catch {
       toast({ title: t("explore.linkFailed") });
     }
@@ -189,6 +256,21 @@ export function ExploreView() {
   const viewerDescription = frames.length ? describe(current) : t("explore.noCoords");
   const showFewFrames = count > 0 && count <= 2;
   const ready = load.status === "ready";
+  const frameLabels = frames.map((f, i) => `${i + 1}. ${formatDate(f.meta.obsDate, lang)}`);
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const search = typeof window === "undefined" ? "" : window.location.search;
+  const shownFlags = showFlags && blinking && flags[current] ? flags[current] : null;
+  const zoomLabel = fill(t("explore.zoomLevel"), { percent: Math.round(zoom * 100) });
+  const frameCounter = count ? `${current + 1} / ${count}` : "–";
+
+  const views2 = (() => {
+    if (mode === "side") {
+      const left = frameCanvases[0];
+      const right = frameCanvases[1];
+      return { left, right };
+    }
+    return null;
+  })();
 
   return (
     <div className="flex flex-col gap-6">
@@ -202,11 +284,7 @@ export function ExploreView() {
         onSearch={onSearch}
         onFov={(value) => newTarget({ fov: value })}
         onDetector={(value) => newTarget({ det: value })}
-        shareSlot={
-          <Button variant="tertiary" size="sm" onClick={copyLink} className="self-end">
-            {t("explore.share")}
-          </Button>
-        }
+        shareSlot={null}
       />
 
       <PresetChips selected={(params.preset as PresetId | null) ?? null} onSelect={onPreset} />
@@ -244,9 +322,9 @@ export function ExploreView() {
       )}
 
       <ViewerToolbar
-        mode={params.mode as ViewMode}
-        onMode={(mode) => void setParams({ mode })}
-        zoomLabel={fill(t("explore.zoomLevel"), { percent: Math.round(zoom * 100) })}
+        mode={mode}
+        onMode={(next) => void setParams({ mode: next })}
+        zoomLabel={zoomLabel}
         onZoomIn={() => zoomBy(1.25)}
         onZoomOut={() => zoomBy(0.8)}
         onFit={fit}
@@ -258,56 +336,94 @@ export function ExploreView() {
         </Card>
       ) : (
         <div className="flex flex-col">
-          <SkyViewer
-            frames={canvases}
-            index={current}
-            zoom={zoom}
-            panX={panX}
-            panY={panY}
-            reducedMotion={reducedMotion}
-            simulated={loaded?.field.isSimulated ?? true}
-            simulatedLabel={t("common.simulatedSky")}
-            ariaLabel={fill(t("explore.viewerLabel"), { description: viewerDescription })}
-            frameCounter={count ? `${current + 1} / ${count}` : "–"}
-            zoomLabel={fill(t("explore.zoomLevel"), { percent: Math.round(zoom * 100) })}
-            onPan={pan}
-            onKeyDown={onKeyDown}
-          >
-            {load.status === "loading" && (
-              <div
-                className="absolute inset-0 grid place-items-center bg-viewer-bg/80"
-                aria-live="off"
-              >
-                <div className="flex flex-col items-center gap-3">
-                  <Skeleton className="h-24 w-24 rounded-full" />
-                  <p className="text-body-sm text-text-secondary">
-                    {load.total > 0
-                      ? fill(t("explore.loadingFrames"), { index: load.loaded, total: load.total })
-                      : t("common.loading")}
-                  </p>
+          {mode === "side" && views2 ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              {[
+                { canvas: views2.left, label: `A · ${frameLabels[a] ?? ""}` },
+                { canvas: views2.right, label: `B · ${frameLabels[b] ?? ""}` },
+              ].map((pane, i) => (
+                <SkyViewer
+                  key={i}
+                  frames={pane.canvas ? [pane.canvas] : []}
+                  index={0}
+                  zoom={zoom}
+                  panX={panX}
+                  panY={panY}
+                  reducedMotion={reducedMotion}
+                  simulated={loaded?.field.isSimulated ?? true}
+                  simulatedLabel={t("common.simulatedSky")}
+                  ariaLabel={pane.label}
+                  frameCounter={pane.label}
+                  zoomLabel={zoomLabel}
+                  onPan={pan}
+                  onKeyDown={onKeyDown}
+                  className="h-[min(50vh,480px)] md:h-[min(60vh,560px)]"
+                />
+              ))}
+            </div>
+          ) : (
+            <SkyViewer
+              frames={frameCanvases}
+              index={mode === "blink" ? current : 0}
+              flags={shownFlags}
+              zoom={zoom}
+              panX={panX}
+              panY={panY}
+              reducedMotion={reducedMotion}
+              simulated={loaded?.field.isSimulated ?? true}
+              simulatedLabel={t("common.simulatedSky")}
+              ariaLabel={
+                mode === "blink"
+                  ? fill(t("explore.viewerLabel"), { description: viewerDescription })
+                  : fill(t("explore.viewerLabel"), { description: t(MODE_LABEL[mode]) })
+              }
+              frameCounter={mode === "blink" ? frameCounter : t(MODE_LABEL[mode])}
+              zoomLabel={zoomLabel}
+              onPan={pan}
+              onPick={mode === "blink" ? (x, y) => setPick({ x, y }) : undefined}
+              onKeyDown={onKeyDown}
+            >
+              {load.status === "loading" && (
+                <div
+                  className="absolute inset-0 grid place-items-center bg-viewer-bg/80"
+                  aria-live="off"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <Skeleton className="h-24 w-24 rounded-full" />
+                    <p className="text-body-sm text-text-secondary">
+                      {load.total > 0
+                        ? fill(t("explore.loadingFrames"), {
+                            index: load.loaded,
+                            total: load.total,
+                          })
+                        : t("common.loading")}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-            {ready && count === 0 && (
-              <div className="absolute inset-0 grid place-items-center">
-                <EmptyState title={t("explore.noData")} body={t("explore.noDataBody")} />
-              </div>
-            )}
-          </SkyViewer>
+              )}
+              {ready && count === 0 && (
+                <div className="absolute inset-0 grid place-items-center">
+                  <EmptyState title={t("explore.noData")} body={t("explore.noDataBody")} />
+                </div>
+              )}
+            </SkyViewer>
+          )}
 
           {ready && count > 0 && (
             <>
-              <PlayerBar
-                frames={frames.map((f) => f.meta)}
-                index={current}
-                playing={playing}
-                fps={fps}
-                onPrev={() => step(-1)}
-                onNext={() => step(1)}
-                onTogglePlay={togglePlay}
-                onSelect={commitFrame}
-                onSpeed={setBlinkFps}
-              />
+              {mode === "blink" && (
+                <PlayerBar
+                  frames={frames.map((f) => f.meta)}
+                  index={current}
+                  playing={playing}
+                  fps={fps}
+                  onPrev={() => step(-1)}
+                  onNext={() => step(1)}
+                  onTogglePlay={togglePlay}
+                  onSelect={commitFrame}
+                  onSpeed={setBlinkFps}
+                />
+              )}
               <FrameMetaStrip
                 frame={frames[current]?.meta ?? null}
                 detector={detector}
@@ -321,10 +437,54 @@ export function ExploreView() {
       )}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="md:col-span-8">
+          <Card className="flex flex-col gap-3">
+            <h2 className="font-sans text-h4 font-medium text-text-primary">
+              {t("explore.lightCurve")}
+            </h2>
+            {ready && count > 0 ? (
+              <LightCurveChart points={lightPoints} current={current} />
+            ) : (
+              <p className="text-body-sm text-text-muted">{t("common.loading")}</p>
+            )}
+          </Card>
+        </div>
         <div className="md:col-span-4">
           <ObjectCard preset={preset} />
         </div>
       </div>
+
+      <AdvancedToolsPanel
+        open={advancedOpen}
+        onOpenChange={setAdvancedOpen}
+        detector={detector}
+        onDetector={(value) => newTarget({ det: value })}
+        stretch={params.st as StretchKind}
+        onStretch={(value) => void setParams({ st: value })}
+        frameLabels={frameLabels}
+        a={a}
+        b={b}
+        onA={(i) => void setParams({ a: i })}
+        onB={(i) => void setParams({ b: i })}
+        diffStyle={params.ds as DiffStyle}
+        onDiffStyle={(value) => void setParams({ ds: value })}
+        showFlags={showFlags}
+        onShowFlags={(on) => void setParams({ fl: on ? 1 : 0 })}
+        flagCount={ready && frames[current] ? countFlagged(frames[current].flags) : 0}
+        spectrum={spectrum}
+        pick={pick}
+        shareUrl={`${origin}/explore${search}`}
+        embedSnippet={embedSnippet(origin, search)}
+        onCopy={(text, doneKey) => void copyText(text, doneKey)}
+        onDownloadPng={() => {
+          const source = frameCanvases[mode === "blink" ? current : 0];
+          if (source)
+            downloadCanvasPng(
+              source,
+              `astroblink-${detector}-${frameLabels.length ? current + 1 : 0}.png`,
+            );
+        }}
+      />
 
       <div className="flex flex-col gap-1 text-caption text-text-muted">
         <p>{t("explore.simulatedNote")}</p>

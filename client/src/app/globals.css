@@ -98,6 +98,15 @@
   --color-danger-subtle: var(--danger-subtle);
   --color-on-danger: var(--on-danger);
 
+  /* shadcn token names, aliased onto the Observatory tokens (components/ui uses these). */
+  --color-background: var(--bg);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--surface-1);
+  --color-card-foreground: var(--text-primary);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-secondary);
+  --color-primary-foreground: var(--on-primary);
+
   --color-data-1: var(--data-1);
   --color-data-2: var(--data-2);
   --color-data-3: var(--data-3);
@@ -125,7 +134,6 @@
   --font-display: var(--font-space-grotesk), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-bn: var(--font-noto-sans-bengali), system-ui, sans-serif;
 
   /* 4.2 Type scale: size / line height */
   --text-display: 3.5rem;
@@ -150,6 +158,41 @@
   --text-mono--line-height: 1.25rem;
 }
 
+@keyframes fade-out-label {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0.5rem) scale(0.95);
+  }
+}
+
+/* Label that fades out after the active section is reached (ScrollGlobe navigation). */
+@utility animate-fade-out-label {
+  animation: fade-out-label 4s ease-in-out forwards;
+}
+
+/* Moving planet on the landing page: a slow drift up and down (components/ui/globe.tsx). */
+@utility animate-planet-float {
+  animation: planet-float 12s ease-in-out infinite;
+}
+
+@keyframes planet-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(4deg);
+  }
+}
+
 @layer base {
   html {
     background: var(--bg);
@@ -162,12 +205,6 @@
     font-size: 1rem;
     line-height: 1.5rem;
     -webkit-font-smoothing: antialiased;
-  }
-
-  /* Bangla: taller glyph stacks → ~10% more line height (design §4.2). */
-  html[lang="bn"] body {
-    font-family: var(--font-bn), system-ui, sans-serif;
-    line-height: 1.65;
   }
 
   h1,
@@ -195,6 +232,29 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Faint starfield behind the landing hero only (design §8.1): CSS dots at about 5% opacity. */
+  .starfield {
+    background-image: radial-gradient(rgba(232, 236, 245, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Print: only the certificate is printed (design §8.10). */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    .certificate-print,
+    .certificate-print * {
+      visibility: visible;
+    }
+    .certificate-print {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      box-shadow: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

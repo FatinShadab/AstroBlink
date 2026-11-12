@@ -1,14 +1,11 @@
-import Link from "next/link";
-import { Container } from "@/components/layout/Container";
-import { HomeIntro } from "./HomeIntro";
+import type { Metadata } from "next";
+import { AstroLanding } from "@/components/landing/AstroLanding";
 
+export const metadata: Metadata = {
+  title: { absolute: "AstroBlink · Watch the sky change" },
+};
+
+/** Landing page in the scroll-globe design (components/ui/landing-page.tsx). */
 export default function HomePage() {
-  return (
-    <Container className="flex flex-1 flex-col justify-center gap-6 py-16">
-      <HomeIntro />
-      <Link href="/dev/ui" className="text-body-sm text-primary underline underline-offset-4">
-        UI primitives
-      </Link>
-    </Container>
-  );
+  return <AstroLanding />;
 }

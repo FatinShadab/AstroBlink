@@ -16,6 +16,21 @@ export function greyToRgba(grey: Uint8ClampedArray): Uint8ClampedArray {
   return out;
 }
 
+/** RGBA bytes to an offscreen canvas. Browser only. */
+export function makeRgbaCanvas(
+  rgba: Uint8ClampedArray,
+  width: number,
+  height: number,
+): HTMLCanvasElement {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("2D canvas is not available");
+  ctx.putImageData(new ImageData(rgba as Uint8ClampedArray<ArrayBuffer>, width, height), 0, 0);
+  return canvas;
+}
+
 /** Build an offscreen canvas at native frame size. Browser only. */
 export function makeFrameCanvas(
   grey: Uint8ClampedArray,

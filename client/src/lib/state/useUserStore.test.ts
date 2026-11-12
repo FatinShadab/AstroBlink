@@ -25,12 +25,6 @@ describe("useUserStore", () => {
     const { settings } = useUserStore.getState();
     expect(settings.reducedMotion).toBe(true);
     expect(settings.blinkFps).toBe(DEFAULT_SETTINGS.blinkFps);
-    expect(settings.lang).toBe("en");
-  });
-
-  it("switches language", () => {
-    useUserStore.getState().setLang("bn");
-    expect(useUserStore.getState().settings.lang).toBe("bn");
   });
 
   it("starts with defaults that respect the 2 frames-per-second cap", () => {

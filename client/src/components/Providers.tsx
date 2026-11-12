@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/Radix";
 import { ToastProvider } from "@/components/ui/Toast";
 import { LangProvider } from "@/lib/i18n/LangProvider";
-import type { Lang } from "@/lib/i18n/lang";
 import { useUserStore } from "@/lib/state/useUserStore";
 
 /** Mirrors the in-app Reduced motion setting onto <html> so CSS can respond (globals.css). */
@@ -17,16 +16,10 @@ function ReducedMotionSync() {
   return null;
 }
 
-export function Providers({
-  initialLang,
-  children,
-}: {
-  initialLang: Lang;
-  children: React.ReactNode;
-}) {
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NuqsAdapter>
-      <LangProvider initialLang={initialLang}>
+      <LangProvider>
         <TooltipProvider delayDuration={400}>
           <ToastProvider>
             <ReducedMotionSync />

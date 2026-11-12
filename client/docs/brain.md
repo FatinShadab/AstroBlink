@@ -191,3 +191,10 @@ If time runs out, stop at the end of a tier. Every tier must leave the app **wor
 | 2026-11-12 | Preset coordinates: Barnard's Star and RW Aurigae filled from web sources that cite SIMBAD; Epsilon Indi B and R Draconis stay pending (chip disabled) | Filling values from SIMBAD is required (rules §9.3). Confirm the filled values in SIMBAD before demo |
 | 2026-11-12 | Static data provider falls back to synthetic until the file format is chosen | Brain §6 says PNG, architecture §5.3 says Float32. Rules §4.5 needs Float32, so the architecture version is the proposal. Needs a team decision |
 | 2026-11-12 | Touch targets meet 44×44 with an invisible hit area; visible sizes follow design §9 | Rules §3.7 and design §9.1 conflict on sizes. This keeps both |
+| 2026-11-12 | Difference style is a URL parameter `ds` (grey or colour) | Architecture §7.1 does not list it; added in Phase 3 so the view is shareable |
+| 2026-11-12 | Glitch-patrol truth is computed from the synthetic data (flag in the central 5×5 aperture = glitch) | Keeps training answers verifiable without inventing labels |
+| 2026-11-12 | Community numbers in `public/demo/community.json` are placeholders and always labelled Demo data | No real volunteer data exists yet (rules §2.2) |
+| 2026-11-12 | Agreement is recorded when a volunteer answers, and shown only after answering | Rules §2.6. Stats then compute the rate without storing totals |
+| 2026-11-12 | Mock sign-in stores name and email in this browser only; "Clear my data" asks first | Rules §5.1 and §8 (confirm permanent deletion) |
+| 2026-11-12 | `/embed` sends `Content-Security-Policy: frame-ancestors *`, nothing else | Architecture §10: the embed route may be framed; the rest of the site may not |
+| 2026-11-12 | Landing planet is a 3D Earth model (`public/models/earth.glb`, CC-BY-4.0, Stéphane Agullo via Sketchfab), shown with `<model-viewer>` 3.5.0 from jsDelivr | Requested by the project owner. Overrides design §13 (sky imagery and geometric marks only). CC-BY requires the credit on the about page. The file is 44 MB; compress the textures before public release |

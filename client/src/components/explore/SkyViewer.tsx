@@ -4,9 +4,11 @@ import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } fr
 import { Badge } from "@/components/ui/Surfaces";
 import { cn } from "@/lib/utils/cn";
 
-interface SkyViewerProps {
+export interface SkyViewerProps {
   frames: HTMLCanvasElement[];
   index: number;
+  /** Optional glitch-flag canvas for the shown frame, same size as the frame. */
+  flags?: HTMLCanvasElement | null;
   zoom: number;
   panX: number;
   panY: number;
@@ -17,20 +19,31 @@ interface SkyViewerProps {
   frameCounter: string;
   zoomLabel: string;
   onPan: (dx: number, dy: number) => void;
+  /** Called with image-pixel coordinates when the user clicks without dragging. */
+  onPick?: (x: number, y: number) => void;
   onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
   children?: React.ReactNode;
+  className?: string;
 }
 
 const FADE_MS = 600;
+const CLICK_SLOP_PX = 4;
+
+interface Size {
+  w: number;
+  h: number;
+  dpr: number;
+}
 
 /**
- * Three stacked layers (design §10): image, overlay (reticle), interaction (pan, keys).
+ * Three stacked layers (design §10): image, overlay (flags and reticle), interaction (pan, click, keys).
  * Two image layers cross-fade in reduced motion; in normal blink they swap instantly.
  */
 export function SkyViewer(props: SkyViewerProps) {
   const {
     frames,
     index,
+    flags,
     zoom,
     panX,
     panY,
@@ -41,8 +54,10 @@ export function SkyViewer(props: SkyViewerProps) {
     frameCounter,
     zoomLabel,
     onPan,
+    onPick,
     onKeyDown,
     children,
+    className,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,10 +67,16 @@ export function SkyViewer(props: SkyViewerProps) {
   const activeLayer = useRef(0);
   const shownIndex = useRef(-1);
   const shownFrames = useRef<HTMLCanvasElement[] | null>(null);
-  const dragging = useRef<{ x: number; y: number } | null>(null);
-  const [size, setSize] = useState({ w: 0, h: 0, dpr: 1 });
+  const dragging = useRef<{
+    x: number;
+    y: number;
+    startX: number;
+    startY: number;
+    moved: boolean;
+  } | null>(null);
+  const [size, setSize] = useState<Size>({ w: 0, h: 0, dpr: 1 });
 
-  // Track the container size (ResizeObserver callbacks are not synchronous setState in an effect).
+  // Track the container size (the callback updates state; no synchronous setState in the effect body).
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -85,7 +106,7 @@ export function SkyViewer(props: SkyViewerProps) {
         ? a
         : b;
 
-    drawLayer(target, current, size, zoom, panX, panY);
+    drawImage(target, current, size, zoom, panX, panY);
     a.style.transition = `opacity ${fadeMs}ms linear`;
     b.style.transition = `opacity ${fadeMs}ms linear`;
 
@@ -97,26 +118,45 @@ export function SkyViewer(props: SkyViewerProps) {
       shownIndex.current = index;
       shownFrames.current = frames;
     }
-    drawOverlay(overlay, size, panX, panY);
-  }, [frames, index, zoom, panX, panY, size, reducedMotion]);
+    drawOverlay(overlay, size, current, flags ?? null, zoom, panX, panY);
+  }, [frames, index, flags, zoom, panX, panY, size, reducedMotion]);
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
-    dragging.current = { x: event.clientX, y: event.clientY };
+    dragging.current = {
+      x: event.clientX,
+      y: event.clientY,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false,
+    };
     event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function onPointerMove(event: PointerEvent<HTMLDivElement>) {
-    const start = dragging.current;
-    if (!start) return;
-    onPan(event.clientX - start.x, event.clientY - start.y);
-    dragging.current = { x: event.clientX, y: event.clientY };
+    const drag = dragging.current;
+    if (!drag) return;
+    if (Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) > CLICK_SLOP_PX) {
+      drag.moved = true;
+    }
+    onPan(event.clientX - drag.x, event.clientY - drag.y);
+    dragging.current = { ...drag, x: event.clientX, y: event.clientY };
   }
 
   function onPointerUp(event: PointerEvent<HTMLDivElement>) {
+    const drag = dragging.current;
     dragging.current = null;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+    const frame = frames[Math.min(index, frames.length - 1)];
+    if (!drag || drag.moved || !onPick || !frame || event.type === "pointercancel") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const scale = (Math.min(rect.width, rect.height) / frame.width) * zoom;
+    const originX = rect.width / 2 + panX - (frame.width / 2) * scale;
+    const originY = rect.height / 2 + panY - (frame.height / 2) * scale;
+    const px = Math.floor((event.clientX - rect.left - originX) / scale);
+    const py = Math.floor((event.clientY - rect.top - originY) / scale);
+    if (px >= 0 && py >= 0 && px < frame.width && py < frame.height) onPick(px, py);
   }
 
   return (
@@ -132,7 +172,8 @@ export function SkyViewer(props: SkyViewerProps) {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       className={cn(
-        "relative h-[min(60vh,calc(100vw-2rem))] w-full cursor-grab overflow-hidden rounded-[var(--radius-md)] bg-viewer-bg touch-none select-none active:cursor-grabbing md:h-[min(68vh,720px)]",
+        "relative h-[min(60vh,calc(100vw-2rem))] w-full cursor-crosshair overflow-hidden rounded-[var(--radius-md)] bg-viewer-bg touch-none select-none md:h-[min(68vh,720px)]",
+        className,
       )}
     >
       <canvas
@@ -169,10 +210,11 @@ export function SkyViewer(props: SkyViewerProps) {
   );
 }
 
-function drawLayer(
+/** Draw a frame with the zoom and pan transform (nearest-neighbour, black background). */
+function drawImage(
   canvas: HTMLCanvasElement,
   source: HTMLCanvasElement,
-  size: { w: number; h: number; dpr: number },
+  size: Size,
   zoom: number,
   panX: number,
   panY: number,
@@ -193,10 +235,13 @@ function drawLayer(
   ctx.drawImage(source, x, y, n * scale, n * scale);
 }
 
-/** Reticle: four 10px ticks with a 12px gap at the centre, 1.5px stroke (design §10). */
+/** Overlay: glitch flags (drawn with the same transform as the image), then the reticle. */
 function drawOverlay(
   canvas: HTMLCanvasElement,
-  size: { w: number; h: number; dpr: number },
+  size: Size,
+  frame: HTMLCanvasElement,
+  flags: HTMLCanvasElement | null,
+  zoom: number,
   panX: number,
   panY: number,
 ) {
@@ -207,8 +252,22 @@ function drawOverlay(
   if (!ctx) return;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
-  const colour =
-    getComputedStyle(document.documentElement).getPropertyValue("--reticle").trim() || "#ffb547";
+
+  if (flags) {
+    const n = frame.width;
+    const scale = (Math.min(w, h) / n) * zoom;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(
+      flags,
+      w / 2 + panX - (n / 2) * scale,
+      h / 2 + panY - (n / 2) * scale,
+      n * scale,
+      n * scale,
+    );
+  }
+
+  const style = getComputedStyle(document.documentElement);
+  const colour = style.getPropertyValue("--reticle").trim() || "#ffb547";
   const cx = w / 2 + panX;
   const cy = h / 2 + panY;
   ctx.strokeStyle = colour;

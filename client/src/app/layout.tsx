@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Noto_Sans_Bengali, Space_Grotesk } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Providers } from "@/components/Providers";
-import { LANG_COOKIE } from "@/lib/i18n/lang";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -25,13 +24,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const notoBengali = Noto_Sans_Bengali({
-  variable: "--font-noto-sans-bengali",
-  subsets: ["bengali"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: {
     default: "AstroBlink",
@@ -47,23 +39,14 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-/*
- * Language before first paint. Reading cookies() in this root layout would make every route
- * dynamic and break static prerendering under Cache Components, so the cookie is read by a tiny
- * inline script instead. The persisted store takes over after hydration (LangProvider).
- */
-const applyLangCookie = `(function(){try{var m=document.cookie.match(/(?:^|; )${LANG_COOKIE}=(en|bn)/);if(m){document.documentElement.lang=m[1];}}catch(e){}})();`;
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      suppressHydrationWarning
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${notoBengali.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-bg text-text-primary">
-        <script dangerouslySetInnerHTML={{ __html: applyLangCookie }} />
-        <Providers initialLang="en">{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

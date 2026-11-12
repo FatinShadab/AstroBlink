@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent } from "@/components/ui/Radix";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { useLang, useT } from "@/lib/i18n/LangProvider";
+import { useT } from "@/lib/i18n/LangProvider";
 import { useUserStore, type BlinkFps } from "@/lib/state/useUserStore";
 
 const speeds = [
@@ -23,7 +23,6 @@ export function SettingsDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { t } = useT();
-  const { lang, setLang } = useLang();
   const reducedMotion = useUserStore((s) => s.settings.reducedMotion);
   const setReducedMotion = useUserStore((s) => s.setReducedMotion);
   const blinkFps = useUserStore((s) => s.settings.blinkFps);
@@ -38,19 +37,6 @@ export function SettingsDialog({
         description={t("settings.description")}
         closeLabel={t("settings.close")}
       >
-        <section className="flex flex-col gap-2">
-          <h3 className="text-body-sm font-medium text-text-primary">{t("settings.language")}</h3>
-          <SegmentedControl
-            label={t("settings.language")}
-            value={lang}
-            onChange={setLang}
-            options={[
-              { value: "en", label: "English" },
-              { value: "bn", label: "বাংলা" },
-            ]}
-          />
-        </section>
-
         <section className="flex flex-col gap-1">
           <label className="flex min-h-11 cursor-pointer items-center gap-3 text-body text-text-primary">
             <input

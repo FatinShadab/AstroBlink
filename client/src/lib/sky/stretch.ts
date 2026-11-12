@@ -59,16 +59,31 @@ export function stretchUnit(value: number, range: ClipRange, kind: StretchKind):
 const LOG_A = 100;
 const ASINH_A = 10;
 
+/** Display adjustments from the Image tab: brightness shifts, contrast scales around mid-grey. */
+export interface Adjust {
+  brightness: number; // −0.5 … 0.5
+  contrast: number; // 0.25 … 3
+}
+
+export const NO_ADJUST: Adjust = { brightness: 0, contrast: 1 };
+
 /** Float32 frame → 8-bit grey. NaN pixels become black (no data). */
 export function stretchToU8(
   data: Float32Array,
   range: ClipRange,
   kind: StretchKind,
+  adjust: Adjust = NO_ADJUST,
 ): Uint8ClampedArray {
   const out = new Uint8ClampedArray(data.length);
   for (let i = 0; i < data.length; i++) {
     const v = data[i];
-    out[i] = Number.isFinite(v) ? Math.round(255 * stretchUnit(v, range, kind)) : 0;
+    if (!Number.isFinite(v)) continue;
+    const u = stretchUnit(v, range, kind);
+    const adjusted = Math.min(
+      1,
+      Math.max(0, (u - 0.5) * adjust.contrast + 0.5 + adjust.brightness),
+    );
+    out[i] = Math.round(255 * adjusted);
   }
   return out;
 }

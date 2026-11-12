@@ -15,13 +15,13 @@ const LINKS = [
 ] as const;
 
 /**
- * Footer (design §7.4): three columns on desktop, stacked on mobile.
- * The credit line is required verbatim (rules §2.4), so it stays English in both languages.
+ * Footer (design Â§7.4): three columns on desktop, stacked on mobile.
+ * The credit line is required verbatim (rules Â§2.4), so it stays English in both languages.
  */
 export function SiteFooter() {
   const { t } = useT();
   return (
-    <footer className="mt-auto border-t border-border bg-surface-1">
+    <footer className="relative z-30 mt-auto border-t border-border bg-surface-1">
       <Container className="grid gap-8 py-10 md:grid-cols-3">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 font-display text-h4 font-semibold text-text-primary">
