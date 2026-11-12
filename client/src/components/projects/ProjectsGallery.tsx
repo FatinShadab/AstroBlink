@@ -81,9 +81,9 @@ export function ProjectsGallery() {
                       ? `/projects/${project.slug}/classify`
                       : `/projects/${project.slug}/train`
                   }
-                  className={buttonStyles({ variant: "primary" })}
+                  className="inline-flex min-h-11 items-center gap-1 font-medium text-accent underline-offset-4 hover:underline focus-visible:rounded-sm"
                 >
-                  {done.count > 0 ? t("projects.continue") : t("projects.start")}
+                  {done.count > 0 ? t("projects.continue") : t("projects.start")} <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </Card>

@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button, buttonStyles } from "@/components/ui/Button";
-import { Badge, Card, ProgressBar } from "@/components/ui/Surfaces";
+import { Badge, Card } from "@/components/ui/Surfaces";
+import { ContributionProgress } from "./ContributionProgress";
 import { ANSWER_LABEL, type ProjectDef } from "@/data/projects";
 import { useT } from "@/lib/i18n/LangProvider";
 import { fill } from "@/lib/i18n/format";
@@ -78,7 +79,7 @@ export function TrainFlow({ project }: { project: ProjectDef }) {
         </Card>
       ) : fields && fields[index] ? (
         <>
-          <BlinkPanel key={fields[index].fieldId} target={fields[index].target} />
+          <BlinkPanel key={fields[index].fieldId} target={fields[index].target} advanced />
           <TrainStep
             key={index}
             project={project}
@@ -96,14 +97,16 @@ export function TrainFlow({ project }: { project: ProjectDef }) {
         </Card>
       )}
 
-      <ProgressBar
-        label={fill(t("classify.progress"), {
-          index: Math.min(index + 1, PRACTICE_SIZE),
-          total: PRACTICE_SIZE,
-        })}
-        value={Math.min(index, PRACTICE_SIZE)}
-        max={PRACTICE_SIZE}
-        valueLabel={`${Math.round((Math.min(index, PRACTICE_SIZE) / PRACTICE_SIZE) * 100)}%`}
+      <ContributionProgress
+        title={t("classify.progressTitle")}
+        done={Math.min(index, PRACTICE_SIZE)}
+        total={PRACTICE_SIZE}
+        caption={t("classify.percentComplete")}
+        stats={[
+          { label: t("classify.statChecked"), value: String(Math.min(index, PRACTICE_SIZE)) },
+          { label: t("classify.statLeft"), value: String(Math.max(PRACTICE_SIZE - index, 0)) },
+          { label: t("classify.statBatch"), value: String(PRACTICE_SIZE) },
+        ]}
       />
     </div>
   );

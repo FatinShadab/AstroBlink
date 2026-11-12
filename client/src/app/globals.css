@@ -1,44 +1,49 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   AstroBlink "Observatory" tokens — source: docs/design.md §3–5, §12.
+   AstroBlink tokens (site-wide). Palette from the design brief:
+   midnight black (background and surfaces), cobalt blue (lines and shapes),
+   acid lime (accent and headings), soft neutral (body copy).
+   Semantic states (danger, success, warning) and chart colours keep their
+   own functional values so errors and data stay readable.
    Never hard-code these values in components; use the Tailwind utilities.
    ------------------------------------------------------------------ */
 :root {
   color-scheme: dark;
 
-  /* 3.1 Surfaces */
-  --bg: #070a12;
-  --surface-1: #0e1320;
-  --surface-2: #151b2c;
-  --surface-3: #1b2236;
+  /* Surfaces: midnight black and its steps */
+  --bg: #07080d;
+  --surface-1: #0b0d15;
+  --surface-2: #10131e;
+  --surface-3: #161a28;
   --viewer-bg: #000000;
-  --overlay-scrim: rgba(3, 5, 10, 0.72);
-  /* design §6: the only glass allowed (site header once scrolled) */
-  --surface-glass: rgba(14, 19, 32, 0.72);
+  --overlay-scrim: rgba(7, 8, 13, 0.72);
+  /* the only glass allowed (site header once scrolled) */
+  --surface-glass: rgba(7, 8, 13, 0.72);
 
-  /* 3.2 Borders */
-  --border: #26304a;
-  --border-glass: rgba(255, 255, 255, 0.06);
-  --border-strong: #5b6886;
-  --focus-ring: #7ad8f5;
+  /* Borders: cobalt blue */
+  --border: #0047ab;
+  --border-glass: rgba(0, 71, 171, 0.35);
+  --border-strong: #0047ab;
+  --focus-ring: #b1ff1f;
 
-  /* 3.3 Text */
-  --text-primary: #e8ecf5;
-  --text-secondary: #a6b0c5;
-  --text-muted: #8792ab;
+  /* Text: the soft neutral for all reading text; captions at 70%. Acid lime is for headings and marks only. */
+  --text-primary: #e8e6e1;
+  --text-secondary: #e8e6e1;
+  --text-muted: rgba(232, 230, 225, 0.7);
+  --text-heading: #b1ff1f;
 
-  /* 3.4 Brand & action */
-  --primary: #4cc9f0;
-  --primary-hover: #7ad8f5;
-  --primary-pressed: #2bb3de;
-  --primary-subtle: rgba(76, 201, 240, 0.12);
-  --on-primary: #04121a;
-  --accent: #ffb547;
-  --accent-subtle: rgba(255, 181, 71, 0.12);
-  --on-accent: #1a1000;
+  /* Brand and action: acid lime is the single accent */
+  --primary: #b1ff1f;
+  --primary-hover: #c8ff5c;
+  --primary-pressed: #95d918;
+  --primary-subtle: rgba(177, 255, 31, 0.12);
+  --on-primary: #07080d;
+  --accent: #b1ff1f;
+  --accent-subtle: rgba(177, 255, 31, 0.12);
+  --on-accent: #07080d;
 
-  /* 3.5 Semantic */
+  /* Semantic (functional) */
   --success: #3ddc97;
   --success-subtle: rgba(61, 220, 151, 0.12);
   --warning: #ffc857;
@@ -47,16 +52,16 @@
   --danger-subtle: rgba(255, 107, 107, 0.12);
   --on-danger: #1a0505;
 
-  /* 3.6 Data & overlay (Okabe–Ito) */
+  /* Data and overlay (Okabe–Ito, for distinct chart series) */
   --data-1: #56b4e9;
   --data-2: #e69f00;
   --data-3: #009e73;
   --data-4: #f0e442;
   --data-5: #d55e00;
   --data-6: #cc79a7;
-  --reticle: #ffb547;
+  --reticle: #b1ff1f;
 
-  /* 3.7 Certificate (light, print only) */
+  /* Certificate (light, print only) */
   --cert-paper: #fbf8f1;
   --cert-ink: #0b1220;
   --cert-muted: #4a5568;
@@ -98,7 +103,7 @@
   --color-danger-subtle: var(--danger-subtle);
   --color-on-danger: var(--on-danger);
 
-  /* shadcn token names, aliased onto the Observatory tokens (components/ui uses these). */
+  /* shadcn token names, aliased onto the AstroBlink tokens (components/ui uses these). */
   --color-background: var(--bg);
   --color-foreground: var(--text-primary);
   --color-card: var(--surface-1);
@@ -178,6 +183,22 @@
   animation: fade-out-label 4s ease-in-out forwards;
 }
 
+/* Flow animation for the advanced features: content eases in from below, like a flow. */
+@utility animate-flow-in {
+  animation: flow-in 450ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes flow-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Moving planet on the landing page: a slow drift up and down (components/ui/globe.tsx). */
 @utility animate-planet-float {
   animation: planet-float 12s ease-in-out infinite;
@@ -193,13 +214,46 @@
   }
 }
 
+/*
+  Starfield (non-interactive, CSS only), on every page: pearl stars that twinkle slowly.
+  Fixed to the viewport, behind the content, and never takes pointer events.
+*/
+html {
+  /* own stacking context, so the starfield (z-index -1) paints above the background */
+  isolation: isolate;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(rgba(232, 230, 225, 0.9) 1px, transparent 1.6px),
+    radial-gradient(rgba(232, 230, 225, 0.6) 1px, transparent 1.6px),
+    radial-gradient(rgba(232, 230, 225, 0.45) 0.8px, transparent 1.3px);
+  background-size: 137px 151px, 211px 197px, 97px 113px;
+  animation: star-twinkle 7s ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 @layer base {
   html {
     background: var(--bg);
   }
 
+  /* No background on body: it would paint over the starfield (body::after). html carries the colour. */
   body {
-    background: var(--bg);
     color: var(--text-primary);
     font-family: var(--font-sans), system-ui, sans-serif;
     font-size: 1rem;
@@ -212,6 +266,12 @@
   h3 {
     font-family: var(--font-display), system-ui, sans-serif;
     font-weight: 600;
+  }
+
+  /* Acid lime is for headings and marks; reading text uses the neutral. */
+  h1,
+  h2 {
+    color: var(--text-heading);
   }
 
   h3 {

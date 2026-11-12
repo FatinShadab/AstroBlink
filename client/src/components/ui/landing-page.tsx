@@ -13,6 +13,8 @@ export interface ScrollSection {
   subtitle?: string;
   description: string;
   align?: "left" | "center" | "right";
+  /** Optional content placed after the description, e.g. the hero coordinate search. */
+  search?: React.ReactNode;
   features?: { title: string; description: string }[];
   actions?: {
     label: string;
@@ -131,7 +133,7 @@ export default function ScrollGlobe({
 
   return (
     <div
-      className={cn("relative w-full overflow-x-hidden bg-background text-foreground", className)}
+      className={cn("relative w-full overflow-x-hidden text-foreground", className)}
     >
       {/* Progress bar: decorative, the sections carry the content */}
       <div aria-hidden="true" className="fixed top-0 left-0 z-50 h-0.5 w-full bg-border">
@@ -254,6 +256,8 @@ export default function ScrollGlobe({
                   </div>
                 )}
               </div>
+
+              {section.search}
 
               {section.features && (
                 <ul className="mb-8 grid gap-3 sm:mb-10 sm:gap-4">

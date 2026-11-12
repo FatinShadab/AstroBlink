@@ -7,8 +7,8 @@ import { Container } from "./Container";
 import { Logo } from "./Logo";
 
 const LINKS = [
-  { href: "/explore", key: "nav.explore" },
   { href: "/projects", key: "nav.projects" },
+  { href: "/explore", key: "nav.explore" },
   { href: "/guide", key: "nav.guide" },
   { href: "/about", key: "nav.about" },
   { href: "/embed", key: "footer.embed" },
@@ -24,10 +24,7 @@ export function SiteFooter() {
     <footer className="relative z-30 mt-auto border-t border-border bg-surface-1">
       <Container className="grid gap-8 py-10 md:grid-cols-3">
         <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 font-display text-h4 font-semibold text-text-primary">
-            <Logo />
-            <span>{t("brand.name")}</span>
-          </div>
+          <Logo height={48} alt={t("brand.mark")} />
           <p className="max-w-[40ch] text-body-sm text-text-secondary">{t("footer.mission")}</p>
         </div>
 

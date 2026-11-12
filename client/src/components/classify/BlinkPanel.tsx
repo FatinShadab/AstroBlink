@@ -1,23 +1,38 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AdvancedSidePanel } from "@/components/explore/AdvancedSidePanel";
 import { PlayerBar } from "@/components/explore/PlayerBar";
 import { SkyViewer } from "@/components/explore/SkyViewer";
 import { useFrameCanvases } from "@/components/explore/useFrameCanvases";
 import { usePlayback } from "@/components/explore/usePlayback";
+import { useSpectrum } from "@/components/explore/useSpectrum";
 import { Skeleton } from "@/components/ui/Surfaces";
+import { useToast } from "@/components/ui/Toast";
 import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
 import { useFieldFrames } from "@/lib/data/useFieldFrames";
-import type { SkyTarget } from "@/lib/data/types";
-import { fill } from "@/lib/i18n/format";
+import type { SkyTarget, StretchKind } from "@/lib/data/types";
+import { downloadCanvasPng, embedSnippet } from "@/lib/sky/export";
+import { fill, formatDate } from "@/lib/i18n/format";
 import { useT } from "@/lib/i18n/LangProvider";
+import type { DictKey } from "@/lib/i18n/en";
+import { countFlagged, flagOverlayRgba } from "@/lib/sky/modes";
+import { makeRgbaCanvas } from "@/lib/sky/render";
 import { NO_ADJUST } from "@/lib/sky/stretch";
 import { useUserStore, type BlinkFps } from "@/lib/state/useUserStore";
 import { useViewerUiStore } from "@/lib/state/useViewerUiStore";
+import { cn } from "@/lib/utils";
+
+/** Tools that work on the contributor pages. Compare, stack and difference need the explore page's views. */
+const CONTRIBUTE_TABS = ["image", "flags", "spectrum", "overlays", "share"];
+const noop = () => undefined;
 
 /**
- * A small blink viewer for the training and classify flows: the field, its player and nothing else.
- * Autoplays once frames are ready, unless reduced motion is on (rules §3.3).
+ * A blink viewer for the training and classify flows. With `advanced`, the viewer takes about 70% of
+ * the width and the advanced features sit beside it in the other 30% (stretch, brightness/contrast,
+ * glitch flags, spectrum, sharing), so changes show live. Autoplays once frames are ready, unless
+ * reduced motion is on (rules §3.3).
  */
 export function BlinkPanel({
   target,
@@ -25,6 +40,7 @@ export function BlinkPanel({
   fps: fpsOverride,
   autoplay = true,
   label,
+  advanced = false,
 }: {
   target: SkyTarget;
   showPlayer?: boolean;
@@ -33,26 +49,53 @@ export function BlinkPanel({
   autoplay?: boolean;
   /** Replaces the default viewer label, e.g. "Simulated example". */
   label?: string;
+  /** Shows the advanced features beside the viewer. */
+  advanced?: boolean;
 }) {
-  const { t } = useT();
+  const { t, lang } = useT();
+  const router = useRouter();
+  const toast = useToast();
   const { load } = useFieldFrames(target);
   const loaded = load.status === "ready" ? load.data : null;
   const frames = useMemo(() => loaded?.frames ?? [], [loaded]);
   const count = frames.length;
-  const canvases = useFrameCanvases(loaded, "asinh", NO_ADJUST);
+
+  const [stretch, setStretch] = useState<StretchKind>("asinh");
+  const [showFlags, setShowFlags] = useState(false);
+  const brightness = useViewerUiStore((s) => s.brightness);
+  const contrast = useViewerUiStore((s) => s.contrast);
+  const adjust = useMemo(
+    () => (brightness === 0 && contrast === 1 ? NO_ADJUST : { brightness, contrast }),
+    [brightness, contrast],
+  );
+  const canvases = useFrameCanvases(loaded, stretch, adjust);
+  const flagCanvases = useMemo(() => {
+    if (!loaded || !showFlags) return [];
+    return loaded.frames.map((f) =>
+      makeRgbaCanvas(
+        flagOverlayRgba(f.flags, f.meta.width, f.meta.height, [204, 121, 167]),
+        f.meta.width,
+        f.meta.height,
+      ),
+    );
+  }, [loaded, showFlags]);
+
   const [index, setIndex] = useState(0);
   const current = count > 0 ? Math.min(index, count - 1) : 0;
 
   const reducedMotion = useReducedMotion();
   const storeFps = useUserStore((s) => s.settings.blinkFps);
-  const fps = fpsOverride ?? storeFps;
   const setBlinkFps = useUserStore((s) => s.setBlinkFps);
+  const fps = fpsOverride ?? storeFps;
   const playing = useViewerUiStore((s) => s.playing);
   const setPlaying = useViewerUiStore((s) => s.setPlaying);
   const zoom = useViewerUiStore((s) => s.zoom);
   const panX = useViewerUiStore((s) => s.panX);
   const panY = useViewerUiStore((s) => s.panY);
   const pan = useViewerUiStore((s) => s.pan);
+  const pick = useViewerUiStore((s) => s.pick);
+  const setPick = useViewerUiStore((s) => s.setPick);
+  const spectrum = useSpectrum(target, pick);
 
   usePlayback({ count, fps, onTick: () => setIndex((i) => (count > 0 ? (i + 1) % count : 0)) });
 
@@ -68,18 +111,34 @@ export function BlinkPanel({
     }
   }, [autoplay, count, reducedMotion, setPlaying]);
 
+  // Links for the advanced tools: the explore page with this field.
+  const search = `?ra=${target.raDeg}&dec=${target.decDeg}&fov=${target.fovArcmin}&det=${target.detector}`;
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const goToDetector = (det: SkyTarget["detector"]) =>
+    router.push(
+      `/explore?ra=${target.raDeg}&dec=${target.decDeg}&fov=${target.fovArcmin}&det=${det}`,
+    );
+  const copy = async (text: string, doneKey: DictKey) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({ title: t(doneKey) });
+    } catch {
+      toast({ title: t("explore.linkFailed") });
+    }
+  };
+
   const description =
     count > 0
       ? fill(t("explore.describe"), {
           index: current + 1,
           total: count,
-          date: frames[current].meta.obsDate,
+          date: formatDate(frames[current].meta.obsDate, lang),
           det: target.detector,
         })
       : t("common.loading");
 
-  return (
-    <div className="flex flex-col">
+  const viewer = (
+    <div className="flex min-w-0 flex-col">
       {load.status === "error" ? (
         <p
           role="alert"
@@ -91,6 +150,7 @@ export function BlinkPanel({
         <SkyViewer
           frames={canvases}
           index={current}
+          flags={showFlags ? (flagCanvases[current] ?? null) : null}
           zoom={zoom}
           panX={panX}
           panY={panY}
@@ -101,6 +161,7 @@ export function BlinkPanel({
           frameCounter={count ? `${current + 1} / ${count}` : "–"}
           zoomLabel={`${Math.round(zoom * 100)}%`}
           onPan={pan}
+          onPick={(x, y) => setPick({ x, y })}
           onKeyDown={() => undefined}
           className="h-[min(60vh,640px)]"
         >
@@ -124,6 +185,42 @@ export function BlinkPanel({
           onSpeed={setBlinkFps}
         />
       )}
+    </div>
+  );
+
+  if (!advanced) return viewer;
+
+  return (
+    <div className={cn("grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start")}>
+      {viewer}
+      <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+        <AdvancedSidePanel
+          tabs={CONTRIBUTE_TABS}
+          detector={target.detector}
+          onDetector={goToDetector}
+          stretch={stretch}
+          onStretch={setStretch}
+          frameLabels={[]}
+          a={0}
+          b={0}
+          onA={noop}
+          onB={noop}
+          diffStyle="grey"
+          onDiffStyle={noop}
+          showFlags={showFlags}
+          onShowFlags={setShowFlags}
+          flagCount={loaded && frames[current] ? countFlagged(frames[current].flags) : 0}
+          spectrum={spectrum}
+          pick={pick}
+          shareUrl={`${origin}/explore${search}`}
+          embedSnippet={embedSnippet(origin, search)}
+          onCopy={(text, doneKey) => void copy(text, doneKey)}
+          onDownloadPng={() => {
+            const source = canvases[current];
+            if (source) downloadCanvasPng(source, `astroblink-${target.detector}-${current + 1}.png`);
+          }}
+        />
+      </aside>
     </div>
   );
 }

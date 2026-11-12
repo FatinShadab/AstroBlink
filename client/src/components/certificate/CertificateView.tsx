@@ -11,6 +11,7 @@ import {
   type CertificateColours,
 } from "@/lib/certificate/drawCertificate";
 import { fill, formatDate } from "@/lib/i18n/format";
+import { CERT_MIN_FIELDS, isCertificateEligible } from "@/lib/certificate/eligibility";
 import { useLang, useT } from "@/lib/i18n/LangProvider";
 import { myStats } from "@/lib/stats/selectors";
 import { useUserStore } from "@/lib/state/useUserStore";
@@ -27,6 +28,7 @@ export function CertificateView() {
   const classifications = useUserStore((s) => s.classifications);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stats = useMemo(() => myStats(classifications), [classifications]);
+  const eligible = isCertificateEligible(stats.fieldsChecked);
   const name = user?.name ?? t("me.volunteer");
   const today = new Date().toISOString().slice(0, 10);
 
@@ -88,11 +90,19 @@ export function CertificateView() {
       <p className="mx-auto max-w-[68ch] text-center text-caption text-text-muted">
         {t("cert.demoNote")}
       </p>
+      {eligible ? (
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button onClick={download}>{t("cert.withdraw")}</Button>
+          <Button variant="secondary" onClick={() => window.print()}>
+            {t("cert.print")}
+          </Button>
+        </div>
+      ) : (
+        <p role="status" className="mx-auto max-w-[68ch] text-center text-body-sm text-text-secondary">
+          {fill(t("cert.notEligible"), { min: CERT_MIN_FIELDS, count: stats.fieldsChecked })}
+        </p>
+      )}
       <div className="flex flex-wrap justify-center gap-3">
-        <Button onClick={download}>{t("cert.download")}</Button>
-        <Button variant="secondary" onClick={() => window.print()}>
-          {t("cert.print")}
-        </Button>
         <Link href="/me" className={buttonStyles({ variant: "tertiary" })}>
           {t("cert.back")}
         </Link>

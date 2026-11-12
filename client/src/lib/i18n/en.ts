@@ -7,6 +7,7 @@ export const en = {
   "brand.mark": "AstroBlink logo",
 
   "nav.explore": "Explore",
+  "nav.home": "Home",
   "nav.projects": "Projects",
   "nav.guide": "Field guide",
   "nav.about": "About",
@@ -172,7 +173,13 @@ export const en = {
   "explore.reset": "Reset",
   "explore.spectrum": "Spectrum",
   "explore.relativeBrightness": "Relative brightness",
-  "explore.advanced": "Advanced tools",
+  "explore.advanced": "Advanced features",
+  "explore.advancedButton": "Advanced features",
+  "explore.advancedHide": "Hide advanced features",
+  "explore.advancedHelp":
+    "Image, compare, glitch flags, spectrum, overlays and sharing, in one place.",
+  "explore.advancedHelpContribute":
+    "Stretch, brightness and contrast, glitch flags, spectrum and sharing. Compare and stack are on the explore page.",
   "explore.show": "Show",
   "explore.hide": "Hide",
   "explore.tab.image": "Image",
@@ -269,6 +276,11 @@ export const en = {
   "classify.badge": "Classify",
   "classify.hint": "Watch the blinking image. Use the field guide if you're unsure.",
   "classify.progress": "Field {index} of {total}",
+  "classify.progressTitle": "Your batch",
+  "classify.percentComplete": "Percent complete",
+  "classify.statChecked": "Checked",
+  "classify.statLeft": "Left",
+  "classify.statBatch": "Batch size",
   "classify.flag": "Flag as interesting",
   "classify.keysHint": "Keys 1–4 answer · Enter next",
   "classify.thanks": "Thanks! {percent}% of volunteers also said: {answer}.",
@@ -322,6 +334,22 @@ export const en = {
   "guide.nothing.how": "If you cannot see a change after a careful look, answer no change.",
 
   "header.myStats": "My stats",
+  "explore.advancedCollapse": "Show as tabs",
+  "auth.required.title": "Sign in to continue",
+  "auth.required.body":
+    "Contributing, your stats and your certificate are kept per account. Sign in to use them. Exploring the sky does not need an account.",
+  "cert.getTitle": "Get your certificate",
+  "cert.eligibleBody":
+    "Your certificate is drawn from your own stats. Download it as a PNG or print it.",
+  "cert.notEligible":
+    "Check at least {min} fields to unlock your certificate. You have checked {count} so far.",
+  "cert.unlockButton": "Get certificate",
+  "cert.withdraw": "Withdraw certificate (PNG)",
+  "header.account": "Account menu",
+  "header.certificate": "Certificate",
+  "header.signOut": "Sign out",
+  "header.mainNav": "Main",
+  "header.mobileNav": "Mobile",
 
   "landing.badge": "NASA Space Apps 2026",
   "landing.title": "Watch the sky change.",
@@ -438,6 +466,9 @@ export const en = {
   "cert.back": "Back to my stats",
 
   "login.title": "Sign in to keep your progress",
+  "login.back": "Back",
+  "login.hookTitle": "Be the next citizen scientist.",
+  "login.hookBody": "Help astronomers find moving stars and new worlds in NASA SPHEREx images. No experience needed.",
   "login.signedIn": "You are signed in",
   "login.as": "Signed in as",
   "login.localNote":

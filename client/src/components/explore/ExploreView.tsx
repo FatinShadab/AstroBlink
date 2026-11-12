@@ -6,6 +6,7 @@ import { useQueryStates } from "nuqs";
 import { Button } from "@/components/ui/Button";
 import { Banner, Card, EmptyState, Skeleton } from "@/components/ui/Surfaces";
 import { useToast } from "@/components/ui/Toast";
+
 import type { PresetId } from "@/data/presets";
 import { useFieldFrames } from "@/lib/data/useFieldFrames";
 import type { Detector, SkyTarget, StretchKind, ViewMode } from "@/lib/data/types";
@@ -23,7 +24,7 @@ import { useFrameCanvases } from "./useFrameCanvases";
 import { useModeCanvases } from "./useModeCanvases";
 import { useSpectrum } from "./useSpectrum";
 import { usePlayback } from "./usePlayback";
-import { AdvancedToolsPanel } from "./AdvancedToolsPanel";
+import { AdvancedSidePanel } from "./AdvancedSidePanel";
 import { FrameMetaStrip } from "./FrameMetaStrip";
 import { ObjectCard } from "./ObjectCard";
 import { PlayerBar } from "./PlayerBar";
@@ -123,8 +124,6 @@ export function ExploreView() {
   const reducedMotion = useReducedMotion();
   const fps = useUserStore((s) => s.settings.blinkFps);
   const setBlinkFps = useUserStore((s) => s.setBlinkFps);
-  const advancedOpen = useUserStore((s) => s.settings.advancedOpen);
-  const setAdvancedOpen = useUserStore((s) => s.setAdvancedOpen);
   const playing = useViewerUiStore((s) => s.playing);
   const setPlaying = useViewerUiStore((s) => s.setPlaying);
   const zoom = useViewerUiStore((s) => s.zoom);
@@ -284,7 +283,15 @@ export function ExploreView() {
         onSearch={onSearch}
         onFov={(value) => newTarget({ fov: value })}
         onDetector={(value) => newTarget({ det: value })}
-        shareSlot={null}
+        shareSlot={
+          <Button
+            variant="secondary"
+            className="shrink-0"
+            onClick={() => void copyText(`${origin}/explore${search}`, "explore.linkCopied")}
+          >
+            {t("explore.copyLink")}
+          </Button>
+        }
       />
 
       <PresetChips selected={(params.preset as PresetId | null) ?? null} onSelect={onPreset} />
@@ -321,6 +328,8 @@ export function ExploreView() {
         <p className="text-body-sm text-text-muted">{t("explore.reducedMotion")}</p>
       )}
 
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start">
+        <div className="flex min-w-0 flex-col gap-6">
       <ViewerToolbar
         mode={mode}
         onMode={(next) => void setParams({ mode: next })}
@@ -436,8 +445,8 @@ export function ExploreView() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        <div className="md:col-span-8">
+      <div className="flex flex-col gap-6">
+        <div>
           <Card className="flex flex-col gap-3">
             <h2 className="font-sans text-h4 font-medium text-text-primary">
               {t("explore.lightCurve")}
@@ -449,42 +458,45 @@ export function ExploreView() {
             )}
           </Card>
         </div>
-        <div className="md:col-span-4">
+        <div>
           <ObjectCard preset={preset} />
         </div>
       </div>
 
-      <AdvancedToolsPanel
-        open={advancedOpen}
-        onOpenChange={setAdvancedOpen}
-        detector={detector}
-        onDetector={(value) => newTarget({ det: value })}
-        stretch={params.st as StretchKind}
-        onStretch={(value) => void setParams({ st: value })}
-        frameLabels={frameLabels}
-        a={a}
-        b={b}
-        onA={(i) => void setParams({ a: i })}
-        onB={(i) => void setParams({ b: i })}
-        diffStyle={params.ds as DiffStyle}
-        onDiffStyle={(value) => void setParams({ ds: value })}
-        showFlags={showFlags}
-        onShowFlags={(on) => void setParams({ fl: on ? 1 : 0 })}
-        flagCount={ready && frames[current] ? countFlagged(frames[current].flags) : 0}
-        spectrum={spectrum}
-        pick={pick}
-        shareUrl={`${origin}/explore${search}`}
-        embedSnippet={embedSnippet(origin, search)}
-        onCopy={(text, doneKey) => void copyText(text, doneKey)}
-        onDownloadPng={() => {
-          const source = frameCanvases[mode === "blink" ? current : 0];
-          if (source)
-            downloadCanvasPng(
-              source,
-              `astroblink-${detector}-${frameLabels.length ? current + 1 : 0}.png`,
-            );
-        }}
-      />
+        </div>
+
+        <div className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+          <AdvancedSidePanel
+            detector={detector}
+            onDetector={(value) => newTarget({ det: value })}
+            stretch={params.st as StretchKind}
+            onStretch={(value) => void setParams({ st: value })}
+            frameLabels={frameLabels}
+            a={a}
+            b={b}
+            onA={(i) => void setParams({ a: i })}
+            onB={(i) => void setParams({ b: i })}
+            diffStyle={params.ds as DiffStyle}
+            onDiffStyle={(value) => void setParams({ ds: value })}
+            showFlags={showFlags}
+            onShowFlags={(on) => void setParams({ fl: on ? 1 : 0 })}
+            flagCount={ready && frames[current] ? countFlagged(frames[current].flags) : 0}
+            spectrum={spectrum}
+            pick={pick}
+            shareUrl={`${origin}/explore${search}`}
+            embedSnippet={embedSnippet(origin, search)}
+            onCopy={(text, doneKey) => void copyText(text, doneKey)}
+            onDownloadPng={() => {
+              const source = frameCanvases[mode === "blink" ? current : 0];
+              if (source)
+                downloadCanvasPng(
+                  source,
+                  `astroblink-${detector}-${frameLabels.length ? current + 1 : 0}.png`,
+                );
+            }}
+          />
+        </div>
+      </div>
 
       <div className="flex flex-col gap-1 text-caption text-text-muted">
         <p>{t("explore.simulatedNote")}</p>

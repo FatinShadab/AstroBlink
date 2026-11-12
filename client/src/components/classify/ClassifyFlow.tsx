@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button, buttonStyles } from "@/components/ui/Button";
-import { Badge, Card, KpiTile, ProgressBar } from "@/components/ui/Surfaces";
+import { Badge, Card, KpiTile } from "@/components/ui/Surfaces";
+import { ContributionProgress } from "./ContributionProgress";
 import { Chip } from "@/components/ui/Field";
 import { ANSWER_LABEL, type ProjectDef } from "@/data/projects";
 import { useT } from "@/lib/i18n/LangProvider";
@@ -88,7 +89,7 @@ export function ClassifyFlow({ project }: { project: ProjectDef }) {
         />
       ) : field ? (
         <>
-          <BlinkPanel key={field.fieldId} target={field.target} />
+          <BlinkPanel key={field.fieldId} target={field.target} advanced />
           <ClassifyStep
             key={`${offset}-${index}`}
             project={project}
@@ -103,14 +104,17 @@ export function ClassifyFlow({ project }: { project: ProjectDef }) {
         </Card>
       )}
 
-      <div className="flex flex-col gap-2">
-        <ProgressBar
-          label={fill(t("classify.progress"), { index: Math.min(index + 1, BATCH), total: BATCH })}
-          value={Math.min(index, BATCH)}
-          max={BATCH}
-          valueLabel={`${Math.round((Math.min(index, BATCH) / BATCH) * 100)}%`}
-        />
-      </div>
+      <ContributionProgress
+        title={t("classify.progressTitle")}
+        done={Math.min(index, BATCH)}
+        total={BATCH}
+        caption={t("classify.percentComplete")}
+        stats={[
+          { label: t("classify.statChecked"), value: String(Math.min(index, BATCH)) },
+          { label: t("classify.statLeft"), value: String(Math.max(BATCH - index, 0)) },
+          { label: t("classify.statBatch"), value: String(BATCH) },
+        ]}
+      />
     </div>
   );
 }

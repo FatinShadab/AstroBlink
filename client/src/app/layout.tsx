@@ -45,7 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-bg text-text-primary">
+      <body className="flex min-h-full flex-col text-text-primary">
         <Providers>{children}</Providers>
       </body>
     </html>

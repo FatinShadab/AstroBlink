@@ -3,6 +3,7 @@
 import ScrollGlobe, { type ScrollSection } from "@/components/ui/landing-page";
 import { PROJECTS } from "@/data/projects";
 import { useT } from "@/lib/i18n/LangProvider";
+import { HeroSearch } from "./HeroSearch";
 
 const HOW_STEPS = [
   { title: "landing.how.1.title", body: "landing.how.1.body" },
@@ -25,6 +26,7 @@ export function AstroLanding() {
       title: t("landing.title"),
       description: t("landing.subtitle"),
       align: "left",
+      search: <HeroSearch />,
       actions: [
         { label: t("landing.try"), variant: "primary", href: tryHref },
         { label: t("landing.join"), variant: "secondary", href: "/projects" },

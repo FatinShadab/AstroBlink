@@ -1,9 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Radix";
 import { Button } from "@/components/ui/Button";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { Badge, Card } from "@/components/ui/Surfaces";
+import { Badge } from "@/components/ui/Surfaces";
 import { DETECTORS } from "@/lib/sky/detectors";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
@@ -11,8 +12,8 @@ import { fill } from "@/lib/i18n/format";
 import { useViewerUiStore } from "@/lib/state/useViewerUiStore";
 import type { DiffStyle } from "@/lib/sky/modes";
 import type { Detector, SpectrumPoint, StretchKind } from "@/lib/data/types";
-import dynamic from "next/dynamic";
 import { spectrumCsv } from "@/lib/sky/spectrumCsv";
+import { cn } from "@/lib/utils";
 
 const SpectrumChart = dynamic(() => import("./SpectrumChart").then((m) => m.SpectrumChart), {
   ssr: false,
@@ -20,8 +21,8 @@ const SpectrumChart = dynamic(() => import("./SpectrumChart").then((m) => m.Spec
 });
 
 export interface AdvancedProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  /** Which tabs to show. Default: all. Pages without the multi-frame views hide "compare". */
+  tabs?: readonly string[];
   detector: Detector;
   onDetector: (d: Detector) => void;
   stretch: StretchKind;
@@ -46,10 +47,12 @@ export interface AdvancedProps {
 
 const TABS = ["image", "compare", "flags", "spectrum", "overlays", "share"] as const;
 
-/** Advanced tools (design §8.2): a tabbed card below the viewer. Collapsed by default; remembers its state. */
-export function AdvancedToolsPanel(props: AdvancedProps) {
+/**
+ * The advanced feature set (design §8.2). Shown as tabs, or, when `expanded`, as every feature at
+ * once with a flow animation. The wrapper with the Advanced features button is AdvancedSidePanel.
+ */
+export function AdvancedToolsPanel({ expanded = false, ...props }: AdvancedProps & { expanded?: boolean }) {
   const { t } = useT();
-  const { open, onOpenChange } = props;
   const brightness = useViewerUiStore((s) => s.brightness);
   const contrast = useViewerUiStore((s) => s.contrast);
   const setBrightness = useViewerUiStore((s) => s.setBrightness);
@@ -58,93 +61,75 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
   const stackIds = useViewerUiStore((s) => s.stackIds);
   const toggleStackId = useViewerUiStore((s) => s.toggleStackId);
 
+  const show = (tab: (typeof TABS)[number]) => !props.tabs || props.tabs.includes(tab);
+  // In "all features" view every tab's content is mounted and shown under its own heading.
+  const contentProps = (
+    _tab: (typeof TABS)[number],
+    base: string,
+  ): { forceMount?: true; className: string } => ({
+    forceMount: expanded ? true : undefined,
+    className: cn(base, expanded && "block"),
+  });
+  const heading = (tab: (typeof TABS)[number]) =>
+    expanded ? (
+      <h3 className="font-sans text-h4 font-medium text-text-primary">
+        {t(`explore.tab.${tab}` as DictKey)}
+      </h3>
+    ) : null;
+
   return (
-    <Card className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="font-sans text-h4 font-medium text-text-primary">{t("explore.advanced")}</h2>
-        <Button
-          variant="secondary"
-          size="sm"
-          aria-expanded={open}
-          onClick={() => onOpenChange(!open)}
-        >
-          {open ? t("explore.hide") : t("explore.show")}
-        </Button>
-      </div>
+    <Tabs key={expanded ? "all" : "tabs"} defaultValue="image" className="animate-flow-in flex flex-col gap-4">
+      {!expanded && (
+        <TabsList aria-label={t("explore.advanced")}>
+          {TABS.filter(show).map((tab) => (
+            <TabsTrigger key={tab} value={tab}>
+              {t(`explore.tab.${tab}` as DictKey)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      )}
 
-      {open && (
-        <Tabs defaultValue="image" className="flex flex-col">
-          <TabsList aria-label={t("explore.advanced")}>
-            {TABS.map((tab) => (
-              <TabsTrigger key={tab} value={tab}>
-                {t(`explore.tab.${tab}` as DictKey)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          <TabsContent value="image" className="grid gap-6 md:grid-cols-12">
-            <div className="flex flex-col gap-4 md:col-span-4">
-              <SegmentedControl<Detector>
-                label={t("explore.detector")}
-                value={props.detector}
-                onChange={props.onDetector}
-                options={DETECTORS.map((d) => ({ value: d.id, label: d.id }))}
-              />
-              <p className="text-caption text-text-muted">
-                {DETECTORS.map(
-                  (d) => `${d.id} ${d.minUm.toFixed(2)}–${d.maxUm.toFixed(2)} μm`,
-                ).join(" · ")}
-              </p>
-              <SegmentedControl<StretchKind>
-                label={t("explore.stretch")}
-                value={props.stretch}
-                onChange={props.onStretch}
-                options={[
-                  { value: "linear", label: t("explore.stretch.linear") },
-                  { value: "log", label: t("explore.stretch.log") },
-                  { value: "asinh", label: t("explore.stretch.asinh") },
-                ]}
-              />
+      <div className={cn("flex flex-col gap-6", expanded && "divide-y divide-border")}>
+        <TabsContent value="image" {...contentProps("image", "grid gap-6 pt-4 md:grid-cols-12")}>
+          {heading("image")}
+          <div className="flex flex-col gap-4 md:col-span-12">
+            <SegmentedControl<Detector>
+              label={t("explore.detector")}
+              value={props.detector}
+              onChange={props.onDetector}
+              options={DETECTORS.map((d) => ({ value: d.id, label: d.id }))}
+            />
+            <p className="text-caption text-text-muted">
+              {DETECTORS.map((d) => `${d.id} ${d.minUm.toFixed(2)}–${d.maxUm.toFixed(2)} μm`).join(" · ")}
+            </p>
+            <SegmentedControl<StretchKind>
+              label={t("explore.stretch")}
+              value={props.stretch}
+              onChange={props.onStretch}
+              options={[
+                { value: "linear", label: t("explore.stretch.linear") },
+                { value: "log", label: t("explore.stretch.log") },
+                { value: "asinh", label: t("explore.stretch.asinh") },
+              ]}
+            />
+          </div>
+          <div className="flex flex-col gap-4 md:col-span-12">
+            <Slider label={t("explore.brightness")} min={-0.5} max={0.5} step={0.01} value={brightness} onChange={setBrightness} />
+            <Slider label={t("explore.contrast")} min={0.25} max={3} step={0.05} value={contrast} onChange={setContrast} />
+            <div>
+              <Button variant="secondary" size="sm" onClick={resetAdjust}>
+                {t("explore.reset")}
+              </Button>
             </div>
-            <div className="flex flex-col gap-4 md:col-span-8">
-              <Slider
-                label={t("explore.brightness")}
-                min={-0.5}
-                max={0.5}
-                step={0.01}
-                value={brightness}
-                onChange={setBrightness}
-              />
-              <Slider
-                label={t("explore.contrast")}
-                min={0.25}
-                max={3}
-                step={0.05}
-                value={contrast}
-                onChange={setContrast}
-              />
-              <div>
-                <Button variant="secondary" size="sm" onClick={resetAdjust}>
-                  {t("explore.reset")}
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
+          </div>
+        </TabsContent>
 
-          <TabsContent value="compare" className="grid gap-6 md:grid-cols-12">
-            <div className="flex flex-col gap-4 md:col-span-4">
-              <FrameSelect
-                label={t("explore.compareA")}
-                value={props.a}
-                labels={props.frameLabels}
-                onChange={props.onA}
-              />
-              <FrameSelect
-                label={t("explore.compareB")}
-                value={props.b}
-                labels={props.frameLabels}
-                onChange={props.onB}
-              />
+        {show("compare") && (
+          <TabsContent value="compare" {...contentProps("compare", "grid gap-6 pt-4 md:grid-cols-12")}>
+            {heading("compare")}
+            <div className="flex flex-col gap-4 md:col-span-12">
+              <FrameSelect label={t("explore.compareA")} value={props.a} labels={props.frameLabels} onChange={props.onA} />
+              <FrameSelect label={t("explore.compareB")} value={props.b} labels={props.frameLabels} onChange={props.onB} />
               <SegmentedControl<DiffStyle>
                 label={t("explore.diffStyle")}
                 value={props.diffStyle}
@@ -155,16 +140,11 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
                 ]}
               />
             </div>
-            <fieldset className="flex flex-col gap-2 md:col-span-8">
-              <legend className="mb-2 text-body-sm font-medium text-text-primary">
-                {t("explore.stackFrames")}
-              </legend>
+            <fieldset className="flex flex-col gap-2 md:col-span-12">
+              <legend className="mb-2 text-body-sm font-medium text-text-primary">{t("explore.stackFrames")}</legend>
               <p className="text-caption text-text-muted">{t("explore.stackHelp")}</p>
               {props.frameLabels.map((label, i) => (
-                <label
-                  key={label}
-                  className="flex min-h-11 items-center gap-3 text-body-sm text-text-primary"
-                >
+                <label key={label} className="flex min-h-11 items-center gap-3 text-body-sm text-text-primary">
                   <input
                     type="checkbox"
                     className="size-5 accent-[var(--primary)]"
@@ -176,8 +156,11 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
               ))}
             </fieldset>
           </TabsContent>
+        )}
 
-          <TabsContent value="flags" className="flex flex-col gap-4">
+        {show("flags") && (
+          <TabsContent value="flags" {...contentProps("flags", "flex flex-col gap-4 pt-4")}>
+            {heading("flags")}
             <label className="flex min-h-11 items-center gap-3 text-body text-text-primary">
               <input
                 type="checkbox"
@@ -192,28 +175,22 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
                 aria-hidden="true"
                 className="inline-block size-6 rounded-[4px] border border-border-strong"
                 style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(45deg, var(--data-6) 0 1px, transparent 1px 4px)",
+                  backgroundImage: "repeating-linear-gradient(45deg, var(--data-6) 0 1px, transparent 1px 4px)",
                 }}
               />
               {t("explore.flagLegend")}
             </div>
-            <p className="text-body-sm text-text-secondary">
-              {fill(t("explore.flagCount"), { count: props.flagCount })}
-            </p>
+            <p className="text-body-sm text-text-secondary">{fill(t("explore.flagCount"), { count: props.flagCount })}</p>
           </TabsContent>
+        )}
 
-          <TabsContent value="spectrum" className="flex flex-col gap-4">
+        {show("spectrum") && (
+          <TabsContent value="spectrum" {...contentProps("spectrum", "flex flex-col gap-4 pt-4")}>
+            {heading("spectrum")}
             <p className="text-body-sm text-text-secondary">{t("explore.spectrumHint")}</p>
-            {props.pick === null && (
-              <p className="text-body-sm text-text-muted">{t("explore.spectrumWaiting")}</p>
-            )}
-            {props.spectrum.loading && (
-              <p className="text-body-sm text-text-muted">{t("common.loading")}</p>
-            )}
-            {props.spectrum.error && (
-              <p className="text-body-sm text-danger">{t("explore.spectrumError")}</p>
-            )}
+            {props.pick === null && <p className="text-body-sm text-text-muted">{t("explore.spectrumWaiting")}</p>}
+            {props.spectrum.loading && <p className="text-body-sm text-text-muted">{t("common.loading")}</p>}
+            {props.spectrum.error && <p className="text-body-sm text-danger">{t("explore.spectrumError")}</p>}
             {props.spectrum.points && (
               <>
                 <SpectrumChart points={props.spectrum.points} />
@@ -222,11 +199,7 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
                     variant="secondary"
                     size="sm"
                     onClick={() =>
-                      downloadText(
-                        "spectrum.csv",
-                        spectrumCsv(props.spectrum.points ?? []),
-                        "text/csv",
-                      )
+                      downloadText("spectrum.csv", spectrumCsv(props.spectrum.points ?? []), "text/csv")
                     }
                   >
                     {t("explore.exportCsv")}
@@ -235,13 +208,13 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
               </>
             )}
           </TabsContent>
+        )}
 
-          <TabsContent value="overlays" className="flex flex-col gap-3">
+        {show("overlays") && (
+          <TabsContent value="overlays" {...contentProps("overlays", "flex flex-col gap-3 pt-4")}>
+            {heading("overlays")}
             {(["explore.overlayGaia", "explore.overlayWise"] as const).map((key) => (
-              <label
-                key={key}
-                className="flex min-h-11 items-center gap-3 text-body text-text-muted"
-              >
+              <label key={key} className="flex min-h-11 items-center gap-3 text-body text-text-muted">
                 <input type="checkbox" disabled className="size-5" />
                 {t(key)}
                 <Badge tone="accent" className="ml-1">
@@ -250,13 +223,13 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
               </label>
             ))}
           </TabsContent>
+        )}
 
-          <TabsContent value="share" className="flex flex-col gap-4">
+        {show("share") && (
+          <TabsContent value="share" {...contentProps("share", "flex flex-col gap-4 pt-4")}>
+            {heading("share")}
             <div className="flex flex-wrap gap-2">
-              <Button
-                variant="secondary"
-                onClick={() => props.onCopy(props.shareUrl, "explore.linkCopied")}
-              >
+              <Button variant="secondary" onClick={() => props.onCopy(props.shareUrl, "explore.linkCopied")}>
                 {t("explore.copyLink")}
               </Button>
               <Button variant="secondary" onClick={props.onDownloadPng}>
@@ -269,19 +242,15 @@ export function AdvancedToolsPanel(props: AdvancedProps) {
                 <code>{props.embedSnippet}</code>
               </pre>
               <div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => props.onCopy(props.embedSnippet, "explore.embedCopied")}
-                >
+                <Button variant="secondary" size="sm" onClick={() => props.onCopy(props.embedSnippet, "explore.embedCopied")}>
                   {t("explore.copyEmbed")}
                 </Button>
               </div>
             </div>
           </TabsContent>
-        </Tabs>
-      )}
-    </Card>
+        )}
+      </div>
+    </Tabs>
   );
 }
 

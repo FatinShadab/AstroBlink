@@ -80,10 +80,7 @@ export function EmbedView() {
   return (
     <div className="flex h-full min-h-screen flex-col bg-bg text-text-primary">
       <div className="flex h-10 items-center justify-between gap-2 border-b border-border bg-surface-1 px-3">
-        <span className="flex items-center gap-2 font-display text-body-sm font-semibold">
-          <Logo className="size-5" />
-          {t("brand.name")}
-        </span>
+        <Logo height={22} alt={t("brand.mark")} />
         <Link
           href={link}
           target="_blank"

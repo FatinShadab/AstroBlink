@@ -28,7 +28,9 @@ export default function Globe({ className }: { className?: string }) {
   }, []);
 
   return (
+    // A solid disc behind the model, so the starfield never shows through the planet.
     <div aria-hidden="true" className={cn("relative size-[250px] animate-planet-float", className)}>
+      <span aria-hidden="true" className="absolute inset-0 rounded-full bg-bg" />
       <model-viewer
         src="/models/earth.glb"
         loading="eager"
@@ -38,7 +40,7 @@ export default function Globe({ className }: { className?: string }) {
         disable-pan=""
         interaction-prompt="none"
         shadow-intensity="0"
-        className="size-full bg-transparent"
+        className="relative size-full bg-transparent"
       />
     </div>
   );

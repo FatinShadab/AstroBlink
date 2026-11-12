@@ -9,6 +9,7 @@ export const bn: Record<DictKey, string> = {
   "brand.mark": "AstroBlink লোগো",
 
   "nav.explore": "অন্বেষণ",
+  "nav.home": "Home", // TODO bn
   "nav.projects": "প্রকল্প",
   "nav.guide": "ফিল্ড গাইড",
   "nav.about": "পরিচিতি",
@@ -173,7 +174,13 @@ export const bn: Record<DictKey, string> = {
   "explore.reset": "রিসেট", // TODO bn review
   "explore.spectrum": "বর্ণালি", // TODO bn review
   "explore.relativeBrightness": "আপেক্ষিক উজ্জ্বলতা", // TODO bn review
-  "explore.advanced": "উন্নত সরঞ্জাম", // TODO bn review
+  "explore.advanced": "Advanced features", // TODO bn
+  "explore.advancedButton": "Advanced features", // TODO bn
+  "explore.advancedHide": "Hide advanced features", // TODO bn
+  "explore.advancedHelp":
+    "Image, compare, glitch flags, spectrum, overlays and sharing, in one place.", // TODO bn
+  "explore.advancedHelpContribute":
+    "Stretch, brightness and contrast, glitch flags, spectrum and sharing. Compare and stack are on the explore page.", // TODO bn
   "explore.show": "দেখান", // TODO bn review
   "explore.hide": "লুকান", // TODO bn review
   "explore.tab.image": "ছবি",
@@ -269,6 +276,11 @@ export const bn: Record<DictKey, string> = {
   "classify.badge": "Classify", // TODO bn
   "classify.hint": "Watch the blinking image. Use the field guide if you're unsure.", // TODO bn
   "classify.progress": "Field {index} of {total}", // TODO bn
+  "classify.progressTitle": "Your batch", // TODO bn
+  "classify.percentComplete": "Percent complete", // TODO bn
+  "classify.statChecked": "Checked", // TODO bn
+  "classify.statLeft": "Left", // TODO bn
+  "classify.statBatch": "Batch size", // TODO bn
   "classify.flag": "Flag as interesting", // TODO bn
   "classify.keysHint": "Keys 1–4 answer · Enter next", // TODO bn
   "classify.thanks": "Thanks! {percent}% of volunteers also said: {answer}.", // TODO bn
@@ -321,6 +333,22 @@ export const bn: Record<DictKey, string> = {
   "guide.nothing.body": "The pictures look the same, apart from a little noise.", // TODO bn
   "guide.nothing.how": "If you cannot see a change after a careful look, answer no change.", // TODO bn
   "header.myStats": "My stats", // TODO bn
+  "explore.advancedCollapse": "Show as tabs", // TODO bn
+  "auth.required.title": "Sign in to continue", // TODO bn
+  "auth.required.body":
+    "Contributing, your stats and your certificate are kept per account. Sign in to use them. Exploring the sky does not need an account.", // TODO bn
+  "cert.getTitle": "Get your certificate", // TODO bn
+  "cert.eligibleBody":
+    "Your certificate is drawn from your own stats. Download it as a PNG or print it.", // TODO bn
+  "cert.notEligible":
+    "Check at least {min} fields to unlock your certificate. You have checked {count} so far.", // TODO bn
+  "cert.unlockButton": "Get certificate", // TODO bn
+  "cert.withdraw": "Withdraw certificate (PNG)", // TODO bn
+  "header.account": "Account menu", // TODO bn
+  "header.certificate": "Certificate", // TODO bn
+  "header.signOut": "Sign out", // TODO bn
+  "header.mainNav": "Main", // TODO bn
+  "header.mobileNav": "Mobile", // TODO bn
 
   "landing.badge": "NASA Space Apps 2026", // TODO bn
   "landing.title": "Watch the sky change.", // TODO bn
@@ -437,6 +465,9 @@ export const bn: Record<DictKey, string> = {
   "cert.back": "Back to my stats", // TODO bn
 
   "login.title": "Sign in to keep your progress", // TODO bn
+  "login.back": "Back", // TODO bn
+  "login.hookTitle": "Be the next citizen scientist.", // TODO bn
+  "login.hookBody": "Help astronomers find moving stars and new worlds in NASA SPHEREx images. No experience needed.", // TODO bn
   "login.signedIn": "You are signed in", // TODO bn
   "login.as": "Signed in as", // TODO bn
   "login.localNote":
