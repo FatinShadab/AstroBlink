@@ -48,7 +48,7 @@ Thumbs.db
 # Don't ignore Dockerfiles or .dockerignore
 
 # ── Data & Logs ────────────────────────────────────────────────
-data/
+/data/
 *.fits
 *.fits.gz
 *.log

@@ -25,6 +25,32 @@ npm run dev          # http://localhost:3000/explore?preset=barnard
 | `npm test` | Vitest unit tests (coordinates, stretch, modes, photometry, synthetic data, URL state, stats) |
 | `npm run format:check` | Prettier check |
 
+## Updating the data
+
+The five preset targets (WISE 0855, Barnard's Star, Epsilon Indi B, R Draconis, RW Aurigae) show real
+NASA SPHEREx observations from static files in `public/data/`. Every other spot uses the labelled
+simulated sky. The app never calls IRSA at runtime.
+
+To fetch or refresh the data (for example when IRSA publishes a new SPHEREx release), run the one-time
+script from `client/` with Python 3.12 and a virtual environment:
+
+```bash
+python -m venv .venv-data
+.venv-data/Scripts/python -m pip install astroquery astropy numpy pillow requests
+.venv-data/Scripts/python scripts/fetch_spherex.py --release QR2,QR3
+```
+
+- `--release` takes any release names, for example `--release QR2,QR3,QR4` once QR4 exists.
+- `--targets` limits the run to some presets, for example `--targets wise-0855,barnard`.
+- `--per-detector` sets how many frames per detector to keep (default 8, spread over the observing period).
+- Frames already on disk are skipped and new epochs are appended. Each target's `manifest.json`,
+  `spectrum.json` and the top-level `public/data/index.json` are rebuilt from the files on disk.
+- IRSA sometimes returns 503 or drops connections. The script retries with backoff and logs what it
+  skipped; run it again to fill the gaps.
+
+Data credit: NASA SPHEREx Quick Release spectral images, NASA/IPAC Infrared Science Archive (IRSA).
+DOIs: 10.26131/IRSA652 (QR2), 10.26131/IRSA662 (QR3).
+
 ## Pages
 
 | Route | What |

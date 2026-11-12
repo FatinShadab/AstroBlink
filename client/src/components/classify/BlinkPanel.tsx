@@ -55,7 +55,8 @@ export function BlinkPanel({
   const { t, lang } = useT();
   const router = useRouter();
   const toast = useToast();
-  const { load } = useFieldFrames(target);
+  // Classify and train stay on the labelled synthetic sky: their answers come from the synthetic model.
+  const { load } = useFieldFrames(target, "synthetic");
   const loaded = load.status === "ready" ? load.data : null;
   const frames = useMemo(() => loaded?.frames ?? [], [loaded]);
   const count = frames.length;
@@ -95,7 +96,7 @@ export function BlinkPanel({
   const pan = useViewerUiStore((s) => s.pan);
   const pick = useViewerUiStore((s) => s.pick);
   const setPick = useViewerUiStore((s) => s.setPick);
-  const spectrum = useSpectrum(target, pick);
+  const spectrum = useSpectrum(target, pick, "synthetic");
 
   usePlayback({ count, fps, onTick: () => setIndex((i) => (count > 0 ? (i + 1) % count : 0)) });
 

@@ -67,7 +67,10 @@ export function SiteHeader() {
       )}
     >
       {/* Three columns: logo left, page links centred, profile right (mobile: menu right). */}
-      <Container className="grid h-full grid-cols-[auto_1fr_auto] items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
+      <Container
+        variant="wide"
+        className="grid h-full grid-cols-[auto_1fr_auto] items-center gap-4 px-3 sm:px-5 md:grid-cols-[1fr_auto_1fr] lg:px-5"
+      >
         <Link
           href="/"
           className="flex items-center gap-2 justify-self-start rounded-[var(--radius-sm)] font-display text-h4 font-semibold text-text-primary"

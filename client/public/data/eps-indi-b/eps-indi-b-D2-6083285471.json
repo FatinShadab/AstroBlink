@@ -1,0 +1,21 @@
+{
+  "id": "eps-indi-b-D2-6083285471",
+  "obsDate": "2025-06-06",
+  "mjd": 60832.854714,
+  "detector": "D2",
+  "wavelengthUm": 1.5623,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 10.675822257995605,
+  "release": "QR2",
+  "files": {
+    "pixels": "eps-indi-b-D2-6083285471.f32",
+    "flags": "eps-indi-b-D2-6083285471.u8"
+  }
+}

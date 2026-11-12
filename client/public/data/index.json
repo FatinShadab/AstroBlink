@@ -1,0 +1,121 @@
+{
+  "generated": "2026-11-12T18:23:24.444411+00:00",
+  "targets": [
+    {
+      "id": "wise-0855",
+      "name": "WISE J085510.83-071442.5",
+      "raDeg": 133.760644,
+      "decDeg": -7.241366,
+      "frameCount": 48,
+      "dateRange": [
+        "2025-05-05",
+        "2026-05-14"
+      ],
+      "detectors": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "releases": [
+        "QR2"
+      ],
+      "manifest": "/data/wise-0855/manifest.json"
+    },
+    {
+      "id": "barnard",
+      "name": "Barnard's Star",
+      "raDeg": 269.446291,
+      "decDeg": 4.767917,
+      "frameCount": 48,
+      "dateRange": [
+        "2025-08-15",
+        "2026-09-22"
+      ],
+      "detectors": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "releases": [
+        "QR2",
+        "QR3"
+      ],
+      "manifest": "/data/barnard/manifest.json"
+    },
+    {
+      "id": "eps-indi-b",
+      "name": "Epsilon Indi B",
+      "raDeg": 331.096448,
+      "decDeg": -56.800596,
+      "frameCount": 46,
+      "dateRange": [
+        "2025-04-24",
+        "2026-10-02"
+      ],
+      "detectors": [
+        "D1",
+        "D2",
+        "D3",
+        "D5",
+        "D6"
+      ],
+      "releases": [
+        "QR2",
+        "QR3"
+      ],
+      "manifest": "/data/eps-indi-b/manifest.json"
+    },
+    {
+      "id": "r-dra",
+      "name": "R Draconis",
+      "raDeg": 248.16667,
+      "decDeg": 66.755,
+      "frameCount": 48,
+      "dateRange": [
+        "2026-05-16",
+        "2026-09-27"
+      ],
+      "detectors": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "releases": [
+        "QR3"
+      ],
+      "manifest": "/data/r-dra/manifest.json"
+    },
+    {
+      "id": "rw-aur",
+      "name": "RW Aurigae",
+      "raDeg": 76.95625,
+      "decDeg": 30.40139,
+      "frameCount": 48,
+      "dateRange": [
+        "2026-09-02",
+        "2026-09-16"
+      ],
+      "detectors": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "releases": [
+        "QR3"
+      ],
+      "manifest": "/data/rw-aur/manifest.json"
+    }
+  ]
+}

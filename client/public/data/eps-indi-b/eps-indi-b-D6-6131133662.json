@@ -1,0 +1,21 @@
+{
+  "id": "eps-indi-b-D6-6131133662",
+  "obsDate": "2026-09-28",
+  "mjd": 61311.336624,
+  "detector": "D6",
+  "wavelengthUm": 4.6611,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 2.2173378467559814,
+  "release": "QR3",
+  "files": {
+    "pixels": "eps-indi-b-D6-6131133662.f32",
+    "flags": "eps-indi-b-D6-6131133662.u8"
+  }
+}

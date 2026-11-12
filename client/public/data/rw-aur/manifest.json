@@ -1,0 +1,1037 @@
+{
+  "id": "rw-aur",
+  "name": "RW Aurigae",
+  "raDeg": 76.95625,
+  "decDeg": 30.40139,
+  "pixelScaleArcsec": 6.2,
+  "source": "NASA SPHEREx Quick Release spectral images, NASA/IPAC IRSA",
+  "releases": [
+    "QR3"
+  ],
+  "doi": [
+    "10.26131/IRSA662"
+  ],
+  "detectors": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6"
+  ],
+  "dateRange": [
+    "2026-09-02",
+    "2026-09-16"
+  ],
+  "frames": [
+    {
+      "id": "rw-aur-D1-6128509717",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.097169,
+      "detector": "D1",
+      "wavelengthUm": 0.9817,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 132.41165161132812,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6128509717.f32",
+        "flags": "rw-aur-D1-6128509717.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6128510015",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.100154,
+      "detector": "D1",
+      "wavelengthUm": 1.0291,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 125.79605865478516,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6128510015.f32",
+        "flags": "rw-aur-D1-6128510015.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6128523723",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.237228,
+      "detector": "D1",
+      "wavelengthUm": 1.1041,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 146.83250427246094,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6128523723.f32",
+        "flags": "rw-aur-D1-6128523723.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6128509717",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.097169,
+      "detector": "D4",
+      "wavelengthUm": 3.3172,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 247.08555603027344,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6128509717.f32",
+        "flags": "rw-aur-D4-6128509717.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6128510015",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.100154,
+      "detector": "D4",
+      "wavelengthUm": 3.4983,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 241.36170959472656,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6128510015.f32",
+        "flags": "rw-aur-D4-6128510015.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6128523723",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.237228,
+      "detector": "D4",
+      "wavelengthUm": 3.789,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 67
+      },
+      "centreFlux": 441.8189392089844,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6128523723.f32",
+        "flags": "rw-aur-D4-6128523723.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6129127665",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.27665,
+      "detector": "D1",
+      "wavelengthUm": 0.7712,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 90.93248748779297,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6129127665.f32",
+        "flags": "rw-aur-D1-6129127665.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6129181889",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.818889,
+      "detector": "D1",
+      "wavelengthUm": 0.8271,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 129.92298889160156,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6129181889.f32",
+        "flags": "rw-aur-D1-6129181889.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6129182187",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.821874,
+      "detector": "D1",
+      "wavelengthUm": 0.8665,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 171.23854064941406,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6129182187.f32",
+        "flags": "rw-aur-D1-6129182187.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6129127665",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.27665,
+      "detector": "D4",
+      "wavelengthUm": 2.5141,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 407.61767578125,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6129127665.f32",
+        "flags": "rw-aur-D4-6129127665.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6129181889",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.818889,
+      "detector": "D4",
+      "wavelengthUm": 2.7233,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 378.8394775390625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6129181889.f32",
+        "flags": "rw-aur-D4-6129181889.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6129182187",
+      "obsDate": "2026-09-08",
+      "mjd": 61291.821874,
+      "detector": "D4",
+      "wavelengthUm": 2.8743,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 71,
+        "y": 73
+      },
+      "centreFlux": 281.09759521484375,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6129182187.f32",
+        "flags": "rw-aur-D4-6129182187.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6129202486",
+      "obsDate": "2026-09-09",
+      "mjd": 61292.024856,
+      "detector": "D1",
+      "wavelengthUm": 0.9298,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 159.51271057128906,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6129202486.f32",
+        "flags": "rw-aur-D1-6129202486.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D1-6129290433",
+      "obsDate": "2026-09-09",
+      "mjd": 61292.904327,
+      "detector": "D1",
+      "wavelengthUm": 0.9744,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 178.8939208984375,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D1-6129290433.f32",
+        "flags": "rw-aur-D1-6129290433.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6129202486",
+      "obsDate": "2026-09-09",
+      "mjd": 61292.024856,
+      "detector": "D4",
+      "wavelengthUm": 3.1164,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 502.98724365234375,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6129202486.f32",
+        "flags": "rw-aur-D4-6129202486.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D4-6129290433",
+      "obsDate": "2026-09-09",
+      "mjd": 61292.904327,
+      "detector": "D4",
+      "wavelengthUm": 3.2892,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 454.2068176269531,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D4-6129290433.f32",
+        "flags": "rw-aur-D4-6129290433.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129337847",
+      "obsDate": "2026-09-10",
+      "mjd": 61293.378474,
+      "detector": "D2",
+      "wavelengthUm": 1.4619,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 261.15625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129337847.f32",
+        "flags": "rw-aur-D2-6129337847.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129338146",
+      "obsDate": "2026-09-10",
+      "mjd": 61293.381458,
+      "detector": "D2",
+      "wavelengthUm": 1.5335,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 237.90724182128906,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129338146.f32",
+        "flags": "rw-aur-D2-6129338146.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129337847",
+      "obsDate": "2026-09-10",
+      "mjd": 61293.378474,
+      "detector": "D5",
+      "wavelengthUm": 4.2404,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 448.5864562988281,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129337847.f32",
+        "flags": "rw-aur-D5-6129337847.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129338295",
+      "obsDate": "2026-09-10",
+      "mjd": 61293.38295,
+      "detector": "D5",
+      "wavelengthUm": 4.3498,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 608.2196655273438,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129338295.f32",
+        "flags": "rw-aur-D5-6129338295.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129487606",
+      "obsDate": "2026-09-11",
+      "mjd": 61294.876058,
+      "detector": "D5",
+      "wavelengthUm": 3.8477,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 374.1903076171875,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129487606.f32",
+        "flags": "rw-aur-D5-6129487606.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129595832",
+      "obsDate": "2026-09-12",
+      "mjd": 61295.958316,
+      "detector": "D2",
+      "wavelengthUm": 1.1476,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 223.58522033691406,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129595832.f32",
+        "flags": "rw-aur-D2-6129595832.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129596130",
+      "obsDate": "2026-09-12",
+      "mjd": 61295.9613,
+      "detector": "D2",
+      "wavelengthUm": 1.2032,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 227.28611755371094,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129596130.f32",
+        "flags": "rw-aur-D2-6129596130.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129596130",
+      "obsDate": "2026-09-12",
+      "mjd": 61295.9613,
+      "detector": "D5",
+      "wavelengthUm": 3.9481,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 387.134765625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129596130.f32",
+        "flags": "rw-aur-D5-6129596130.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129657099",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.570993,
+      "detector": "D2",
+      "wavelengthUm": 1.6462,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 50
+      },
+      "centreFlux": 387.17486572265625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129657099.f32",
+        "flags": "rw-aur-D2-6129657099.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129629759",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.297591,
+      "detector": "D3",
+      "wavelengthUm": 2.1782,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 283.4767150878906,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129629759.f32",
+        "flags": "rw-aur-D3-6129629759.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129630058",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.300575,
+      "detector": "D3",
+      "wavelengthUm": 2.2798,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 108.31737518310547,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129630058.f32",
+        "flags": "rw-aur-D3-6129630058.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129656950",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.569501,
+      "detector": "D5",
+      "wavelengthUm": 4.386,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 474.11151123046875,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129656950.f32",
+        "flags": "rw-aur-D5-6129656950.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129629759",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.297591,
+      "detector": "D6",
+      "wavelengthUm": 4.8389,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 535.965087890625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129629759.f32",
+        "flags": "rw-aur-D6-6129629759.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129630058",
+      "obsDate": "2026-09-13",
+      "mjd": 61296.300575,
+      "detector": "D6",
+      "wavelengthUm": 4.9098,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 582.4929809570312,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129630058.f32",
+        "flags": "rw-aur-D6-6129630058.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129731780",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.317795,
+      "detector": "D2",
+      "wavelengthUm": 1.2907,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 153.83518981933594,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129731780.f32",
+        "flags": "rw-aur-D2-6129731780.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129785693",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.856926,
+      "detector": "D3",
+      "wavelengthUm": 1.6814,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 160.83453369140625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129785693.f32",
+        "flags": "rw-aur-D3-6129785693.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129785991",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.85991,
+      "detector": "D3",
+      "wavelengthUm": 1.7599,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 316.908203125,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129785991.f32",
+        "flags": "rw-aur-D3-6129785991.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129731780",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.317795,
+      "detector": "D5",
+      "wavelengthUm": 4.0514,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 478.182373046875,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129731780.f32",
+        "flags": "rw-aur-D5-6129731780.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129732080",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.320798,
+      "detector": "D5",
+      "wavelengthUm": 4.1218,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 553.1309204101562,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129732080.f32",
+        "flags": "rw-aur-D5-6129732080.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129785693",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.856926,
+      "detector": "D6",
+      "wavelengthUm": 4.4596,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 346.8663330078125,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129785693.f32",
+        "flags": "rw-aur-D6-6129785693.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129785991",
+      "obsDate": "2026-09-14",
+      "mjd": 61297.85991,
+      "detector": "D6",
+      "wavelengthUm": 4.5239,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 669.194091796875,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129785991.f32",
+        "flags": "rw-aur-D6-6129785991.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129833367",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.333666,
+      "detector": "D2",
+      "wavelengthUm": 1.3842,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 96.35014343261719,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129833367.f32",
+        "flags": "rw-aur-D2-6129833367.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D2-6129833665",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.33665,
+      "detector": "D2",
+      "wavelengthUm": 1.4511,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 186.69699096679688,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D2-6129833665.f32",
+        "flags": "rw-aur-D2-6129833665.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129887830",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.878303,
+      "detector": "D3",
+      "wavelengthUm": 1.8426,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 132.1223602294922,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129887830.f32",
+        "flags": "rw-aur-D3-6129887830.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129888131",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.881306,
+      "detector": "D3",
+      "wavelengthUm": 1.9292,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 372.8280944824219,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129888131.f32",
+        "flags": "rw-aur-D3-6129888131.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D5-6129833665",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.33665,
+      "detector": "D5",
+      "wavelengthUm": 4.229,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 500.0225524902344,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D5-6129833665.f32",
+        "flags": "rw-aur-D5-6129833665.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129887830",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.878303,
+      "detector": "D6",
+      "wavelengthUm": 4.5898,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 617.3142700195312,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129887830.f32",
+        "flags": "rw-aur-D6-6129887830.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129888131",
+      "obsDate": "2026-09-15",
+      "mjd": 61298.881306,
+      "detector": "D6",
+      "wavelengthUm": 4.6571,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 582.8373413085938,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129888131.f32",
+        "flags": "rw-aur-D6-6129888131.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129928656",
+      "obsDate": "2026-09-16",
+      "mjd": 61299.286559,
+      "detector": "D3",
+      "wavelengthUm": 2.0652,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 237.863525390625,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129928656.f32",
+        "flags": "rw-aur-D3-6129928656.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D3-6129989590",
+      "obsDate": "2026-09-16",
+      "mjd": 61299.895897,
+      "detector": "D3",
+      "wavelengthUm": 2.162,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 262.4652404785156,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D3-6129989590.f32",
+        "flags": "rw-aur-D3-6129989590.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129928656",
+      "obsDate": "2026-09-16",
+      "mjd": 61299.286559,
+      "detector": "D6",
+      "wavelengthUm": 4.7593,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 628.5458984375,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129928656.f32",
+        "flags": "rw-aur-D6-6129928656.u8"
+      }
+    },
+    {
+      "id": "rw-aur-D6-6129989590",
+      "obsDate": "2026-09-16",
+      "mjd": 61299.895897,
+      "detector": "D6",
+      "wavelengthUm": 4.8279,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 484.5865783691406,
+      "release": "QR3",
+      "files": {
+        "pixels": "rw-aur-D6-6129989590.f32",
+        "flags": "rw-aur-D6-6129989590.u8"
+      }
+    }
+  ],
+  "skippedLastRun": []
+}

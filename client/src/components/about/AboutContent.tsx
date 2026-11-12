@@ -23,6 +23,10 @@ export function AboutContent() {
         </section>
       ))}
       <Card className="flex flex-col gap-2 text-caption text-text-muted">
+        <p>
+          {t("data.credit")} {t("data.tools")}
+        </p>
+        <p>{t("data.refresh")}</p>
         <p>{t("footer.credit")}</p>
         <p>{t("about.models")}</p>
       </Card>

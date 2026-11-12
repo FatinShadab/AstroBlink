@@ -1,0 +1,21 @@
+{
+  "id": "r-dra-D5-6121214690",
+  "obsDate": "2026-06-21",
+  "mjd": 61212.146899,
+  "detector": "D5",
+  "wavelengthUm": 4.1249,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 73
+  },
+  "centreFlux": null,
+  "release": "QR3",
+  "files": {
+    "pixels": "r-dra-D5-6121214690.f32",
+    "flags": "r-dra-D5-6121214690.u8"
+  }
+}

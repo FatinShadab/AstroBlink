@@ -1,0 +1,38 @@
+[
+  {
+    "detector": "D1",
+    "wavelengthUm": 0.9417,
+    "flux": 0.28727998211979866,
+    "fluxErr": 0.020240465367856373
+  },
+  {
+    "detector": "D2",
+    "wavelengthUm": 1.3834,
+    "flux": 0.29282693192362785,
+    "fluxErr": 0.014480200429415245
+  },
+  {
+    "detector": "D3",
+    "wavelengthUm": 2.0937,
+    "flux": 0.18742641992866993,
+    "fluxErr": 0.01062862014610152
+  },
+  {
+    "detector": "D4",
+    "wavelengthUm": 3.163,
+    "flux": 0.16984548047184944,
+    "fluxErr": 0.016411643553855104
+  },
+  {
+    "detector": "D5",
+    "wavelengthUm": 4.1432,
+    "flux": 0.3496265057474375,
+    "fluxErr": 0.0459073318358949
+  },
+  {
+    "detector": "D6",
+    "wavelengthUm": 4.7816,
+    "flux": 0.6905801147222519,
+    "fluxErr": 0.07588231775439234
+  }
+]

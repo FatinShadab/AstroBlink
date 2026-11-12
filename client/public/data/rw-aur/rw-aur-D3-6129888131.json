@@ -1,0 +1,21 @@
+{
+  "id": "rw-aur-D3-6129888131",
+  "obsDate": "2026-09-15",
+  "mjd": 61298.881306,
+  "detector": "D3",
+  "wavelengthUm": 1.9292,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 372.8280944824219,
+  "release": "QR3",
+  "files": {
+    "pixels": "rw-aur-D3-6129888131.f32",
+    "flags": "rw-aur-D3-6129888131.u8"
+  }
+}

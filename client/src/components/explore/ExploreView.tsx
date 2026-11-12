@@ -499,7 +499,7 @@ export function ExploreView() {
       </div>
 
       <div className="flex flex-col gap-1 text-caption text-text-muted">
-        <p>{t("explore.simulatedNote")}</p>
+        <p>{loaded?.field.isSimulated === false ? t("data.credit") : t("explore.simulatedNote")}</p>
         <p>{t("explore.keys")}</p>
       </div>
 

@@ -424,6 +424,9 @@ export const en = {
   "about.data.body":
     "By default the viewer uses a simulated sky. It is generated in your browser from a seeded model, so the same spot always looks the same. Every simulated view says so. Real SPHEREx cutouts can be added later as static files. There is no live archive connection in this version.",
   "about.credits.title": "Credits and acknowledgements",
+  "data.credit": "Data: NASA SPHEREx Quick Release spectral images, NASA/IPAC Infrared Science Archive (IRSA). DOIs: 10.26131/IRSA652 (QR2), 10.26131/IRSA662 (QR3).",
+  "data.tools": "Built with Astropy and Astroquery.",
+  "data.refresh": "The sky data can be refreshed whenever IRSA publishes a new SPHEREx release.",
   "about.credits.body":
     "Built with NASA SPHEREx data from IRSA/IPAC. AstroBlink is a NASA Space Apps Challenge project and is not endorsed by NASA.",
   "about.models":

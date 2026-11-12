@@ -8,8 +8,8 @@ import type { DictKey } from "@/lib/i18n/en";
 import { VIEW_MODES } from "@/lib/state/viewerParams";
 import type { ViewMode } from "@/lib/data/types";
 
-/** Only Blink works in this phase. The other modes arrive in Phase 3 and stay disabled until then. */
-const LIVE_MODES: readonly ViewMode[] = ["blink"];
+/** Every view mode is live: blink, side by side, merge, difference and stack (ExploreView renders each). */
+const LIVE_MODES: readonly ViewMode[] = VIEW_MODES;
 
 export function ViewerToolbar({
   mode,

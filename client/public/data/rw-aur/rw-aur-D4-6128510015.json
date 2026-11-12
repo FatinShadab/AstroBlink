@@ -1,0 +1,21 @@
+{
+  "id": "rw-aur-D4-6128510015",
+  "obsDate": "2026-09-02",
+  "mjd": 61285.100154,
+  "detector": "D4",
+  "wavelengthUm": 3.4983,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 73
+  },
+  "centreFlux": 241.36170959472656,
+  "release": "QR3",
+  "files": {
+    "pixels": "rw-aur-D4-6128510015.f32",
+    "flags": "rw-aur-D4-6128510015.u8"
+  }
+}

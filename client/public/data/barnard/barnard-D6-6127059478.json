@@ -1,0 +1,21 @@
+{
+  "id": "barnard-D6-6127059478",
+  "obsDate": "2026-08-18",
+  "mjd": 61270.594779,
+  "detector": "D6",
+  "wavelengthUm": 4.5963,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 793.4262084960938,
+  "release": "QR3",
+  "files": {
+    "pixels": "barnard-D6-6127059478.f32",
+    "flags": "barnard-D6-6127059478.u8"
+  }
+}

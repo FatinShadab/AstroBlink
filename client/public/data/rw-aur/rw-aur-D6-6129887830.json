@@ -1,0 +1,21 @@
+{
+  "id": "rw-aur-D6-6129887830",
+  "obsDate": "2026-09-15",
+  "mjd": 61298.878303,
+  "detector": "D6",
+  "wavelengthUm": 4.5898,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 617.3142700195312,
+  "release": "QR3",
+  "files": {
+    "pixels": "rw-aur-D6-6129887830.f32",
+    "flags": "rw-aur-D6-6129887830.u8"
+  }
+}

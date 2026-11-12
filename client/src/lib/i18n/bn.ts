@@ -423,6 +423,9 @@ export const bn: Record<DictKey, string> = {
   "about.data.body":
     "By default the viewer uses a simulated sky. It is generated in your browser from a seeded model, so the same spot always looks the same. Every simulated view says so. Real SPHEREx cutouts can be added later as static files. There is no live archive connection in this version.", // TODO bn
   "about.credits.title": "Credits and acknowledgements", // TODO bn
+  "data.credit": "ডেটা: NASA SPHEREx Quick Release স্পেকট্রাল ছবি, NASA/IPAC Infrared Science Archive (IRSA)। DOI: 10.26131/IRSA652 (QR2), 10.26131/IRSA662 (QR3)।",
+  "data.tools": "Astropy ও Astroquery দিয়ে তৈরি।",
+  "data.refresh": "IRSA যখনই SPHEREx-এর নতুন রিলিজ প্রকাশ করবে, তখনই আকাশের ডেটা হালনাগাদ করা যাবে।",
   "about.credits.body":
     "Built with NASA SPHEREx data from IRSA/IPAC. AstroBlink is a NASA Space Apps Challenge project and is not endorsed by NASA.", // TODO bn
   "about.models":

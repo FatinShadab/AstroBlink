@@ -1,0 +1,1037 @@
+{
+  "id": "wise-0855",
+  "name": "WISE J085510.83-071442.5",
+  "raDeg": 133.760644,
+  "decDeg": -7.241366,
+  "pixelScaleArcsec": 6.2,
+  "source": "NASA SPHEREx Quick Release spectral images, NASA/IPAC IRSA",
+  "releases": [
+    "QR2"
+  ],
+  "doi": [
+    "10.26131/IRSA652"
+  ],
+  "detectors": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6"
+  ],
+  "dateRange": [
+    "2025-05-05",
+    "2026-05-14"
+  ],
+  "frames": [
+    {
+      "id": "wise-0855-D3-6080070003",
+      "obsDate": "2025-05-05",
+      "mjd": 60800.700028,
+      "detector": "D3",
+      "wavelengthUm": 2.3637,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.19523188471794128,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6080070003.f32",
+        "flags": "wise-0855-D3-6080070003.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6080070003",
+      "obsDate": "2025-05-05",
+      "mjd": 60800.700028,
+      "detector": "D6",
+      "wavelengthUm": 4.9612,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.808770477771759,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6080070003.f32",
+        "flags": "wise-0855-D6-6080070003.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6080151418",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.514177,
+      "detector": "D1",
+      "wavelengthUm": 0.9928,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.27338436245918274,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6080151418.f32",
+        "flags": "wise-0855-D1-6080151418.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6080110660",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.106596,
+      "detector": "D2",
+      "wavelengthUm": 1.5154,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.3031521439552307,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6080110660.f32",
+        "flags": "wise-0855-D2-6080110660.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6080145012",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.450117,
+      "detector": "D2",
+      "wavelengthUm": 1.373,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.3220652639865875,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6080145012.f32",
+        "flags": "wise-0855-D2-6080145012.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6080151418",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.514177,
+      "detector": "D4",
+      "wavelengthUm": 3.3584,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.13491672277450562,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6080151418.f32",
+        "flags": "wise-0855-D4-6080151418.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6080110660",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.106596,
+      "detector": "D5",
+      "wavelengthUm": 4.2888,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.49886974692344666,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6080110660.f32",
+        "flags": "wise-0855-D5-6080110660.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6080145012",
+      "obsDate": "2025-05-06",
+      "mjd": 60801.450117,
+      "detector": "D5",
+      "wavelengthUm": 4.1385,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.3799385130405426,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6080145012.f32",
+        "flags": "wise-0855-D5-6080145012.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6097972417",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.724169,
+      "detector": "D1",
+      "wavelengthUm": 0.8818,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.3729473948478699,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6097972417.f32",
+        "flags": "wise-0855-D1-6097972417.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6097978864",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.788638,
+      "detector": "D1",
+      "wavelengthUm": 0.9914,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.2991465628147125,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6097978864.f32",
+        "flags": "wise-0855-D1-6097978864.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6097985822",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.858224,
+      "detector": "D1",
+      "wavelengthUm": 1.1147,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 34
+      },
+      "centreFlux": 0.36992332339286804,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6097985822.f32",
+        "flags": "wise-0855-D1-6097985822.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6097972417",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.724169,
+      "detector": "D4",
+      "wavelengthUm": 2.9315,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.16368013620376587,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6097972417.f32",
+        "flags": "wise-0855-D4-6097972417.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6097978864",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.788638,
+      "detector": "D4",
+      "wavelengthUm": 3.3537,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.13902214169502258,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6097978864.f32",
+        "flags": "wise-0855-D4-6097978864.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6097985822",
+      "obsDate": "2025-10-31",
+      "mjd": 60979.858224,
+      "detector": "D4",
+      "wavelengthUm": 3.831,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 24
+      },
+      "centreFlux": 0.28873538970947266,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6097985822.f32",
+        "flags": "wise-0855-D4-6097985822.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6098251106",
+      "obsDate": "2025-11-03",
+      "mjd": 60982.511062,
+      "detector": "D1",
+      "wavelengthUm": 0.8416,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.2804641127586365,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6098251106.f32",
+        "flags": "wise-0855-D1-6098251106.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6098251106",
+      "obsDate": "2025-11-03",
+      "mjd": 60982.511062,
+      "detector": "D4",
+      "wavelengthUm": 2.7764,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.17124362289905548,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6098251106.f32",
+        "flags": "wise-0855-D4-6098251106.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6098637824",
+      "obsDate": "2025-11-07",
+      "mjd": 60986.378241,
+      "detector": "D2",
+      "wavelengthUm": 1.2383,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.32639753818511963,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6098637824.f32",
+        "flags": "wise-0855-D2-6098637824.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6098685667",
+      "obsDate": "2025-11-07",
+      "mjd": 60986.856669,
+      "detector": "D2",
+      "wavelengthUm": 1.447,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.29808664321899414,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6098685667.f32",
+        "flags": "wise-0855-D2-6098685667.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6098637824",
+      "obsDate": "2025-11-07",
+      "mjd": 60986.378241,
+      "detector": "D5",
+      "wavelengthUm": 3.9837,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.2803420126438141,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6098637824.f32",
+        "flags": "wise-0855-D5-6098637824.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6098685667",
+      "obsDate": "2025-11-07",
+      "mjd": 60986.856669,
+      "detector": "D5",
+      "wavelengthUm": 4.2183,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.5498577952384949,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6098685667.f32",
+        "flags": "wise-0855-D5-6098685667.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6098930153",
+      "obsDate": "2025-11-10",
+      "mjd": 60989.301533,
+      "detector": "D3",
+      "wavelengthUm": 1.747,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.22206613421440125,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6098930153.f32",
+        "flags": "wise-0855-D3-6098930153.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6098930153",
+      "obsDate": "2025-11-10",
+      "mjd": 60989.301533,
+      "detector": "D6",
+      "wavelengthUm": 4.5073,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.7150343656539917,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6098930153.f32",
+        "flags": "wise-0855-D6-6098930153.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6099350660",
+      "obsDate": "2025-11-14",
+      "mjd": 60993.506601,
+      "detector": "D3",
+      "wavelengthUm": 2.0333,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.23426760733127594,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6099350660.f32",
+        "flags": "wise-0855-D3-6099350660.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6099357873",
+      "obsDate": "2025-11-14",
+      "mjd": 60993.578727,
+      "detector": "D3",
+      "wavelengthUm": 2.3326,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.15544892847537994,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6099357873.f32",
+        "flags": "wise-0855-D3-6099357873.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6099350809",
+      "obsDate": "2025-11-14",
+      "mjd": 60993.508093,
+      "detector": "D6",
+      "wavelengthUm": 4.7637,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.7658069729804993,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6099350809.f32",
+        "flags": "wise-0855-D6-6099350809.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6099391288",
+      "obsDate": "2025-11-14",
+      "mjd": 60993.912885,
+      "detector": "D6",
+      "wavelengthUm": 4.9755,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.9476850628852844,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6099391288.f32",
+        "flags": "wise-0855-D6-6099391288.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6102080369",
+      "obsDate": "2025-12-11",
+      "mjd": 61020.803689,
+      "detector": "D2",
+      "wavelengthUm": 1.2867,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.24546602368354797,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6102080369.f32",
+        "flags": "wise-0855-D2-6102080369.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6102080369",
+      "obsDate": "2025-12-11",
+      "mjd": 61020.803689,
+      "detector": "D5",
+      "wavelengthUm": 4.0404,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.23518627882003784,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6102080369.f32",
+        "flags": "wise-0855-D5-6102080369.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6115119942",
+      "obsDate": "2026-04-21",
+      "mjd": 61151.199425,
+      "detector": "D3",
+      "wavelengthUm": 1.6764,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.19260838627815247,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6115119942.f32",
+        "flags": "wise-0855-D3-6115119942.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6115120092",
+      "obsDate": "2026-04-21",
+      "mjd": 61151.200918,
+      "detector": "D6",
+      "wavelengthUm": 4.4801,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.3417191505432129,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6115120092.f32",
+        "flags": "wise-0855-D6-6115120092.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6115343795",
+      "obsDate": "2026-04-23",
+      "mjd": 61153.437949,
+      "detector": "D3",
+      "wavelengthUm": 1.9221,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.17256762087345123,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6115343795.f32",
+        "flags": "wise-0855-D3-6115343795.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6115343944",
+      "obsDate": "2026-04-23",
+      "mjd": 61153.439442,
+      "detector": "D6",
+      "wavelengthUm": 4.6789,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.3624889850616455,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6115343944.f32",
+        "flags": "wise-0855-D6-6115343944.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6115649467",
+      "obsDate": "2026-04-26",
+      "mjd": 61156.494673,
+      "detector": "D3",
+      "wavelengthUm": 2.311,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.1897866278886795,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6115649467.f32",
+        "flags": "wise-0855-D3-6115649467.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6115649467",
+      "obsDate": "2026-04-26",
+      "mjd": 61156.494673,
+      "detector": "D6",
+      "wavelengthUm": 4.9251,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.6641979813575745,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6115649467.f32",
+        "flags": "wise-0855-D6-6115649467.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6116158836",
+      "obsDate": "2026-05-01",
+      "mjd": 61161.58836,
+      "detector": "D2",
+      "wavelengthUm": 1.1372,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.21969079971313477,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6116158836.f32",
+        "flags": "wise-0855-D2-6116158836.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6116158836",
+      "obsDate": "2026-05-01",
+      "mjd": 61161.58836,
+      "detector": "D5",
+      "wavelengthUm": 3.8613,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.1444118469953537,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6116158836.f32",
+        "flags": "wise-0855-D5-6116158836.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6116233696",
+      "obsDate": "2026-05-02",
+      "mjd": 61162.336956,
+      "detector": "D1",
+      "wavelengthUm": 0.7791,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.18996010720729828,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6116233696.f32",
+        "flags": "wise-0855-D1-6116233696.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6116267515",
+      "obsDate": "2026-05-02",
+      "mjd": 61162.675147,
+      "detector": "D2",
+      "wavelengthUm": 1.4795,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.3514607548713684,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6116267515.f32",
+        "flags": "wise-0855-D2-6116267515.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6116233696",
+      "obsDate": "2026-05-02",
+      "mjd": 61162.336956,
+      "detector": "D4",
+      "wavelengthUm": 2.5432,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.1500445157289505,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6116233696.f32",
+        "flags": "wise-0855-D4-6116233696.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6116267515",
+      "obsDate": "2026-05-02",
+      "mjd": 61162.675147,
+      "detector": "D5",
+      "wavelengthUm": 4.2523,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.27823537588119507,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6116267515.f32",
+        "flags": "wise-0855-D5-6116267515.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6116457010",
+      "obsDate": "2026-05-04",
+      "mjd": 61164.570098,
+      "detector": "D1",
+      "wavelengthUm": 0.9696,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.2677803635597229,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6116457010.f32",
+        "flags": "wise-0855-D1-6116457010.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6116457010",
+      "obsDate": "2026-05-04",
+      "mjd": 61164.570098,
+      "detector": "D4",
+      "wavelengthUm": 3.2691,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.1623734086751938,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6116457010.f32",
+        "flags": "wise-0855-D4-6116457010.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D1-6116559014",
+      "obsDate": "2026-05-05",
+      "mjd": 61165.590143,
+      "detector": "D1",
+      "wavelengthUm": 0.9623,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.24463362991809845,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D1-6116559014.f32",
+        "flags": "wise-0855-D1-6116559014.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D4-6116559014",
+      "obsDate": "2026-05-05",
+      "mjd": 61165.590143,
+      "detector": "D4",
+      "wavelengthUm": 3.241,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.14874790608882904,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D4-6116559014.f32",
+        "flags": "wise-0855-D4-6116559014.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D3-6117109635",
+      "obsDate": "2026-05-11",
+      "mjd": 61171.09635,
+      "detector": "D3",
+      "wavelengthUm": 2.3635,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 0.13743416965007782,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D3-6117109635.f32",
+        "flags": "wise-0855-D3-6117109635.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D6-6117109635",
+      "obsDate": "2026-05-11",
+      "mjd": 61171.09635,
+      "detector": "D6",
+      "wavelengthUm": 4.9611,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 0.9189379215240479,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D6-6117109635.f32",
+        "flags": "wise-0855-D6-6117109635.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D2-6117428722",
+      "obsDate": "2026-05-14",
+      "mjd": 61174.287218,
+      "detector": "D2",
+      "wavelengthUm": 1.5899,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 0.2762962877750397,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D2-6117428722.f32",
+        "flags": "wise-0855-D2-6117428722.u8"
+      }
+    },
+    {
+      "id": "wise-0855-D5-6117428722",
+      "obsDate": "2026-05-14",
+      "mjd": 61174.287218,
+      "detector": "D5",
+      "wavelengthUm": 4.3626,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 0.430170476436615,
+      "release": "QR2",
+      "files": {
+        "pixels": "wise-0855-D5-6117428722.f32",
+        "flags": "wise-0855-D5-6117428722.u8"
+      }
+    }
+  ],
+  "skippedLastRun": []
+}

@@ -129,6 +129,9 @@ export function EmbedView() {
           onSpeed={setBlinkFps}
         />
       )}
+      {loaded?.field.isSimulated === false && (
+        <p className="px-2 py-1 text-caption text-text-muted">{t("data.credit")}</p>
+      )}
     </div>
   );
 }

@@ -1,0 +1,1039 @@
+{
+  "id": "barnard",
+  "name": "Barnard's Star",
+  "raDeg": 269.446291,
+  "decDeg": 4.767917,
+  "pixelScaleArcsec": 6.2,
+  "source": "NASA SPHEREx Quick Release spectral images, NASA/IPAC IRSA",
+  "releases": [
+    "QR2",
+    "QR3"
+  ],
+  "doi": [
+    "10.26131/IRSA652",
+    "10.26131/IRSA662"
+  ],
+  "detectors": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6"
+  ],
+  "dateRange": [
+    "2025-08-15",
+    "2026-09-22"
+  ],
+  "frames": [
+    {
+      "id": "barnard-D3-6090286472",
+      "obsDate": "2025-08-15",
+      "mjd": 60902.864715,
+      "detector": "D3",
+      "wavelengthUm": 2.3076,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6090286472.f32",
+        "flags": "barnard-D3-6090286472.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6090286472",
+      "obsDate": "2025-08-15",
+      "mjd": 60902.864715,
+      "detector": "D6",
+      "wavelengthUm": 4.9224,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 798.7876586914062,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6090286472.f32",
+        "flags": "barnard-D6-6090286472.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6090898193",
+      "obsDate": "2025-08-21",
+      "mjd": 60908.981929,
+      "detector": "D2",
+      "wavelengthUm": 1.1011,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 1860.320556640625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D2-6090898193.f32",
+        "flags": "barnard-D2-6090898193.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6090863919",
+      "obsDate": "2025-08-21",
+      "mjd": 60908.63919,
+      "detector": "D3",
+      "wavelengthUm": 1.8304,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6090863919.f32",
+        "flags": "barnard-D3-6090863919.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6090898193",
+      "obsDate": "2025-08-21",
+      "mjd": 60908.981929,
+      "detector": "D5",
+      "wavelengthUm": 3.8151,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 3148.412353515625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D5-6090898193.f32",
+        "flags": "barnard-D5-6090898193.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6090863919",
+      "obsDate": "2025-08-21",
+      "mjd": 60908.63919,
+      "detector": "D6",
+      "wavelengthUm": 4.5741,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 579.6989135742188,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6090863919.f32",
+        "flags": "barnard-D6-6090863919.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6091421253",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.21253,
+      "detector": "D1",
+      "wavelengthUm": 0.7502,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 1394.7012939453125,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D1-6091421253.f32",
+        "flags": "barnard-D1-6091421253.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6091427627",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.276271,
+      "detector": "D2",
+      "wavelengthUm": 1.2384,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D2-6091427627.f32",
+        "flags": "barnard-D2-6091427627.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6091448408",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.484085,
+      "detector": "D3",
+      "wavelengthUm": 2.2501,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6091448408.f32",
+        "flags": "barnard-D3-6091448408.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6091421253",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.21253,
+      "detector": "D4",
+      "wavelengthUm": 2.4411,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D4-6091421253.f32",
+        "flags": "barnard-D4-6091421253.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6091427627",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.276271,
+      "detector": "D5",
+      "wavelengthUm": 3.9838,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 1428.4979248046875,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D5-6091427627.f32",
+        "flags": "barnard-D5-6091427627.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6091448408",
+      "obsDate": "2025-08-27",
+      "mjd": 60914.484085,
+      "detector": "D6",
+      "wavelengthUm": 4.8833,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 1313.910400390625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6091448408.f32",
+        "flags": "barnard-D6-6091448408.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6091672646",
+      "obsDate": "2025-08-29",
+      "mjd": 60916.726464,
+      "detector": "D1",
+      "wavelengthUm": 1.1073,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 41
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D1-6091672646.f32",
+        "flags": "barnard-D1-6091672646.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6091672646",
+      "obsDate": "2025-08-29",
+      "mjd": 60916.726464,
+      "detector": "D4",
+      "wavelengthUm": 3.8005,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 31
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D4-6091672646.f32",
+        "flags": "barnard-D4-6091672646.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6091767394",
+      "obsDate": "2025-08-30",
+      "mjd": 60917.67394,
+      "detector": "D2",
+      "wavelengthUm": 1.4961,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D2-6091767394.f32",
+        "flags": "barnard-D2-6091767394.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6091767394",
+      "obsDate": "2025-08-30",
+      "mjd": 60917.67394,
+      "detector": "D5",
+      "wavelengthUm": 4.269,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 2549.20703125,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D5-6091767394.f32",
+        "flags": "barnard-D5-6091767394.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6091910304",
+      "obsDate": "2025-09-01",
+      "mjd": 60919.10304,
+      "detector": "D1",
+      "wavelengthUm": 1.0166,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 2146.420166015625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D1-6091910304.f32",
+        "flags": "barnard-D1-6091910304.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6092310720",
+      "obsDate": "2025-09-05",
+      "mjd": 60923.107203,
+      "detector": "D4",
+      "wavelengthUm": 3.0145,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 713.0076904296875,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D4-6092310720.f32",
+        "flags": "barnard-D4-6092310720.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6111009290",
+      "obsDate": "2026-03-11",
+      "mjd": 61110.092895,
+      "detector": "D1",
+      "wavelengthUm": 0.7624,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 910.056640625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D1-6111009290.f32",
+        "flags": "barnard-D1-6111009290.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6111056807",
+      "obsDate": "2026-03-11",
+      "mjd": 61110.568072,
+      "detector": "D1",
+      "wavelengthUm": 0.9478,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D1-6111056807.f32",
+        "flags": "barnard-D1-6111056807.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6111009439",
+      "obsDate": "2026-03-11",
+      "mjd": 61110.094387,
+      "detector": "D4",
+      "wavelengthUm": 2.5476,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D4-6111009439.f32",
+        "flags": "barnard-D4-6111009439.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6111056807",
+      "obsDate": "2026-03-11",
+      "mjd": 61110.568072,
+      "detector": "D4",
+      "wavelengthUm": 3.1859,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 1262.91650390625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D4-6111056807.f32",
+        "flags": "barnard-D4-6111056807.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6111430409",
+      "obsDate": "2026-03-15",
+      "mjd": 61114.304091,
+      "detector": "D2",
+      "wavelengthUm": 1.5911,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D2-6111430409.f32",
+        "flags": "barnard-D2-6111430409.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6111430409",
+      "obsDate": "2026-03-15",
+      "mjd": 61114.304091,
+      "detector": "D5",
+      "wavelengthUm": 4.3637,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 1204.494140625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D5-6111430409.f32",
+        "flags": "barnard-D5-6111430409.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6111838152",
+      "obsDate": "2026-03-19",
+      "mjd": 61118.381517,
+      "detector": "D3",
+      "wavelengthUm": 2.107,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6111838152.f32",
+        "flags": "barnard-D3-6111838152.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6111838152",
+      "obsDate": "2026-03-19",
+      "mjd": 61118.381517,
+      "detector": "D6",
+      "wavelengthUm": 4.7832,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 1385.3345947265625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6111838152.f32",
+        "flags": "barnard-D6-6111838152.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6112055356",
+      "obsDate": "2026-03-21",
+      "mjd": 61120.553564,
+      "detector": "D2",
+      "wavelengthUm": 1.1719,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D2-6112055356.f32",
+        "flags": "barnard-D2-6112055356.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6112055207",
+      "obsDate": "2026-03-21",
+      "mjd": 61120.552072,
+      "detector": "D5",
+      "wavelengthUm": 3.8703,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 1158.143798828125,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D5-6112055207.f32",
+        "flags": "barnard-D5-6112055207.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6112265562",
+      "obsDate": "2026-03-23",
+      "mjd": 61122.655618,
+      "detector": "D3",
+      "wavelengthUm": 1.6624,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6112265562.f32",
+        "flags": "barnard-D3-6112265562.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6112265562",
+      "obsDate": "2026-03-23",
+      "mjd": 61122.655618,
+      "detector": "D6",
+      "wavelengthUm": 4.4373,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 1474.43212890625,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6112265562.f32",
+        "flags": "barnard-D6-6112265562.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6116508297",
+      "obsDate": "2026-05-05",
+      "mjd": 61165.082972,
+      "detector": "D3",
+      "wavelengthUm": 2.2564,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": null,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D3-6116508297.f32",
+        "flags": "barnard-D3-6116508297.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6116508297",
+      "obsDate": "2026-05-05",
+      "mjd": 61165.082972,
+      "detector": "D6",
+      "wavelengthUm": 4.8877,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 647.4689331054688,
+      "release": "QR2",
+      "files": {
+        "pixels": "barnard-D6-6116508297.f32",
+        "flags": "barnard-D6-6116508297.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6127059478",
+      "obsDate": "2026-08-18",
+      "mjd": 61270.594779,
+      "detector": "D3",
+      "wavelengthUm": 1.8504,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 907.81201171875,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D3-6127059478.f32",
+        "flags": "barnard-D3-6127059478.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6127059478",
+      "obsDate": "2026-08-18",
+      "mjd": 61270.594779,
+      "detector": "D6",
+      "wavelengthUm": 4.5963,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 793.4262084960938,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D6-6127059478.f32",
+        "flags": "barnard-D6-6127059478.u8"
+      }
+    },
+    {
+      "id": "barnard-D3-6127290618",
+      "obsDate": "2026-08-20",
+      "mjd": 61272.906175,
+      "detector": "D3",
+      "wavelengthUm": 2.2233,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 1840.9840087890625,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D3-6127290618.f32",
+        "flags": "barnard-D3-6127290618.u8"
+      }
+    },
+    {
+      "id": "barnard-D6-6127290618",
+      "obsDate": "2026-08-20",
+      "mjd": 61272.906175,
+      "detector": "D6",
+      "wavelengthUm": 4.8708,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 90.01769256591797,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D6-6127290618.f32",
+        "flags": "barnard-D6-6127290618.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6127338316",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.383164,
+      "detector": "D2",
+      "wavelengthUm": 1.1393,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 842.1613159179688,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D2-6127338316.f32",
+        "flags": "barnard-D2-6127338316.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6127365380",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.653795,
+      "detector": "D2",
+      "wavelengthUm": 1.3759,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 584.318115234375,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D2-6127365380.f32",
+        "flags": "barnard-D2-6127365380.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6127338316",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.383164,
+      "detector": "D5",
+      "wavelengthUm": 3.8704,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 160.288330078125,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D5-6127338316.f32",
+        "flags": "barnard-D5-6127338316.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6127365380",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.653795,
+      "detector": "D5",
+      "wavelengthUm": 4.1482,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 109.99220275878906,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D5-6127365380.f32",
+        "flags": "barnard-D5-6127365380.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6127595919",
+      "obsDate": "2026-08-23",
+      "mjd": 61275.959186,
+      "detector": "D1",
+      "wavelengthUm": 0.7756,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": 315.3905334472656,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D1-6127595919.f32",
+        "flags": "barnard-D1-6127595919.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6127595919",
+      "obsDate": "2026-08-23",
+      "mjd": 61275.959186,
+      "detector": "D4",
+      "wavelengthUm": 2.5308,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 72
+      },
+      "centreFlux": null,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D4-6127595919.f32",
+        "flags": "barnard-D4-6127595919.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6127779022",
+      "obsDate": "2026-08-25",
+      "mjd": 61277.790218,
+      "detector": "D1",
+      "wavelengthUm": 1.022,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 2072.759521484375,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D1-6127779022.f32",
+        "flags": "barnard-D1-6127779022.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6127779022",
+      "obsDate": "2026-08-25",
+      "mjd": 61277.790218,
+      "detector": "D4",
+      "wavelengthUm": 3.4718,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "centreFlux": 1047.1680908203125,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D4-6127779022.f32",
+        "flags": "barnard-D4-6127779022.u8"
+      }
+    },
+    {
+      "id": "barnard-D1-6128525704",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.257036,
+      "detector": "D1",
+      "wavelengthUm": 0.7584,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 72,
+        "y": 73
+      },
+      "centreFlux": 53.25022506713867,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D1-6128525704.f32",
+        "flags": "barnard-D1-6128525704.u8"
+      }
+    },
+    {
+      "id": "barnard-D4-6128525704",
+      "obsDate": "2026-09-02",
+      "mjd": 61285.257036,
+      "detector": "D4",
+      "wavelengthUm": 2.4647,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 674.4207153320312,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D4-6128525704.f32",
+        "flags": "barnard-D4-6128525704.u8"
+      }
+    },
+    {
+      "id": "barnard-D2-6130562802",
+      "obsDate": "2026-09-22",
+      "mjd": 61305.628021,
+      "detector": "D2",
+      "wavelengthUm": 1.5111,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 644.916259765625,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D2-6130562802.f32",
+        "flags": "barnard-D2-6130562802.u8"
+      }
+    },
+    {
+      "id": "barnard-D5-6130562802",
+      "obsDate": "2026-09-22",
+      "mjd": 61305.628021,
+      "detector": "D5",
+      "wavelengthUm": 4.2904,
+      "width": 148,
+      "height": 148,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "centrePixel": {
+        "x": 73,
+        "y": 73
+      },
+      "centreFlux": 135.17042541503906,
+      "release": "QR3",
+      "files": {
+        "pixels": "barnard-D5-6130562802.f32",
+        "flags": "barnard-D5-6130562802.u8"
+      }
+    }
+  ],
+  "skippedLastRun": []
+}

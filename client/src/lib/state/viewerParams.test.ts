@@ -8,7 +8,7 @@ describe("resolveTarget", () => {
     const result = resolveTarget({ ...none, preset: "barnard" });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.target.raDeg).toBeCloseTo(269.452, 2);
+      expect(result.target.raDeg).toBeCloseTo(269.4463, 3);
       expect(result.target.detector).toBe("D2");
       expect(result.target.fovArcmin).toBe(5);
     }
@@ -20,9 +20,11 @@ describe("resolveTarget", () => {
     expect(result.ok && result.target.fovArcmin).toBe(10);
   });
 
-  it("reports a pending preset instead of guessing coordinates", () => {
+  it("resolves Epsilon Indi B to its preset coordinates", () => {
     const result = resolveTarget({ ...none, preset: "eps-indi-b" });
-    expect(result).toMatchObject({ ok: false, code: "pending-preset" });
+    expect(result.ok).toBe(true);
+    expect(result.ok && result.target.raDeg).toBeCloseTo(331.096448, 4);
+    expect(result.ok && result.target.decDeg).toBeCloseTo(-56.800596, 4);
   });
 
   it("accepts raw coordinates and defaults to 5′ and D2", () => {

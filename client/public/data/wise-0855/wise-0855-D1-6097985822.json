@@ -1,0 +1,21 @@
+{
+  "id": "wise-0855-D1-6097985822",
+  "obsDate": "2025-10-31",
+  "mjd": 60979.858224,
+  "detector": "D1",
+  "wavelengthUm": 1.1147,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 34
+  },
+  "centreFlux": 0.36992332339286804,
+  "release": "QR2",
+  "files": {
+    "pixels": "wise-0855-D1-6097985822.f32",
+    "flags": "wise-0855-D1-6097985822.u8"
+  }
+}

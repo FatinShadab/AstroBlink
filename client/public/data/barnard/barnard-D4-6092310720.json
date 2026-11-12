@@ -1,0 +1,21 @@
+{
+  "id": "barnard-D4-6092310720",
+  "obsDate": "2025-09-05",
+  "mjd": 60923.107203,
+  "detector": "D4",
+  "wavelengthUm": 3.0145,
+  "width": 148,
+  "height": 148,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "centrePixel": {
+    "x": 73,
+    "y": 72
+  },
+  "centreFlux": 713.0076904296875,
+  "release": "QR2",
+  "files": {
+    "pixels": "barnard-D4-6092310720.f32",
+    "flags": "barnard-D4-6092310720.u8"
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getProvider } from "@/lib/data/provider";
+import { providerFor, type DataChoice } from "@/lib/data/provider";
 import type { SkyTarget, SpectrumPoint } from "@/lib/data/types";
 
 interface SpectrumState {
@@ -14,10 +14,11 @@ interface SpectrumState {
 export function useSpectrum(
   target: SkyTarget | null,
   pick: { x: number; y: number } | null,
+  choice: DataChoice = "sky",
 ): { points: SpectrumPoint[] | null; loading: boolean; error: string | null } {
   const key =
     target && pick
-      ? `${target.raDeg}|${target.decDeg}|${target.fovArcmin}|${target.detector}|${pick.x}|${pick.y}`
+      ? `${choice}|${target.raDeg}|${target.decDeg}|${target.fovArcmin}|${target.detector}|${pick.x}|${pick.y}`
       : null;
   const [state, setState] = useState<SpectrumState>({ key: "", points: null, error: null });
 
@@ -26,7 +27,7 @@ export function useSpectrum(
     const controller = new AbortController();
     (async () => {
       try {
-        const points = await getProvider().getSpectrum(target, pick, controller.signal);
+        const points = await providerFor(choice).getSpectrum(target, pick, controller.signal);
         if (!controller.signal.aborted) setState({ key, points, error: null });
       } catch (error) {
         if (controller.signal.aborted) return;
