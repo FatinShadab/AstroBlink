@@ -19,7 +19,7 @@ export function Logo({
       alt={alt}
       width={Math.round(height * RATIO)}
       height={height}
-      className={cn("h-auto w-auto shrink-0", className)}
+      className={cn("h-auto w-auto shrink-0 self-start", className)}
       style={{ height, width: "auto" }}
       priority
     />

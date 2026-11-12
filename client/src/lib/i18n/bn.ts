@@ -10,6 +10,14 @@ export const bn: Record<DictKey, string> = {
 
   "nav.explore": "অন্বেষণ",
   "nav.home": "Home", // TODO bn
+  "footer.builtAt": "Built at United International University", // TODO bn
+  "footer.uiuAlt": "United International University crest", // TODO bn
+  "footer.pages": "Pages", // TODO bn
+  "footer.ctaTitle": "Ready to spot something moving?", // TODO bn
+  "footer.ctaBody": "Pick a mission, or open the sky on any spot. No experience needed.", // TODO bn
+  "footer.ctaProjects": "Browse missions", // TODO bn
+  "footer.ctaExplore": "Explore the sky", // TODO bn
+  "footer.project": "Project", // TODO bn
   "nav.projects": "প্রকল্প",
   "nav.guide": "ফিল্ড গাইড",
   "nav.about": "পরিচিতি",
