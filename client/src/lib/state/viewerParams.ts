@@ -1,5 +1,5 @@
 import { parseAsFloat, parseAsInteger, parseAsString, parseAsStringLiteral } from "nuqs";
-import { presetById, type Preset } from "@/data/presets";
+import { presetAt, presetById, type Preset } from "@/data/presets";
 import { parseCoordinatePair, CoordError, type CoordErrorCode } from "@/lib/sky/coords";
 import { DETECTOR_IDS } from "@/lib/sky/detectors";
 import type { Detector, SkyTarget, StretchKind, ViewMode } from "@/lib/data/types";
@@ -77,11 +77,14 @@ export function resolveTarget(
   if (raDeg < 0 || raDeg >= 360 || decDeg < -90 || decDeg > 90) {
     return { ok: false, code: raDeg < 0 || raDeg >= 360 ? "ra-range" : "dec-range", preset };
   }
-  const fov = params.fov ?? preset?.fovArcmin ?? DEFAULT_FOV;
+  // Typed coordinates that land on a real-data target use that target's own defaults
+  // (WISE 0855 is brightest in D6), unless the URL says otherwise.
+  const matched = preset ?? presetAt({ raDeg, decDeg }) ?? null;
+  const fov = params.fov ?? matched?.fovArcmin ?? DEFAULT_FOV;
   if (!(FOV_VALUES as readonly number[]).includes(fov))
-    return { ok: false, code: "bad-fov", preset };
-  const detector = params.det ?? preset?.detector ?? DEFAULT_DETECTOR;
-  return { ok: true, target: { raDeg, decDeg, fovArcmin: fov, detector }, preset };
+    return { ok: false, code: "bad-fov", preset: matched };
+  const detector = params.det ?? matched?.detector ?? DEFAULT_DETECTOR;
+  return { ok: true, target: { raDeg, decDeg, fovArcmin: fov, detector }, preset: matched };
 }
 
 /** Parse what the user typed into the search box. Throws CoordError with a code for the UI. */

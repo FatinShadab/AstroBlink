@@ -107,9 +107,11 @@ export const en = {
   "notFound.cta": "Go to explore",
 
   "explore.title": "Explore the sky",
-  "explore.searchLabel": "Coordinates (RA, Dec)",
+  "explore.searchLabel": "Coordinates or target name",
   "explore.searchPlaceholder": "e.g. 08h55m10.8s −07d14m42s or 133.795 −7.245",
-  "explore.searchHelp": "Press Enter to go to this spot.",
+  "explore.searchHelp": "Press Enter to go. You can also type a target name, like Barnard's Star or WISE 0855.",
+  "explore.simulatedBanner": "Real SPHEREx data is available for the 5 test targets. Showing simulated sky here.",
+  "explore.realTargets": "Targets with real data:",
   "explore.searchSubmit": "Show this spot",
   "explore.err.empty": "Type coordinates to begin.",
   "explore.err.format": "Could not read that. Try 08h55m10.8s −07d14m42s or 133.795 −7.245.",
@@ -176,6 +178,7 @@ export const en = {
 
   "explore.lightCurve": "Brightness over time",
   "explore.brightnessCaption": "Higher = brighter. Measured at the centre of each frame.",
+  "explore.brightnessCaptionReal": "Higher = brighter. Aperture photometry at the target in mJy; flagged and saturated pixels are skipped, and a saturated frame has no point.",
   "explore.brightness": "Brightness",
   "explore.contrast": "Contrast",
   "explore.reset": "Reset",

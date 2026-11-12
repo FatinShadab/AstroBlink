@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Field";
 import { CoordError, parseCoordinatePair } from "@/lib/sky/coords";
+import { presetByName } from "@/data/presets";
 import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
 
@@ -26,6 +27,13 @@ export function HeroSearch() {
       setError(null);
       router.push(`/explore?ra=${raDeg}&dec=${decDeg}&fov=5&det=D2`);
     } catch (caught) {
+      // Not coordinates: try a target name ("Barnard's Star", "WISE 0855", "R Dra").
+      const named = presetByName(draft);
+      if (named) {
+        setError(null);
+        router.push(`/explore?preset=${named.id}`);
+        return;
+      }
       const code = caught instanceof CoordError ? caught.code : "format";
       setError(`explore.err.${code}` as DictKey);
     }

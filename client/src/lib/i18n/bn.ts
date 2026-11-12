@@ -109,9 +109,11 @@ export const bn: Record<DictKey, string> = {
   "notFound.cta": "এক্সপ্লোরে যান", // TODO bn review
 
   "explore.title": "আকাশ অন্বেষণ করুন", // TODO bn review
-  "explore.searchLabel": "স্থানাঙ্ক (RA, Dec)",
+  "explore.searchLabel": "স্থানাঙ্ক বা লক্ষ্যবস্তুর নাম",
   "explore.searchPlaceholder": "যেমন 08h55m10.8s −07d14m42s বা 133.795 −7.245",
-  "explore.searchHelp": "এই স্থানে যেতে Enter চাপুন।", // TODO bn review
+  "explore.searchHelp": "যেতে Enter চাপুন। লক্ষ্যবস্তুর নামও লিখতে পারেন, যেমন Barnard's Star বা WISE 0855।",
+  "explore.simulatedBanner": "৫টি পরীক্ষামূলক লক্ষ্যবস্তুর জন্য আসল SPHEREx ডেটা আছে। এখানে সিমুলেটেড আকাশ দেখানো হচ্ছে।",
+  "explore.realTargets": "আসল ডেটা আছে যেসব লক্ষ্যবস্তুর:",
   "explore.searchSubmit": "এই স্থান দেখান", // TODO bn review
   "explore.err.empty": "শুরু করতে স্থানাঙ্ক লিখুন।", // TODO bn review
   "explore.err.format": "পড়া যায়নি। চেষ্টা করুন 08h55m10.8s −07d14m42s বা 133.795 −7.245।", // TODO bn review
@@ -177,6 +179,7 @@ export const bn: Record<DictKey, string> = {
 
   "explore.lightCurve": "সময়ের সাথে উজ্জ্বলতা", // TODO bn review
   "explore.brightnessCaption": "বড় মান = বেশি উজ্জ্বল। প্রতিটি ফ্রেমের কেন্দ্রে মাপা।", // TODO bn review
+  "explore.brightnessCaptionReal": "বড় মান = বেশি উজ্জ্বল। লক্ষ্যবস্তুর উপর অ্যাপারচার ফটোমেট্রি (mJy); চিহ্নিত ও স্যাচুরেটেড পিক্সেল বাদ দেওয়া হয়, আর স্যাচুরেটেড ফ্রেমের কোনো বিন্দু থাকে না।",
   "explore.brightness": "উজ্জ্বলতা", // TODO bn review
   "explore.contrast": "কন্ট্রাস্ট", // TODO bn review
   "explore.reset": "রিসেট", // TODO bn review

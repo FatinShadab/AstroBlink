@@ -150,14 +150,63 @@ export function isPresetReady(preset: Preset): boolean {
   return Number.isFinite(preset.raDeg) && Number.isFinite(preset.decDeg);
 }
 
-/** The preset whose position matches this target within 1′, if any. Used by the synthetic model. */
+/**
+ * Catalogue positions as published (J2000 / the challenge brief). The preset position above is the
+ * star's position at epoch 2025.9; typing either one opens the real data.
+ */
+export const CATALOGUE_POSITIONS: Record<PresetId, { raDeg: number; decDeg: number; label: string }> = {
+  "wise-0855": { raDeg: 133.795129, decDeg: -7.245147, label: "08h55m10.831s −07°14′42.53″ (challenge brief)" },
+  barnard: { raDeg: 269.452083, decDeg: 4.693333, label: "17h57m48.5s +04°41′36″ (J2000)" },
+  "eps-indi-b": { raDeg: 331.04375, decDeg: -56.782778, label: "22h04m10.5s −56°46′58″ (J2000)" },
+  "r-dra": { raDeg: 248.166667, decDeg: 66.755, label: "16h32m40s +66°45′18″ (J2000)" },
+  "rw-aur": { raDeg: 76.95625, decDeg: 30.401389, label: "05h07m49.5s +30°24′05″ (J2000)" },
+};
+
+/** Names people type for each target. Matching ignores case, spaces, apostrophes and punctuation. */
+export const PRESET_ALIASES: Record<PresetId, readonly string[]> = {
+  "wise-0855": ["WISE 0855", "WISE J0855", "WISE J085510.83-071442.5", "WISE 0855-0714"],
+  barnard: ["Barnard's Star", "Barnard", "Barnards Star", "GJ 699", "Gliese 699"],
+  "eps-indi-b": ["Epsilon Indi B", "Eps Ind B", "eps Indi B", "Epsilon Indi Ba"],
+  "r-dra": ["R Draconis", "R Dra"],
+  "rw-aur": ["RW Aurigae", "RW Aur", "RW Aur A"],
+};
+
+/** The stored real-data cutouts are 15′ wide, so a position within 5′ still has the target inside. */
+export const REAL_MATCH_RADIUS_ARCMIN = 5;
+
+function separationDeg(a: { raDeg: number; decDeg: number }, b: { raDeg: number; decDeg: number }): number {
+  const dRa = (((a.raDeg - b.raDeg + 540) % 360) - 180) * Math.cos((b.decDeg * Math.PI) / 180);
+  return Math.hypot(dRa, a.decDeg - b.decDeg);
+}
+
+/**
+ * The preset whose position (epoch 2025.9) or catalogue position lies within 5′ of this target, if any.
+ * The routed data provider uses this to choose real data; the synthetic model uses it too.
+ */
 export function presetAt(target: Pick<SkyTarget, "raDeg" | "decDeg">): Preset | undefined {
-  const tolDeg = 1 / 60;
+  const tolDeg = REAL_MATCH_RADIUS_ARCMIN / 60;
   return PRESETS.find((p) => {
     if (!isPresetReady(p)) return false;
-    const dRa =
-      (((target.raDeg - p.raDeg + 540) % 360) - 180) * Math.cos((p.decDeg * Math.PI) / 180);
-    const dDec = target.decDeg - p.decDeg;
-    return Math.hypot(dRa, dDec) < tolDeg;
+    return (
+      separationDeg(target, p) < tolDeg || separationDeg(target, CATALOGUE_POSITIONS[p.id]) < tolDeg
+    );
   });
+}
+
+/** True when real SPHEREx data covers this position (one of the five test targets). */
+export function hasRealData(target: Pick<SkyTarget, "raDeg" | "decDeg">): boolean {
+  return presetAt(target) !== undefined;
+}
+
+function normaliseName(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/** The preset a typed name refers to ("Barnard's Star", "WISE 0855", "R Dra"), if any. */
+export function presetByName(text: string): Preset | undefined {
+  const key = normaliseName(text);
+  if (key.length < 3) return undefined;
+  return PRESETS.find((p) =>
+    [p.name, ...PRESET_ALIASES[p.id]].some((alias) => normaliseName(alias) === key),
+  );
 }

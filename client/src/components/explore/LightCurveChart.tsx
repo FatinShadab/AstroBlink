@@ -32,7 +32,16 @@ interface Row {
  * Brightness over time (design §8.2, §11). Points with error bars, a thin dashed connector,
  * and the current frame ringed. Client-only: loaded with next/dynamic (rules §4.2.2).
  */
-export function LightCurveChart({ points, current }: { points: LightPoint[]; current: number }) {
+export function LightCurveChart({
+  points,
+  current,
+  caption,
+}: {
+  points: LightPoint[];
+  current: number;
+  /** Replaces the default caption, e.g. to describe real aperture photometry. */
+  caption?: string;
+}) {
   const { t } = useT();
   const { lang } = useLang();
   const rows: Row[] = points
@@ -106,7 +115,7 @@ export function LightCurveChart({ points, current }: { points: LightPoint[]; cur
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <p className="text-caption text-text-muted">{t("explore.brightnessCaption")}</p>
+      <p className="text-caption text-text-muted">{caption ?? t("explore.brightnessCaption")}</p>
     </div>
   );
 }

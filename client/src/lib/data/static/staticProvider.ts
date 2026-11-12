@@ -25,6 +25,9 @@ interface ManifestFrame {
   height: number;
   pixelScaleArcsec: number;
   hasFlags: boolean;
+  /** Aperture photometry at the target (mJy); null when the aperture is saturated or off the image. */
+  flux?: number | null;
+  fluxErr?: number | null;
   files: { pixels: string; flags: string };
 }
 
@@ -174,10 +177,25 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
       if (frames.length === 0) {
         throw new Error(`No real ${target.detector} observations are stored for ${manifest.name}.`);
       }
+      // Light curve from the aperture photometry in the manifest (saturated frames have no point).
+      // Data written before photometry existed has no `flux` field; then there is no light curve here
+      // and the view measures the frames itself.
+      const hasPhotometry = matched.some((f) => "flux" in f);
+      const lightCurve = hasPhotometry
+        ? matched
+            .filter((f) => typeof f.flux === "number" && Number.isFinite(f.flux))
+            .map((f) => ({
+              obsDate: f.obsDate,
+              flux: f.flux as number,
+              fluxErr: typeof f.fluxErr === "number" ? f.fluxErr : 0,
+              frameId: f.id,
+            }))
+        : undefined;
       const field: FieldData = {
         fieldId: `real-${presetId}-${target.detector}`,
         target,
         frames,
+        lightCurve,
         source: "static",
         isSimulated: false,
       };

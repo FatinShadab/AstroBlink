@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Banner, Card, EmptyState, Skeleton } from "@/components/ui/Surfaces";
 import { useToast } from "@/components/ui/Toast";
 
-import type { PresetId } from "@/data/presets";
+import Link from "next/link";
+import { PRESETS, hasRealData, type PresetId } from "@/data/presets";
 import { useFieldFrames } from "@/lib/data/useFieldFrames";
 import type { Detector, SkyTarget, StretchKind, ViewMode } from "@/lib/data/types";
 import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
@@ -163,14 +164,20 @@ export function ExploreView() {
         })
       : "";
 
-  // Light curve from the centre of every frame (design §11).
+  // Light curve (design §11). Real data uses the aperture photometry from the data files; a saturated
+  // frame has no point (NaN) rather than a guessed value. The simulated sky uses the frame centre.
+  // Real data with aperture photometry in its files; older real data without it is measured like the simulated sky.
+  const realField = loaded?.field.isSimulated === false && loaded.field.lightCurve ? loaded.field : null;
   const lightPoints = useMemo(
     () =>
-      frames.map((f) => ({
-        obsDate: f.meta.obsDate,
-        ...centreAperture(f.data, f.meta.width),
-      })),
-    [frames],
+      frames.map((f) => {
+        if (realField) {
+          const p = realField.lightCurve?.find((lc) => lc.frameId === f.meta.id);
+          return { obsDate: f.meta.obsDate, flux: p ? p.flux : Number.NaN, fluxErr: p ? p.fluxErr : 0 };
+        }
+        return { obsDate: f.meta.obsDate, ...centreAperture(f.data, f.meta.width) };
+      }),
+    [frames, realField],
   );
 
   // Spectrum for the picked pixel (design §8.2).
@@ -281,6 +288,7 @@ export function ExploreView() {
         fov={fov}
         detector={detector}
         onSearch={onSearch}
+        onPreset={onPreset}
         onFov={(value) => newTarget({ fov: value })}
         onDetector={(value) => newTarget({ det: value })}
         shareSlot={
@@ -299,6 +307,23 @@ export function ExploreView() {
       {errorKey && (
         <Banner tone="danger" icon="⚠">
           {t(errorKey)}
+        </Banner>
+      )}
+      {target && !hasRealData(target) && (
+        <Banner tone="info" icon="ℹ">
+          <span>{t("explore.simulatedBanner")} </span>
+          <span>{t("explore.realTargets")} </span>
+          {PRESETS.map((p, i) => (
+            <span key={p.id}>
+              <Link
+                href={`/explore?preset=${p.id}`}
+                className="font-medium text-text-primary underline underline-offset-2"
+              >
+                {p.name}
+              </Link>
+              {i < PRESETS.length - 1 ? ", " : "."}
+            </span>
+          ))}
         </Banner>
       )}
       {pendingName && (
@@ -322,6 +347,8 @@ export function ExploreView() {
           }
         >
           {t("explore.errorBody")}
+          {/* The specific reason (for example no matching wavelengths on this detector). */}
+          <span className="mt-1 block text-caption">{load.message}</span>
         </Banner>
       )}
       {reducedMotion && ready && count > 1 && (
@@ -452,7 +479,11 @@ export function ExploreView() {
               {t("explore.lightCurve")}
             </h2>
             {ready && count > 0 ? (
-              <LightCurveChart points={lightPoints} current={current} />
+              <LightCurveChart
+                points={lightPoints}
+                current={current}
+                caption={realField ? t("explore.brightnessCaptionReal") : undefined}
+              />
             ) : (
               <p className="text-body-sm text-text-muted">{t("common.loading")}</p>
             )}

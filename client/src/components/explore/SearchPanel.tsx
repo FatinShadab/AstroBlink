@@ -10,6 +10,7 @@ import { fill } from "@/lib/i18n/format";
 import type { DictKey } from "@/lib/i18n/en";
 import { FOV_VALUES } from "@/lib/state/viewerParams";
 import type { Detector } from "@/lib/data/types";
+import { presetByName, type PresetId } from "@/data/presets";
 
 const selectClass =
   "h-11 rounded-[var(--radius-sm)] border border-border-strong bg-surface-2 px-3 text-body text-text-primary focus:border-primary focus:outline-none";
@@ -20,6 +21,8 @@ interface SearchPanelProps {
   fov: number;
   detector: Detector;
   onSearch: (raDeg: number, decDeg: number) => void;
+  /** Called when the box holds a target name instead of coordinates. */
+  onPreset: (id: PresetId) => void;
   onFov: (fov: number) => void;
   onDetector: (detector: Detector) => void;
   shareSlot: React.ReactNode;
@@ -30,7 +33,7 @@ interface SearchPanelProps {
  * The form remounts when the URL coordinates change, so the box always shows the current spot.
  */
 export function SearchPanel(props: SearchPanelProps) {
-  const { raDeg, decDeg, fov, detector, onSearch, onFov, onDetector, shareSlot } = props;
+  const { raDeg, decDeg, fov, detector, onSearch, onPreset, onFov, onDetector, shareSlot } = props;
   const { t } = useT();
   const initial =
     raDeg !== null && decDeg !== null ? `${formatRa(raDeg)} ${formatDec(decDeg)}` : "";
@@ -43,6 +46,13 @@ export function SearchPanel(props: SearchPanelProps) {
       setError(null);
       onSearch(coords.raDeg, coords.decDeg);
     } catch (caught) {
+      // Not coordinates: try a target name ("Barnard's Star", "WISE 0855", "R Dra").
+      const named = presetByName(text);
+      if (named) {
+        setError(null);
+        onPreset(named.id);
+        return;
+      }
       const code = caught instanceof CoordError ? caught.code : "format";
       setError(`explore.err.${code}` as DictKey);
     }

@@ -27,11 +27,18 @@ describe("resolveTarget", () => {
     expect(result.ok && result.target.decDeg).toBeCloseTo(-56.800596, 4);
   });
 
-  it("accepts raw coordinates and defaults to 5′ and D2", () => {
-    const result = resolveTarget({ ...none, ra: 133.795, dec: -7.245 });
+  it("gives typed coordinates on a real-data target that target's detector", () => {
+    // WISE 0855 as written in the challenge brief → its default detector D6, not D2.
+    const result = resolveTarget({ ...none, ra: 133.795129, dec: -7.245147 });
+    expect(result.ok && result.target.detector).toBe("D6");
+    expect(result.ok && result.preset?.id).toBe("wise-0855");
+  });
+
+  it("accepts raw coordinates away from the real targets and defaults to 5′ and D2", () => {
+    const result = resolveTarget({ ...none, ra: 200.5, dec: -45 });
     expect(result.ok && result.target).toEqual({
-      raDeg: 133.795,
-      decDeg: -7.245,
+      raDeg: 200.5,
+      decDeg: -45,
       fovArcmin: 5,
       detector: "D2",
     });
