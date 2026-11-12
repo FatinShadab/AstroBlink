@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
 
@@ -10,38 +10,66 @@ import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
  * The viewer is Google's <model-viewer> (Apache-2.0), loaded from jsDelivr at a pinned version.
  * Decorative: the sections carry the content, so the viewer is hidden from assistive technology.
  * It rotates slowly; reduced motion (OS or in-app setting) turns the rotation off.
+ * Without WebGL (disabled GPU, locked-down or sandboxed browsers) the viewer cannot start,
+ * so a flat shaded planet is drawn instead and the script is never loaded.
  */
 const MODEL_VIEWER_URL =
   "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
 
+/** True when the browser can create a WebGL context. The probe context is released straight away. */
+function hasWebGL(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    if (!gl) return false;
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// WebGL support does not change during a visit: probe once, never notify.
+let webglSupport: boolean | undefined;
+const getWebGLSupport = () => (webglSupport ??= hasWebGL());
+const subscribeNever = () => () => {};
+
 export default function Globe({ className }: { className?: string }) {
   const reducedMotion = useReducedMotion();
+  // null on the server and during hydration, so both renders match; then the client answer.
+  const webgl = useSyncExternalStore(subscribeNever, getWebGLSupport, () => null);
 
   // Add the viewer script once, in the head (a <script> rendered by React would not run).
   useEffect(() => {
+    if (!webgl) return;
     if (customElements.get("model-viewer")) return;
     if (document.querySelector(`script[src="${MODEL_VIEWER_URL}"]`)) return;
     const script = document.createElement("script");
     script.type = "module";
     script.src = MODEL_VIEWER_URL;
     document.head.appendChild(script);
-  }, []);
+  }, [webgl]);
 
   return (
     // A solid disc behind the model, so the starfield never shows through the planet.
     <div aria-hidden="true" className={cn("relative size-[250px] animate-planet-float", className)}>
       <span aria-hidden="true" className="absolute inset-0 rounded-full bg-bg" />
-      <model-viewer
-        src="/models/earth.glb"
-        loading="eager"
-        {...(reducedMotion ? {} : { "auto-rotate": "", "rotation-per-second": "6deg" })}
-        camera-orbit="0deg 75deg 105%"
-        disable-zoom=""
-        disable-pan=""
-        interaction-prompt="none"
-        shadow-intensity="0"
-        className="relative size-full bg-transparent"
-      />
+      {webgl === true && (
+        <model-viewer
+          src="/models/earth.glb"
+          loading="eager"
+          {...(reducedMotion ? {} : { "auto-rotate": "", "rotation-per-second": "6deg" })}
+          camera-orbit="0deg 75deg 105%"
+          disable-zoom=""
+          disable-pan=""
+          interaction-prompt="none"
+          shadow-intensity="0"
+          className="relative size-full bg-transparent"
+        />
+      )}
+      {webgl === false && (
+        <span className="absolute inset-[2.5%] rounded-full bg-[radial-gradient(circle_at_35%_30%,#6fc3ff_0%,#2a6fb8_35%,#123a6b_65%,#060b16_100%)] shadow-[inset_-18px_-14px_40px_rgba(0,0,0,0.65),0_0_40px_rgba(86,180,233,0.18)]" />
+      )}
     </div>
   );
 }
