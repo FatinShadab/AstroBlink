@@ -215,6 +215,24 @@
 }
 
 /*
+  Flat Earth spin for browsers without WebGL (components/ui/globe.tsx): the model's own map
+  scrolls across the disc. The map is twice as wide as tall, so -200% is one full turn.
+  One turn a minute, the same as the 3D model's 6deg per second.
+*/
+@utility animate-earth-spin {
+  animation: earth-spin 60s linear infinite;
+}
+
+@keyframes earth-spin {
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/*
   Starfield (non-interactive, CSS only), on every page: pearl stars that twinkle slowly.
   Fixed to the viewport, behind the content, and never takes pointer events.
 */
