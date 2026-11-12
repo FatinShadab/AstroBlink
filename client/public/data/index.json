@@ -29,9 +29,9 @@
       "name": "Barnard's Star",
       "raDeg": 269.446291,
       "decDeg": 4.767917,
-      "frameCount": 48,
+      "frameCount": 47,
       "dateRange": [
-        "2025-08-15",
+        "2025-08-25",
         "2026-09-22"
       ],
       "detectors": [
@@ -43,10 +43,11 @@
         "D6"
       ],
       "releases": [
-        "QR2",
+        "DR1",
         "QR3"
       ],
-      "manifest": "/data/barnard/manifest.json"
+      "manifest": "/data/barnard/manifest.json",
+      "spectrumPoints": 47
     },
     {
       "id": "eps-indi-b",
@@ -76,10 +77,10 @@
       "name": "R Draconis",
       "raDeg": 248.16667,
       "decDeg": 66.755,
-      "frameCount": 48,
+      "frameCount": 66,
       "dateRange": [
-        "2026-05-16",
-        "2026-09-27"
+        "2025-04-25",
+        "2026-09-17"
       ],
       "detectors": [
         "D1",
@@ -90,9 +91,11 @@
         "D6"
       ],
       "releases": [
+        "DR1",
         "QR3"
       ],
-      "manifest": "/data/r-dra/manifest.json"
+      "manifest": "/data/r-dra/manifest.json",
+      "spectrumPoints": 58
     },
     {
       "id": "rw-aur",

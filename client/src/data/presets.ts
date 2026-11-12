@@ -46,6 +46,8 @@ export interface Preset {
   synthetic: SyntheticSpecial;
   descriptionKey: DictKey;
   lookKey: DictKey;
+  /** An honest note about the real data for this target (shown on the object card), if needed. */
+  dataNoteKey?: DictKey;
 }
 
 const UNIFORM_PEAK = { D1: 1200, D2: 1200, D3: 1200, D4: 1200, D5: 1200, D6: 1200 } as const;
@@ -55,7 +57,9 @@ export const PRESETS: readonly Preset[] = [
     id: "barnard",
     name: "Barnard's Star",
     kind: "mover",
-    detector: "D2",
+    // D5: five frames at one wavelength from Aug 2025 to Sep 2026 (the longest baseline, 1.8 px of motion),
+    // star field aligned (scripts/qa_check.py), and the steadiest brightness of this non-variable star.
+    detector: "D5",
     fovArcmin: 5,
     raDeg: 269.446291, // position at epoch 2025.9
     decDeg: 4.767917,
@@ -106,6 +110,7 @@ export const PRESETS: readonly Preset[] = [
     },
     descriptionKey: "preset.wise0855.desc",
     lookKey: "preset.wise0855.look",
+    dataNoteKey: "preset.wise0855.note",
   },
   {
     id: "rw-aur",
@@ -120,11 +125,15 @@ export const PRESETS: readonly Preset[] = [
     synthetic: { kind: "variable", variability: "irregular", amplitude: 0.3, peakCounts: 900 },
     descriptionKey: "preset.rwAur.desc",
     lookKey: "preset.rwAur.look",
+    dataNoteKey: "preset.rwAur.note",
   },
   {
     id: "r-dra",
     name: "R Draconis",
     kind: "variable",
+    // R Dra saturates every SPHEREx detector, so brightness is measured on the unsaturated outer ring.
+    // D3: eight frames at one wavelength (Apr 2025 to Jun 2026) with the clearest change, about 10x, far above
+    // what the same method gives for the constant Barnard's Star on D3 (1.7x).
     detector: "D3",
     fovArcmin: 5,
     raDeg: 248.16667, // 16h32m40s, from the team brief

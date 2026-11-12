@@ -30,6 +30,10 @@ interface ManifestFrame {
   fluxErr?: number | null;
   /** Older data: the target pixel's value (MJy/sr), null when saturated. */
   centreFlux?: number | null;
+  /** "wing" for saturated stars (scripts/wing_photometry.py). */
+  fluxMethod?: "aperture" | "wing";
+  /** A per-visit stack: the number of frames averaged. */
+  stacked?: number;
   files: { pixels: string; flags: string };
 }
 
@@ -37,6 +41,8 @@ interface Manifest {
   id: string;
   name: string;
   frames: ManifestFrame[];
+  /** Per-visit stacks for faint targets (e.g. WISE 0855 D5/D6). When a detector has them, the viewer uses them. */
+  stacks?: ManifestFrame[];
   detectors: string[];
   dateRange: [string, string];
 }
@@ -183,7 +189,10 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
       const presetId = presetIdOf(target);
       if (!presetId) throw new Error("No real data is available for these coordinates.");
       const manifest = await loadManifest(presetId, signal);
-      const onDetector = manifest.frames.filter((f) => f.detector === target.detector);
+      // A faint target's detector may have per-visit stacks; they show the target better than single frames.
+      const stacked = (manifest.stacks ?? []).filter((f) => f.detector === target.detector);
+      const onDetector =
+        stacked.length >= 2 ? stacked : manifest.frames.filter((f) => f.detector === target.detector);
       const matched = selectMatchedWavelength(onDetector);
       if (onDetector.length > 0 && matched.length === 0) {
         throw new Error(
@@ -221,6 +230,7 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
               flux: f.flux as number,
               fluxErr: typeof f.fluxErr === "number" ? f.fluxErr : 0,
               frameId: f.id,
+              method: f.fluxMethod ?? "aperture",
             }))
         : undefined;
       const field: FieldData = {
@@ -237,7 +247,7 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
     async getFramePixels(frame, signal): Promise<FramePixels> {
       const presetId = presetIdOfFrame(frame.id);
       const manifest = await loadManifest(presetId, signal);
-      const entry = manifest.frames.find((f) => f.id === frame.id);
+      const entry = [...manifest.frames, ...(manifest.stacks ?? [])].find((f) => f.id === frame.id);
       if (!entry) throw new Error(`Frame ${frame.id} is not in the real-data manifest.`);
       const [pixelsRes, flagsRes] = await Promise.all([
         fetchOk(`${DATA_ROOT}/${presetId}/${entry.files.pixels}`, signal),
@@ -259,7 +269,15 @@ export function createStaticProvider(presetIdOf: (target: SkyTarget) => string |
       const manifest = await loadManifest(presetId, signal);
       const points: SpectrumPoint[] = manifest.frames
         .map((f) => {
-          const flux = typeof f.flux === "number" ? f.flux : f.centreFlux;
+          // Older data stores the target pixel's surface brightness (MJy/sr); convert it to the flux in that
+          // pixel (mJy) so every spectrum is in mJy: MJy/sr × pixel solid angle (sr) × 10⁹.
+          const pixelSr = (f.pixelScaleArcsec / 206264.806) ** 2;
+          const flux =
+            typeof f.flux === "number"
+              ? f.flux
+              : typeof f.centreFlux === "number"
+                ? f.centreFlux * pixelSr * 1e9
+                : null;
           return typeof flux === "number" && Number.isFinite(flux)
             ? { wavelengthUm: f.wavelengthUm, flux, fluxErr: typeof f.fluxErr === "number" ? f.fluxErr : 0 }
             : null;

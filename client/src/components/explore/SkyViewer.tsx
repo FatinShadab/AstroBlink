@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
-import { Badge } from "@/components/ui/Surfaces";
+import { DataBadge } from "@/components/ui/DataBadge";
 import { cn } from "@/lib/utils/cn";
 
 export interface SkyViewerProps {
@@ -192,13 +192,10 @@ export function SkyViewer(props: SkyViewerProps) {
         className="pointer-events-none absolute inset-0 h-full w-full"
       />
 
-      {simulated && (
-        <div className="absolute top-3 left-3 z-10">
-          <Badge tone="accent" className="bg-surface-1/90">
-            {simulatedLabel}
-          </Badge>
-        </div>
-      )}
+      {/* Data source: grey "Simulated sky" or cyan "Real NASA data". */}
+      <div className="absolute top-3 left-3 z-10 rounded-full bg-surface-1/90" title={simulated ? simulatedLabel : undefined}>
+        <DataBadge real={!simulated} />
+      </div>
       <div className="absolute top-3 right-3 z-10 rounded-[var(--radius-sm)] bg-surface-1/90 px-2 py-1 font-mono text-mono tabular-nums text-text-primary">
         {frameCounter}
       </div>

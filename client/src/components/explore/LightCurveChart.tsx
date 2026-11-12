@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { formatDate } from "@/lib/i18n/format";
 import { useLang, useT } from "@/lib/i18n/LangProvider";
+import { paddedRange } from "@/lib/sky/cleanSpectrum";
 
 export interface LightPoint {
   obsDate: string;
@@ -60,7 +61,7 @@ export function LightCurveChart({
       <div className="h-56 w-full" role="img" aria-label={`${t("explore.lightCurve")}. ${summary}`}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={rows} margin={{ top: 12, right: 16, bottom: 4, left: 0 }}>
-            <CartesianGrid vertical={false} stroke="var(--border)" />
+            <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
             <XAxis
               dataKey="t"
               type="number"
@@ -69,12 +70,17 @@ export function LightCurveChart({
                 formatDate(new Date(v).toISOString().slice(0, 10), lang)
               }
               tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-              stroke="var(--border)"
+              stroke="var(--chart-grid)"
             />
             <YAxis
               dataKey="flux"
+              type="number"
+              domain={paddedRange(rows.map((r) => ({ wavelengthUm: 0, flux: r.flux, fluxErr: r.err })))}
+              tickFormatter={(v: number) =>
+                Math.abs(v) >= 100 ? Math.round(v).toLocaleString("en-US") : Number(v).toPrecision(3)
+              }
               tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-              stroke="var(--border)"
+              stroke="var(--chart-grid)"
               width={56}
             />
             <Tooltip
@@ -108,7 +114,7 @@ export function LightCurveChart({
                 y={currentRow.flux}
                 r={7}
                 fill="none"
-                stroke="var(--accent)"
+                stroke="var(--primary)"
                 strokeWidth={2}
               />
             )}

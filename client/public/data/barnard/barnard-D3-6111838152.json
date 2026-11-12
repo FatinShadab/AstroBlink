@@ -3,17 +3,26 @@
   "obsDate": "2026-03-19",
   "mjd": 61118.381517,
   "detector": "D3",
-  "wavelengthUm": 2.107,
-  "width": 148,
-  "height": 148,
+  "wavelengthUm": 2.1068,
+  "width": 145,
+  "height": 145,
   "pixelScaleArcsec": 6.2,
   "hasFlags": true,
+  "flaggedPixels": 639,
   "centrePixel": {
     "x": 72,
-    "y": 73
+    "y": 72
   },
-  "centreFlux": null,
-  "release": "QR2",
+  "targetPixel": {
+    "x": 72.04,
+    "y": 72.52
+  },
+  "flux": null,
+  "fluxErr": null,
+  "fluxUnit": "mJy",
+  "apertureMaskedFraction": 1.0,
+  "saturated": true,
+  "release": "DR1",
   "files": {
     "pixels": "barnard-D3-6111838152.f32",
     "flags": "barnard-D3-6111838152.u8"

@@ -13,7 +13,7 @@ import type { Detector } from "@/lib/data/types";
 import { presetByName, type PresetId } from "@/data/presets";
 
 const selectClass =
-  "h-11 rounded-[var(--radius-sm)] border border-border-strong bg-surface-2 px-3 text-body text-text-primary focus:border-primary focus:outline-none";
+  "h-11 rounded-[var(--radius-sm)] border border-border bg-surface-2 px-3 text-body text-text-primary hover:border-border-strong focus:border-border-strong focus:outline-none";
 
 interface SearchPanelProps {
   raDeg: number | null;

@@ -3,9 +3,55 @@
   "name": "R Draconis",
   "raDeg": 248.16667,
   "decDeg": 66.755,
+  "epoch": 2025.9,
   "pixelScaleArcsec": 6.2,
-  "source": "NASA SPHEREx Quick Release spectral images, NASA/IPAC IRSA",
+  "grid": {
+    "ctype": [
+      "RA---TAN",
+      "DEC--TAN"
+    ],
+    "crval": [
+      248.16667,
+      66.755
+    ],
+    "crpix": [
+      73.0,
+      73.0
+    ],
+    "cdelt": [
+      -0.0017222222222222222,
+      0.0017222222222222222
+    ],
+    "size": [
+      145,
+      145
+    ],
+    "centrePixel": {
+      "x": 72,
+      "y": 72
+    },
+    "note": "crpix is 1-based (FITS); centrePixel is 0-based (array index). North up, east left."
+  },
+  "photometry": {
+    "apertureRadiusPx": 2.0,
+    "annulusPx": [
+      5.0,
+      8.0
+    ],
+    "maxMaskedFraction": 0.25,
+    "unit": "mJy",
+    "wing": "Saturated stars: flux in the unsaturated ring just outside the core (scripts/wing_photometry.py); compare within one detector."
+  },
+  "glitchBits": {
+    "MP_TRANSIENT": 0,
+    "MP_OVERFLOW": 1,
+    "MP_NONFUNC": 6,
+    "MP_HOT": 10,
+    "MP_COLD": 11
+  },
+  "source": "NASA SPHEREx spectral images (Level 2), NASA/IPAC IRSA",
   "releases": [
+    "DR1",
     "QR3"
   ],
   "doi": [
@@ -20,114 +66,1812 @@
     "D6"
   ],
   "dateRange": [
-    "2026-05-16",
-    "2026-09-27"
+    "2025-04-25",
+    "2026-09-17"
   ],
+  "coverage": {
+    "D1": {
+      "DR1": {
+        "count": 197,
+        "first": "2025-06-06",
+        "last": "2025-11-20"
+      },
+      "QR3": {
+        "count": 387,
+        "first": "2026-07-06",
+        "last": "2026-09-27"
+      }
+    },
+    "D2": {
+      "DR1": {
+        "count": 70,
+        "first": "2025-06-08",
+        "last": "2025-12-14"
+      },
+      "QR3": {
+        "count": 19,
+        "first": "2026-06-21",
+        "last": "2026-06-23"
+      }
+    },
+    "D3": {
+      "DR1": {
+        "count": 554,
+        "first": "2025-04-24",
+        "last": "2026-05-13"
+      },
+      "QR3": {
+        "count": 20,
+        "first": "2026-05-16",
+        "last": "2026-06-12"
+      }
+    },
+    "D4": {
+      "DR1": {
+        "count": 195,
+        "first": "2025-06-06",
+        "last": "2025-11-20"
+      },
+      "QR3": {
+        "count": 389,
+        "first": "2026-07-06",
+        "last": "2026-09-25"
+      }
+    },
+    "D5": {
+      "DR1": {
+        "count": 70,
+        "first": "2025-06-08",
+        "last": "2025-12-14"
+      },
+      "QR3": {
+        "count": 19,
+        "first": "2026-06-21",
+        "last": "2026-06-23"
+      }
+    },
+    "D6": {
+      "DR1": {
+        "count": 552,
+        "first": "2025-04-24",
+        "last": "2026-05-13"
+      },
+      "QR3": {
+        "count": 21,
+        "first": "2026-05-16",
+        "last": "2026-06-12"
+      }
+    }
+  },
+  "spectrumPoints": 58,
   "frames": [
     {
-      "id": "r-dra-D3-6117636374",
-      "obsDate": "2026-05-16",
-      "mjd": 61176.363744,
+      "id": "r-dra-D3-6079069573",
+      "obsDate": "2025-04-25",
+      "mjd": 60790.695731,
       "detector": "D3",
-      "wavelengthUm": 1.6453,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 1.8652,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D3-6117636374.f32",
-        "flags": "r-dra-D3-6117636374.u8"
-      }
-    },
-    {
-      "id": "r-dra-D6-6117636374",
-      "obsDate": "2026-05-16",
-      "mjd": 61176.363744,
-      "detector": "D6",
-      "wavelengthUm": 4.4294,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
+      "flaggedPixels": 683,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6117636374.f32",
-        "flags": "r-dra-D6-6117636374.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6118172582",
-      "obsDate": "2026-05-21",
-      "mjd": 61181.725825,
-      "detector": "D3",
-      "wavelengthUm": 2.4089,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
-      "release": "QR3",
+      "flux": 670.6552912077761,
+      "fluxErr": 4.112733702942125,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
       "files": {
-        "pixels": "r-dra-D3-6118172582.f32",
-        "flags": "r-dra-D3-6118172582.u8"
-      }
+        "pixels": "r-dra-D3-6079069573.f32",
+        "flags": "r-dra-D3-6079069573.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.061
     },
     {
-      "id": "r-dra-D6-6118172582",
-      "obsDate": "2026-05-21",
-      "mjd": 61181.725825,
+      "id": "r-dra-D6-6079069573",
+      "obsDate": "2025-04-25",
+      "mjd": 60790.695731,
       "detector": "D6",
-      "wavelengthUm": 4.9997,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 4.6076,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 63
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6118172582.f32",
-        "flags": "r-dra-D6-6118172582.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6118213404",
-      "obsDate": "2026-05-22",
-      "mjd": 61182.134045,
-      "detector": "D3",
-      "wavelengthUm": 1.8014,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
+      "flaggedPixels": 728,
       "centrePixel": {
         "x": 72,
-        "y": 73
+        "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 252.1256507852856,
+      "fluxErr": 1.6836260296165928,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
       "files": {
-        "pixels": "r-dra-D3-6118213404.f32",
-        "flags": "r-dra-D3-6118213404.u8"
-      }
+        "pixels": "r-dra-D6-6079069573.f32",
+        "flags": "r-dra-D6-6079069573.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.031
+    },
+    {
+      "id": "r-dra-D3-6079259830",
+      "obsDate": "2025-04-27",
+      "mjd": 60792.598301,
+      "detector": "D3",
+      "wavelengthUm": 1.864,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 642,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 591.6067353656007,
+      "fluxErr": 3.704675670181663,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6079259830.f32",
+        "flags": "r-dra-D3-6079259830.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D6-6079259830",
+      "obsDate": "2025-04-27",
+      "mjd": 60792.598301,
+      "detector": "D6",
+      "wavelengthUm": 4.6067,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 721,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 236.13754814575515,
+      "fluxErr": 1.579548670907022,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6079259830.f32",
+        "flags": "r-dra-D6-6079259830.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.065
+    },
+    {
+      "id": "r-dra-D3-6079782707",
+      "obsDate": "2025-05-02",
+      "mjd": 60797.827068,
+      "detector": "D3",
+      "wavelengthUm": 1.619,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 326,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6079782707.f32",
+        "flags": "r-dra-D3-6079782707.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.316
+    },
+    {
+      "id": "r-dra-D3-6081569417",
+      "obsDate": "2025-05-20",
+      "mjd": 60815.694173,
+      "detector": "D3",
+      "wavelengthUm": 1.8548,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 600,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 756.362312678248,
+      "fluxErr": 4.667712206824132,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6081569417.f32",
+        "flags": "r-dra-D3-6081569417.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.041
+    },
+    {
+      "id": "r-dra-D6-6081569417",
+      "obsDate": "2025-05-20",
+      "mjd": 60815.694173,
+      "detector": "D6",
+      "wavelengthUm": 4.5989,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 714,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 350.7466673715121,
+      "fluxErr": 2.5767630921503626,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6081569417.f32",
+        "flags": "r-dra-D6-6081569417.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.012
+    },
+    {
+      "id": "r-dra-D1-6083247538",
+      "obsDate": "2025-06-06",
+      "mjd": 60832.47538,
+      "detector": "D1",
+      "wavelengthUm": 0.9661,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 594,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 449.1283090003012,
+      "fluxErr": 2.6762645612296176,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6083247538.f32",
+        "flags": "r-dra-D1-6083247538.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D4-6083247538",
+      "obsDate": "2025-06-06",
+      "mjd": 60832.47538,
+      "detector": "D4",
+      "wavelengthUm": 3.2556,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 984,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 760.3627723602448,
+      "fluxErr": 4.265412685577147,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D4-6083247538.f32",
+        "flags": "r-dra-D4-6083247538.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.033
+    },
+    {
+      "id": "r-dra-D2-6083478775",
+      "obsDate": "2025-06-08",
+      "mjd": 60834.787751,
+      "detector": "D2",
+      "wavelengthUm": 1.4047,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 376,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 334.3912194428622,
+      "fluxErr": 2.1555023380881537,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6083478775.f32",
+        "flags": "r-dra-D2-6083478775.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.023
+    },
+    {
+      "id": "r-dra-D5-6083478924",
+      "obsDate": "2025-06-08",
+      "mjd": 60834.789243,
+      "detector": "D5",
+      "wavelengthUm": 4.2157,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 746,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 404.55776141886673,
+      "fluxErr": 2.6063723462919954,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6083478924.f32",
+        "flags": "r-dra-D5-6083478924.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.035
+    },
+    {
+      "id": "r-dra-D3-6083825436",
+      "obsDate": "2025-06-12",
+      "mjd": 60838.254362,
+      "detector": "D3",
+      "wavelengthUm": 1.8613,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 750,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 486.4883173215609,
+      "fluxErr": 2.8941307273920422,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6083825436.f32",
+        "flags": "r-dra-D3-6083825436.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.056
+    },
+    {
+      "id": "r-dra-D6-6083825436",
+      "obsDate": "2025-06-12",
+      "mjd": 60838.254362,
+      "detector": "D6",
+      "wavelengthUm": 4.605,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 1040,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 274.73214654772534,
+      "fluxErr": 2.138388590367649,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6083825436.f32",
+        "flags": "r-dra-D6-6083825436.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.015
+    },
+    {
+      "id": "r-dra-D2-6085157271",
+      "obsDate": "2025-06-25",
+      "mjd": 60851.572707,
+      "detector": "D2",
+      "wavelengthUm": 1.4118,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 314,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 864.4432752018837,
+      "fluxErr": 7.029800441805495,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6085157271.f32",
+        "flags": "r-dra-D2-6085157271.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.174
+    },
+    {
+      "id": "r-dra-D2-6085890756",
+      "obsDate": "2025-07-02",
+      "mjd": 60858.90756,
+      "detector": "D2",
+      "wavelengthUm": 1.2467,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 571,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 926.0471594856575,
+      "fluxErr": 5.821220430105186,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6085890756.f32",
+        "flags": "r-dra-D2-6085890756.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.029
+    },
+    {
+      "id": "r-dra-D5-6085883790",
+      "obsDate": "2025-07-02",
+      "mjd": 60858.837904,
+      "detector": "D5",
+      "wavelengthUm": 4.2235,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 338,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6085883790.f32",
+        "flags": "r-dra-D5-6085883790.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.4
+    },
+    {
+      "id": "r-dra-D5-6085890756",
+      "obsDate": "2025-07-02",
+      "mjd": 60858.90756,
+      "detector": "D5",
+      "wavelengthUm": 4.0002,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 599,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 415.6276586260302,
+      "fluxErr": 2.573429760683313,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6085890756.f32",
+        "flags": "r-dra-D5-6085890756.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.023
+    },
+    {
+      "id": "r-dra-D1-6086345707",
+      "obsDate": "2025-07-07",
+      "mjd": 60863.457071,
+      "detector": "D1",
+      "wavelengthUm": 0.963,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 1158,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 401.7094080779736,
+      "fluxErr": 2.327525662850045,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6086345707.f32",
+        "flags": "r-dra-D1-6086345707.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.019
+    },
+    {
+      "id": "r-dra-D4-6086345707",
+      "obsDate": "2025-07-07",
+      "mjd": 60863.457071,
+      "detector": "D4",
+      "wavelengthUm": 3.2435,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 1956,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 703.0660689197157,
+      "fluxErr": 4.022360108218958,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D4-6086345707.f32",
+        "flags": "r-dra-D4-6086345707.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.158
+    },
+    {
+      "id": "r-dra-D1-6092404919",
+      "obsDate": "2025-09-06",
+      "mjd": 60924.049189,
+      "detector": "D1",
+      "wavelengthUm": 0.9651,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 626,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 194.10991450813472,
+      "fluxErr": 1.254691227676767,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6092404919.f32",
+        "flags": "r-dra-D1-6092404919.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.004
+    },
+    {
+      "id": "r-dra-D4-6092404919",
+      "obsDate": "2025-09-06",
+      "mjd": 60924.049189,
+      "detector": "D4",
+      "wavelengthUm": 3.2527,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 952,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 394.0471037378513,
+      "fluxErr": 2.3364170171269834,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D4-6092404919.f32",
+        "flags": "r-dra-D4-6092404919.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.075
+    },
+    {
+      "id": "r-dra-D1-6092764787",
+      "obsDate": "2025-09-09",
+      "mjd": 60927.647868,
+      "detector": "D1",
+      "wavelengthUm": 0.9885,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 690,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 219.2131195751481,
+      "fluxErr": 1.3497190057571617,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6092764787.f32",
+        "flags": "r-dra-D1-6092764787.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.023
+    },
+    {
+      "id": "r-dra-D1-6093661728",
+      "obsDate": "2025-09-18",
+      "mjd": 60936.617278,
+      "detector": "D1",
+      "wavelengthUm": 0.9667,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 526,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 182.28698834438396,
+      "fluxErr": 1.1914145600197927,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6093661728.f32",
+        "flags": "r-dra-D1-6093661728.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.015
+    },
+    {
+      "id": "r-dra-D4-6093661728",
+      "obsDate": "2025-09-18",
+      "mjd": 60936.617278,
+      "detector": "D4",
+      "wavelengthUm": 3.258,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 913,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 377.3087965052611,
+      "fluxErr": 2.303223186949435,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D4-6093661728.f32",
+        "flags": "r-dra-D4-6093661728.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.083
+    },
+    {
+      "id": "r-dra-D4-6096704137",
+      "obsDate": "2025-10-19",
+      "mjd": 60967.04137,
+      "detector": "D4",
+      "wavelengthUm": 3.2483,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 711,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 363.9689209011326,
+      "fluxErr": 2.1074161610866744,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D4-6096704137.f32",
+        "flags": "r-dra-D4-6096704137.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D1-6098483779",
+      "obsDate": "2025-11-05",
+      "mjd": 60984.83779,
+      "detector": "D1",
+      "wavelengthUm": 0.9564,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 640,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 222.45003316378492,
+      "fluxErr": 1.442904610981493,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6098483779.f32",
+        "flags": "r-dra-D1-6098483779.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.008
+    },
+    {
+      "id": "r-dra-D1-6099345949",
+      "obsDate": "2025-11-14",
+      "mjd": 60993.459488,
+      "detector": "D1",
+      "wavelengthUm": 0.8646,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 553,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 106.67863013470098,
+      "fluxErr": 0.7266181596826833,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D1-6099345949.f32",
+        "flags": "r-dra-D1-6099345949.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.05
+    },
+    {
+      "id": "r-dra-D2-6099773274",
+      "obsDate": "2025-11-18",
+      "mjd": 60997.732738,
+      "detector": "D2",
+      "wavelengthUm": 1.4096,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 530,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 194.95573912334484,
+      "fluxErr": 1.4201781024518787,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6099773274.f32",
+        "flags": "r-dra-D2-6099773274.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D5-6099773423",
+      "obsDate": "2025-11-18",
+      "mjd": 60997.73423,
+      "detector": "D5",
+      "wavelengthUm": 4.2213,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 781,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 257.77062609976934,
+      "fluxErr": 1.6261809046833158,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6099773423.f32",
+        "flags": "r-dra-D5-6099773423.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.062
+    },
+    {
+      "id": "r-dra-D5-6100948174",
+      "obsDate": "2025-11-30",
+      "mjd": 61009.48174,
+      "detector": "D5",
+      "wavelengthUm": 3.7972,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 165,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6100948174.f32",
+        "flags": "r-dra-D5-6100948174.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.669
+    },
+    {
+      "id": "r-dra-D2-6101213174",
+      "obsDate": "2025-12-03",
+      "mjd": 61012.131735,
+      "detector": "D2",
+      "wavelengthUm": 1.4017,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 514,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 654.2276062059908,
+      "fluxErr": 3.4709121112245427,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6101213174.f32",
+        "flags": "r-dra-D2-6101213174.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D5-6101213174",
+      "obsDate": "2025-12-03",
+      "mjd": 61012.131735,
+      "detector": "D5",
+      "wavelengthUm": 4.1767,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 788,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 290.714801683808,
+      "fluxErr": 1.8400960455354303,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6101213174.f32",
+        "flags": "r-dra-D5-6101213174.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.008
+    },
+    {
+      "id": "r-dra-D2-6101987199",
+      "obsDate": "2025-12-10",
+      "mjd": 61019.871989,
+      "detector": "D2",
+      "wavelengthUm": 1.4057,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 406,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 518.6200987594037,
+      "fluxErr": 3.619061262872876,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6101987199.f32",
+        "flags": "r-dra-D2-6101987199.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.0
+    },
+    {
+      "id": "r-dra-D5-6101987348",
+      "obsDate": "2025-12-10",
+      "mjd": 61019.873482,
+      "detector": "D5",
+      "wavelengthUm": 4.2169,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 587,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 283.9727864387695,
+      "fluxErr": 1.8397135975694068,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6101987348.f32",
+        "flags": "r-dra-D5-6101987348.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.008
+    },
+    {
+      "id": "r-dra-D2-6102163861",
+      "obsDate": "2025-12-12",
+      "mjd": 61021.638606,
+      "detector": "D2",
+      "wavelengthUm": 1.6589,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 435,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 1042.0860245521405,
+      "fluxErr": 5.815101155264741,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D2-6102163861.f32",
+        "flags": "r-dra-D2-6102163861.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.076
+    },
+    {
+      "id": "r-dra-D5-6102163861",
+      "obsDate": "2025-12-12",
+      "mjd": 61021.638606,
+      "detector": "D5",
+      "wavelengthUm": 4.4298,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 3200,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D5-6102163861.f32",
+        "flags": "r-dra-D5-6102163861.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.692
+    },
+    {
+      "id": "r-dra-D6-6103555898",
+      "obsDate": "2025-12-26",
+      "mjd": 61035.55898,
+      "detector": "D6",
+      "wavelengthUm": 4.5892,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 758,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 218.86055393695338,
+      "fluxErr": 1.5589201458094717,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6103555898.f32",
+        "flags": "r-dra-D6-6103555898.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.008
+    },
+    {
+      "id": "r-dra-D3-6109102547",
+      "obsDate": "2026-02-20",
+      "mjd": 61091.025469,
+      "detector": "D3",
+      "wavelengthUm": 2.0936,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 850,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 1766.9423586750056,
+      "fluxErr": 10.501617096965685,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6109102547.f32",
+        "flags": "r-dra-D3-6109102547.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.066
+    },
+    {
+      "id": "r-dra-D3-6110046368",
+      "obsDate": "2026-03-01",
+      "mjd": 61100.463678,
+      "detector": "D3",
+      "wavelengthUm": 1.8241,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 663,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 1563.684056000546,
+      "fluxErr": 9.292433519355496,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6110046368.f32",
+        "flags": "r-dra-D3-6110046368.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.107
+    },
+    {
+      "id": "r-dra-D6-6112090241",
+      "obsDate": "2026-03-21",
+      "mjd": 61120.902414,
+      "detector": "D6",
+      "wavelengthUm": 4.5953,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 731,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 237.5291263893837,
+      "fluxErr": 1.7915812125679973,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6112090241.f32",
+        "flags": "r-dra-D6-6112090241.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.019
+    },
+    {
+      "id": "r-dra-D3-6112286713",
+      "obsDate": "2026-03-23",
+      "mjd": 61122.867127,
+      "detector": "D3",
+      "wavelengthUm": 1.8498,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 2735,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 337.99957743841145,
+      "fluxErr": 2.192504516975292,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6112286713.f32",
+        "flags": "r-dra-D3-6112286713.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.097
+    },
+    {
+      "id": "r-dra-D3-6112314364",
+      "obsDate": "2026-03-24",
+      "mjd": 61123.143638,
+      "detector": "D3",
+      "wavelengthUm": 2.4215,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 351,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 391.06103955058745,
+      "fluxErr": 3.0376332919788616,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6112314364.f32",
+        "flags": "r-dra-D3-6112314364.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.02
+    },
+    {
+      "id": "r-dra-D6-6112314364",
+      "obsDate": "2026-03-24",
+      "mjd": 61123.143638,
+      "detector": "D6",
+      "wavelengthUm": 5.0121,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 302,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6112314364.f32",
+        "flags": "r-dra-D6-6112314364.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.315
+    },
+    {
+      "id": "r-dra-D6-6112701165",
+      "obsDate": "2026-03-28",
+      "mjd": 61127.011651,
+      "detector": "D6",
+      "wavelengthUm": 4.7733,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 824,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 235.85983900178294,
+      "fluxErr": 1.6893929755683386,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6112701165.f32",
+        "flags": "r-dra-D6-6112701165.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.015
+    },
+    {
+      "id": "r-dra-D3-6114445477",
+      "obsDate": "2026-04-14",
+      "mjd": 61144.454773,
+      "detector": "D3",
+      "wavelengthUm": 1.8647,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 611,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 543.260546020062,
+      "fluxErr": 3.308872209058002,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6114445477.f32",
+        "flags": "r-dra-D3-6114445477.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.036
+    },
+    {
+      "id": "r-dra-D6-6114439123",
+      "obsDate": "2026-04-14",
+      "mjd": 61144.391228,
+      "detector": "D6",
+      "wavelengthUm": 4.5741,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 627,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 180.46663411414022,
+      "fluxErr": 1.2902524562705857,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6114439123.f32",
+        "flags": "r-dra-D6-6114439123.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.081
+    },
+    {
+      "id": "r-dra-D6-6116652625",
+      "obsDate": "2026-05-06",
+      "mjd": 61166.526248,
+      "detector": "D6",
+      "wavelengthUm": 4.4003,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 471,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D6-6116652625.f32",
+        "flags": "r-dra-D6-6116652625.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.638
+    },
+    {
+      "id": "r-dra-D3-6117080058",
+      "obsDate": "2026-05-10",
+      "mjd": 61170.800582,
+      "detector": "D3",
+      "wavelengthUm": 1.8546,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 530,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 250.63293108092734,
+      "fluxErr": 1.524937928847861,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "DR1",
+      "files": {
+        "pixels": "r-dra-D3-6117080058.f32",
+        "flags": "r-dra-D3-6117080058.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.031
     },
     {
       "id": "r-dra-D6-6118213554",
@@ -135,903 +1879,649 @@
       "mjd": 61182.135538,
       "detector": "D6",
       "wavelengthUm": 4.5903,
-      "width": 148,
-      "height": 148,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 551,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 148.30624888173406,
+      "fluxErr": 1.2373883095558247,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
         "pixels": "r-dra-D6-6118213554.f32",
         "flags": "r-dra-D6-6118213554.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6118349050",
-      "obsDate": "2026-05-23",
-      "mjd": 61183.490505,
-      "detector": "D3",
-      "wavelengthUm": 1.93,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D3-6118349050.f32",
-        "flags": "r-dra-D3-6118349050.u8"
-      }
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.038
     },
     {
-      "id": "r-dra-D6-6118349200",
-      "obsDate": "2026-05-23",
-      "mjd": 61183.491997,
-      "detector": "D6",
-      "wavelengthUm": 4.6915,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6118349200.f32",
-        "flags": "r-dra-D6-6118349200.u8"
-      }
-    },
-    {
-      "id": "r-dra-D6-6118349498",
-      "obsDate": "2026-05-23",
-      "mjd": 61183.494982,
-      "detector": "D6",
-      "wavelengthUm": 4.7596,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6118349498.f32",
-        "flags": "r-dra-D6-6118349498.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6119897313",
-      "obsDate": "2026-06-07",
-      "mjd": 61198.97313,
-      "detector": "D3",
-      "wavelengthUm": 1.6275,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D3-6119897313.f32",
-        "flags": "r-dra-D3-6119897313.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6119958270",
-      "obsDate": "2026-06-08",
-      "mjd": 61199.582698,
-      "detector": "D3",
-      "wavelengthUm": 1.743,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D3-6119958270.f32",
-        "flags": "r-dra-D3-6119958270.u8"
-      }
-    },
-    {
-      "id": "r-dra-D6-6119958121",
-      "obsDate": "2026-06-08",
-      "mjd": 61199.581206,
-      "detector": "D6",
-      "wavelengthUm": 4.4782,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6119958121.f32",
-        "flags": "r-dra-D6-6119958121.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6120385643",
+      "id": "r-dra-D3-6120385792",
       "obsDate": "2026-06-12",
-      "mjd": 61203.856428,
+      "mjd": 61203.85792,
       "detector": "D3",
-      "wavelengthUm": 1.825,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 1.8675,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 484,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D3-6120385643.f32",
-        "flags": "r-dra-D3-6120385643.u8"
-      }
-    },
-    {
-      "id": "r-dra-D3-6120386090",
-      "obsDate": "2026-06-12",
-      "mjd": 61203.860905,
-      "detector": "D3",
-      "wavelengthUm": 1.9552,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
+      "flux": 74.06816412468618,
+      "fluxErr": 0.5972504078276435,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D3-6120386090.f32",
-        "flags": "r-dra-D3-6120386090.u8"
-      }
+        "pixels": "r-dra-D3-6120385792.f32",
+        "flags": "r-dra-D3-6120385792.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        9.5,
+        12.5
+      ],
+      "wingMaskedFraction": 0.071
     },
     {
-      "id": "r-dra-D6-6120385643",
+      "id": "r-dra-D6-6120385792",
       "obsDate": "2026-06-12",
-      "mjd": 61203.856428,
+      "mjd": 61203.85792,
       "detector": "D6",
-      "wavelengthUm": 4.5762,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 4.6098,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 631,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 142.82233462621502,
+      "fluxErr": 1.0727883845942752,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D6-6120385643.f32",
-        "flags": "r-dra-D6-6120385643.u8"
-      }
+        "pixels": "r-dra-D6-6120385792.f32",
+        "flags": "r-dra-D6-6120385792.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.0
     },
     {
-      "id": "r-dra-D6-6120386090",
-      "obsDate": "2026-06-12",
-      "mjd": 61203.860905,
-      "detector": "D6",
-      "wavelengthUm": 4.6776,
-      "width": 148,
-      "height": 148,
+      "id": "r-dra-D5-6121261827",
+      "obsDate": "2026-06-21",
+      "mjd": 61212.618274,
+      "detector": "D5",
+      "wavelengthUm": 4.2324,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 1097,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D6-6120386090.f32",
-        "flags": "r-dra-D6-6120386090.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121214242",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.142422,
-      "detector": "D2",
-      "wavelengthUm": 1.2628,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
+      "flux": 180.26587570122797,
+      "fluxErr": 1.2428555607309075,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D2-6121214242.f32",
-        "flags": "r-dra-D2-6121214242.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121214690",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.146899,
-      "detector": "D2",
-      "wavelengthUm": 1.355,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
+        "pixels": "r-dra-D5-6121261827.f32",
+        "flags": "r-dra-D5-6121261827.u8"
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121214690.f32",
-        "flags": "r-dra-D2-6121214690.u8"
-      }
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.073
     },
     {
-      "id": "r-dra-D2-6121261977",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.619766,
-      "detector": "D2",
-      "wavelengthUm": 1.4898,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121261977.f32",
-        "flags": "r-dra-D2-6121261977.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121268578",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.685781,
-      "detector": "D2",
-      "wavelengthUm": 1.6006,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121268578.f32",
-        "flags": "r-dra-D2-6121268578.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121214242",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.142422,
-      "detector": "D5",
-      "wavelengthUm": 4.0188,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121214242.f32",
-        "flags": "r-dra-D5-6121214242.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121214690",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.146899,
-      "detector": "D5",
-      "wavelengthUm": 4.1249,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121214690.f32",
-        "flags": "r-dra-D5-6121214690.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121261977",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.619766,
-      "detector": "D5",
-      "wavelengthUm": 4.2689,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121261977.f32",
-        "flags": "r-dra-D5-6121261977.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121268578",
-      "obsDate": "2026-06-21",
-      "mjd": 61212.685781,
-      "detector": "D5",
-      "wavelengthUm": 4.3793,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121268578.f32",
-        "flags": "r-dra-D5-6121268578.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121322905",
+      "id": "r-dra-D2-6121323054",
       "obsDate": "2026-06-22",
-      "mjd": 61213.229051,
+      "mjd": 61213.230543,
       "detector": "D2",
-      "wavelengthUm": 1.3869,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 1.4204,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 545,
       "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121322905.f32",
-        "flags": "r-dra-D2-6121322905.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121322905",
-      "obsDate": "2026-06-22",
-      "mjd": 61213.229051,
-      "detector": "D5",
-      "wavelengthUm": 4.1605,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
+        "x": 72,
         "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 160.92338318427272,
+      "fluxErr": 1.1677038717385333,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D5-6121322905.f32",
-        "flags": "r-dra-D5-6121322905.u8"
-      }
+        "pixels": "r-dra-D2-6121323054.f32",
+        "flags": "r-dra-D2-6121323054.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.041
     },
     {
-      "id": "r-dra-D2-6121411319",
+      "id": "r-dra-D2-6121424984",
       "obsDate": "2026-06-23",
-      "mjd": 61214.113194,
+      "mjd": 61214.249842,
       "detector": "D2",
-      "wavelengthUm": 1.2584,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 1.093,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121411319.f32",
-        "flags": "r-dra-D2-6121411319.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121425133",
-      "obsDate": "2026-06-23",
-      "mjd": 61214.251334,
-      "detector": "D2",
-      "wavelengthUm": 1.1187,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121425133.f32",
-        "flags": "r-dra-D2-6121425133.u8"
-      }
-    },
-    {
-      "id": "r-dra-D2-6121445368",
-      "obsDate": "2026-06-23",
-      "mjd": 61214.453677,
-      "detector": "D2",
-      "wavelengthUm": 1.2005,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 72
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D2-6121445368.f32",
-        "flags": "r-dra-D2-6121445368.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121411319",
-      "obsDate": "2026-06-23",
-      "mjd": 61214.113194,
-      "detector": "D5",
-      "wavelengthUm": 4.0138,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121411319.f32",
-        "flags": "r-dra-D5-6121411319.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121425133",
-      "obsDate": "2026-06-23",
-      "mjd": 61214.251334,
-      "detector": "D5",
-      "wavelengthUm": 3.844,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121425133.f32",
-        "flags": "r-dra-D5-6121425133.u8"
-      }
-    },
-    {
-      "id": "r-dra-D5-6121445368",
-      "obsDate": "2026-06-23",
-      "mjd": 61214.453677,
-      "detector": "D5",
-      "wavelengthUm": 3.9448,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D5-6121445368.f32",
-        "flags": "r-dra-D5-6121445368.u8"
-      }
-    },
-    {
-      "id": "r-dra-D1-6122748453",
-      "obsDate": "2026-07-06",
-      "mjd": 61227.484528,
-      "detector": "D1",
-      "wavelengthUm": 1.0082,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
+      "flaggedPixels": 434,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D1-6122748453.f32",
-        "flags": "r-dra-D1-6122748453.u8"
-      }
-    },
-    {
-      "id": "r-dra-D4-6122748453",
-      "obsDate": "2026-07-06",
-      "mjd": 61227.484528,
-      "detector": "D4",
-      "wavelengthUm": 3.4181,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 73
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
+      "flux": 721.6205923890933,
+      "fluxErr": 3.9112808575977245,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D4-6122748453.f32",
-        "flags": "r-dra-D4-6122748453.u8"
-      }
+        "pixels": "r-dra-D2-6121424984.f32",
+        "flags": "r-dra-D2-6121424984.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        7.5,
+        10.5
+      ],
+      "wingMaskedFraction": 0.0
     },
     {
-      "id": "r-dra-D1-6125273705",
-      "obsDate": "2026-07-31",
-      "mjd": 61252.737053,
+      "id": "r-dra-D1-6123094794",
+      "obsDate": "2026-07-09",
+      "mjd": 61230.947945,
       "detector": "D1",
-      "wavelengthUm": 0.7951,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 0.9619,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D1-6125273705.f32",
-        "flags": "r-dra-D1-6125273705.u8"
-      }
-    },
-    {
-      "id": "r-dra-D4-6125280355",
-      "obsDate": "2026-07-31",
-      "mjd": 61252.803547,
-      "detector": "D4",
-      "wavelengthUm": 2.6452,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D4-6125280355.f32",
-        "flags": "r-dra-D4-6125280355.u8"
-      }
-    },
-    {
-      "id": "r-dra-D1-6126237693",
-      "obsDate": "2026-08-10",
-      "mjd": 61262.376931,
-      "detector": "D1",
-      "wavelengthUm": 1.0535,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D1-6126237693.f32",
-        "flags": "r-dra-D1-6126237693.u8"
-      }
-    },
-    {
-      "id": "r-dra-D4-6126244165",
-      "obsDate": "2026-08-10",
-      "mjd": 61262.441649,
-      "detector": "D4",
-      "wavelengthUm": 2.7467,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
-      },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D4-6126244165.f32",
-        "flags": "r-dra-D4-6126244165.u8"
-      }
-    },
-    {
-      "id": "r-dra-D1-6127269419",
-      "obsDate": "2026-08-20",
-      "mjd": 61272.694186,
-      "detector": "D1",
-      "wavelengthUm": 0.8625,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
+      "flaggedPixels": 699,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D1-6127269419.f32",
-        "flags": "r-dra-D1-6127269419.u8"
-      }
-    },
-    {
-      "id": "r-dra-D4-6127269269",
-      "obsDate": "2026-08-20",
-      "mjd": 61272.692694,
-      "detector": "D4",
-      "wavelengthUm": 2.7829,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
+      "flux": 231.18574164744572,
+      "fluxErr": 1.4439511116945283,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D4-6127269269.f32",
-        "flags": "r-dra-D4-6127269269.u8"
-      }
-    },
-    {
-      "id": "r-dra-D1-6127778130",
-      "obsDate": "2026-08-25",
-      "mjd": 61277.7813,
-      "detector": "D1",
-      "wavelengthUm": 1.1105,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 72,
-        "y": 48
+        "pixels": "r-dra-D1-6123094794.f32",
+        "flags": "r-dra-D1-6123094794.u8"
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D1-6127778130.f32",
-        "flags": "r-dra-D1-6127778130.u8"
-      }
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.008
     },
     {
-      "id": "r-dra-D4-6127765169",
-      "obsDate": "2026-08-25",
-      "mjd": 61277.651688,
+      "id": "r-dra-D4-6123094794",
+      "obsDate": "2026-07-09",
+      "mjd": 61230.947945,
       "detector": "D4",
-      "wavelengthUm": 3.6147,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 3.2398,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 1034,
       "centrePixel": {
         "x": 72,
         "y": 72
       },
-      "centreFlux": null,
-      "release": "QR3",
-      "files": {
-        "pixels": "r-dra-D4-6127765169.f32",
-        "flags": "r-dra-D4-6127765169.u8"
-      }
-    },
-    {
-      "id": "r-dra-D1-6128436879",
-      "obsDate": "2026-09-01",
-      "mjd": 61284.368789,
-      "detector": "D1",
-      "wavelengthUm": 0.9515,
-      "width": 148,
-      "height": 148,
-      "pixelScaleArcsec": 6.2,
-      "hasFlags": true,
-      "centrePixel": {
-        "x": 73,
-        "y": 73
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
       },
-      "centreFlux": null,
+      "flux": 381.7232555294566,
+      "fluxErr": 2.3065614188630676,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D1-6128436879.f32",
-        "flags": "r-dra-D1-6128436879.u8"
-      }
+        "pixels": "r-dra-D4-6123094794.f32",
+        "flags": "r-dra-D4-6123094794.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.067
     },
     {
-      "id": "r-dra-D4-6128436580",
-      "obsDate": "2026-09-01",
-      "mjd": 61284.365804,
-      "detector": "D4",
-      "wavelengthUm": 3.0315,
-      "width": 148,
-      "height": 148,
+      "id": "r-dra-D1-6123196765",
+      "obsDate": "2026-07-10",
+      "mjd": 61231.967652,
+      "detector": "D1",
+      "wavelengthUm": 0.7355,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 370,
       "centrePixel": {
         "x": 72,
-        "y": 73
+        "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D4-6128436580.f32",
-        "flags": "r-dra-D4-6128436580.u8"
-      }
+        "pixels": "r-dra-D1-6123196765.f32",
+        "flags": "r-dra-D1-6123196765.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.508
     },
     {
-      "id": "r-dra-D4-6129271794",
-      "obsDate": "2026-09-09",
-      "mjd": 61292.717938,
+      "id": "r-dra-D4-6123671921",
+      "obsDate": "2026-07-15",
+      "mjd": 61236.719206,
       "detector": "D4",
-      "wavelengthUm": 3.7881,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 2.404,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 676,
       "centrePixel": {
         "x": 72,
-        "y": 58
+        "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 302.21959289562,
+      "fluxErr": 2.2008342070991174,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D4-6129271794.f32",
-        "flags": "r-dra-D4-6129271794.u8"
-      }
+        "pixels": "r-dra-D4-6123671921.f32",
+        "flags": "r-dra-D4-6123671921.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.183
     },
     {
-      "id": "r-dra-D1-6129373224",
-      "obsDate": "2026-09-10",
-      "mjd": 61293.732245,
+      "id": "r-dra-D1-6123787323",
+      "obsDate": "2026-07-16",
+      "mjd": 61237.873234,
       "detector": "D1",
-      "wavelengthUm": 1.0185,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 1.1224,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 383,
       "centrePixel": {
-        "x": 73,
-        "y": 73
+        "x": 72,
+        "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": null,
+      "fluxErr": null,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D1-6129373224.f32",
-        "flags": "r-dra-D1-6129373224.u8"
-      }
+        "pixels": "r-dra-D1-6123787323.f32",
+        "flags": "r-dra-D1-6123787323.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.415
     },
     {
-      "id": "r-dra-D4-6130846188",
-      "obsDate": "2026-09-25",
-      "mjd": 61308.461884,
+      "id": "r-dra-D4-6127337613",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.376129,
       "detector": "D4",
-      "wavelengthUm": 3.7843,
-      "width": 148,
-      "height": 148,
+      "wavelengthUm": 3.8383,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 515,
       "centrePixel": {
-        "x": 73,
-        "y": 41
+        "x": 72,
+        "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 566.7273272142615,
+      "fluxErr": 3.7159454489052193,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D4-6130846188.f32",
-        "flags": "r-dra-D4-6130846188.u8"
-      }
+        "pixels": "r-dra-D4-6127337613.f32",
+        "flags": "r-dra-D4-6127337613.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.221
     },
     {
-      "id": "r-dra-D1-6131029118",
-      "obsDate": "2026-09-27",
-      "mjd": 61310.291175,
-      "detector": "D1",
-      "wavelengthUm": 1.1134,
-      "width": 148,
-      "height": 148,
+      "id": "r-dra-D4-6127357712",
+      "obsDate": "2026-08-21",
+      "mjd": 61273.577121,
+      "detector": "D4",
+      "wavelengthUm": 2.8602,
+      "width": 145,
+      "height": 145,
       "pixelScaleArcsec": 6.2,
       "hasFlags": true,
+      "flaggedPixels": 944,
       "centrePixel": {
-        "x": 73,
-        "y": 6
+        "x": 72,
+        "y": 72
       },
-      "centreFlux": null,
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 268.4692711833311,
+      "fluxErr": 1.6129718611317398,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
       "release": "QR3",
       "files": {
-        "pixels": "r-dra-D1-6131029118.f32",
-        "flags": "r-dra-D1-6131029118.u8"
-      }
+        "pixels": "r-dra-D4-6127357712.f32",
+        "flags": "r-dra-D4-6127357712.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.029
+    },
+    {
+      "id": "r-dra-D4-6127574803",
+      "obsDate": "2026-08-23",
+      "mjd": 61275.748032,
+      "detector": "D4",
+      "wavelengthUm": 3.3381,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 1162,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 301.0734699259492,
+      "fluxErr": 1.804163184119988,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "QR3",
+      "files": {
+        "pixels": "r-dra-D4-6127574803.f32",
+        "flags": "r-dra-D4-6127574803.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.046
+    },
+    {
+      "id": "r-dra-D1-6128029772",
+      "obsDate": "2026-08-28",
+      "mjd": 61280.297722,
+      "detector": "D1",
+      "wavelengthUm": 0.9579,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 675,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 446.02623708407464,
+      "fluxErr": 2.994989370845362,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "QR3",
+      "files": {
+        "pixels": "r-dra-D1-6128029772.f32",
+        "flags": "r-dra-D1-6128029772.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.004
+    },
+    {
+      "id": "r-dra-D4-6128029772",
+      "obsDate": "2026-08-28",
+      "mjd": 61280.297722,
+      "detector": "D4",
+      "wavelengthUm": 3.2263,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 952,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 385.76222424804524,
+      "fluxErr": 2.238297200572191,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "QR3",
+      "files": {
+        "pixels": "r-dra-D4-6128029772.f32",
+        "flags": "r-dra-D4-6128029772.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.096
+    },
+    {
+      "id": "r-dra-D1-6130045471",
+      "obsDate": "2026-09-17",
+      "mjd": 61300.454711,
+      "detector": "D1",
+      "wavelengthUm": 0.9612,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 621,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 449.0983354389401,
+      "fluxErr": 2.5896367849352675,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "QR3",
+      "files": {
+        "pixels": "r-dra-D1-6130045471.f32",
+        "flags": "r-dra-D1-6130045471.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        12.5,
+        15.5
+      ],
+      "wingMaskedFraction": 0.046
+    },
+    {
+      "id": "r-dra-D4-6130045471",
+      "obsDate": "2026-09-17",
+      "mjd": 61300.454711,
+      "detector": "D4",
+      "wavelengthUm": 3.2374,
+      "width": 145,
+      "height": 145,
+      "pixelScaleArcsec": 6.2,
+      "hasFlags": true,
+      "flaggedPixels": 893,
+      "centrePixel": {
+        "x": 72,
+        "y": 72
+      },
+      "targetPixel": {
+        "x": 72.0,
+        "y": 72.0
+      },
+      "flux": 531.3732192538955,
+      "fluxErr": 3.22859473172933,
+      "fluxUnit": "mJy",
+      "apertureMaskedFraction": 1.0,
+      "saturated": true,
+      "release": "QR3",
+      "files": {
+        "pixels": "r-dra-D4-6130045471.f32",
+        "flags": "r-dra-D4-6130045471.u8"
+      },
+      "fluxMethod": "wing",
+      "wingRingPx": [
+        11.0,
+        14.0
+      ],
+      "wingMaskedFraction": 0.029
     }
   ],
+  "stacks": [],
   "skippedLastRun": []
 }

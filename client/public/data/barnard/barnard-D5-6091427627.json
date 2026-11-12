@@ -3,17 +3,26 @@
   "obsDate": "2025-08-27",
   "mjd": 60914.276271,
   "detector": "D5",
-  "wavelengthUm": 3.9838,
-  "width": 148,
-  "height": 148,
+  "wavelengthUm": 3.9901,
+  "width": 145,
+  "height": 145,
   "pixelScaleArcsec": 6.2,
   "hasFlags": true,
+  "flaggedPixels": 588,
   "centrePixel": {
-    "x": 73,
-    "y": 73
+    "x": 72,
+    "y": 72
   },
-  "centreFlux": 1428.4979248046875,
-  "release": "QR2",
+  "targetPixel": {
+    "x": 71.97,
+    "y": 71.59
+  },
+  "flux": null,
+  "fluxErr": null,
+  "fluxUnit": "mJy",
+  "apertureMaskedFraction": 1.0,
+  "saturated": true,
+  "release": "DR1",
   "files": {
     "pixels": "barnard-D5-6091427627.f32",
     "flags": "barnard-D5-6091427627.u8"

@@ -1,0 +1,856 @@
+{
+  "barnard": {
+    "name": "Barnard's Star",
+    "defaultDetector": "D5",
+    "detectors": {
+      "D1": {
+        "frames": 3,
+        "dates": [
+          "2025-09-01",
+          "2026-08-25"
+        ],
+        "wavelengths": [
+          1.016,
+          1.017,
+          1.022
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D1-6111063577",
+            "date": "2026-03-11",
+            "corr0": 0.861,
+            "bestRotationDeg": 0,
+            "corrBest": 0.861,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D1-6127779022",
+            "date": "2026-08-25",
+            "corr0": 0.885,
+            "bestRotationDeg": 0,
+            "corrBest": 0.885,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.861,
+        "anyRotation": false,
+        "expectedShiftPx": 1.65,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          139.74011709236908,
+          151.09786513608452,
+          151.8863149329745
+        ],
+        "status": "ok"
+      },
+      "D2": {
+        "frames": 5,
+        "dates": [
+          "2025-08-25",
+          "2026-09-22"
+        ],
+        "wavelengths": [
+          1.503,
+          1.512,
+          1.516,
+          1.517
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D2-6111403499",
+            "date": "2026-03-15",
+            "corr0": 0.927,
+            "bestRotationDeg": 0,
+            "corrBest": 0.927,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D2-6127086712",
+            "date": "2026-08-18",
+            "corr0": 0.923,
+            "bestRotationDeg": 0,
+            "corrBest": 0.923,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D2-6127378822",
+            "date": "2026-08-21",
+            "corr0": 0.9,
+            "bestRotationDeg": 0,
+            "corrBest": 0.9,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D2-6130562802",
+            "date": "2026-09-22",
+            "corr0": 0.934,
+            "bestRotationDeg": 0,
+            "corrBest": 0.934,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.9,
+        "anyRotation": false,
+        "expectedShiftPx": 1.81,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          115.59707756081316,
+          74.53141874461411,
+          104.30481134807299,
+          103.92076251057907,
+          142.06682915463284
+        ],
+        "status": "ok"
+      },
+      "D3": {
+        "frames": 3,
+        "dates": [
+          "2025-08-25",
+          "2026-05-04"
+        ],
+        "wavelengths": [
+          2.1,
+          2.106,
+          2.107
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D3-6111838152",
+            "date": "2026-03-19",
+            "corr0": 0.926,
+            "bestRotationDeg": 0,
+            "corrBest": 0.926,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D3-6116413313",
+            "date": "2026-05-04",
+            "corr0": 0.935,
+            "bestRotationDeg": 0,
+            "corrBest": 0.935,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.926,
+        "anyRotation": false,
+        "expectedShiftPx": 1.15,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          149.2199011448941,
+          100.53305217288052,
+          168.06850516422884
+        ],
+        "status": "ok"
+      },
+      "D4": {
+        "frames": 3,
+        "dates": [
+          "2025-09-01",
+          "2026-08-25"
+        ],
+        "wavelengths": [
+          3.449,
+          3.452,
+          3.473
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D4-6111063577",
+            "date": "2026-03-11",
+            "corr0": 0.853,
+            "bestRotationDeg": 0,
+            "corrBest": 0.853,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D4-6127779022",
+            "date": "2026-08-25",
+            "corr0": 0.925,
+            "bestRotationDeg": 0,
+            "corrBest": 0.925,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.853,
+        "anyRotation": false,
+        "expectedShiftPx": 1.65,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          91.08633378808169,
+          90.36804811737122,
+          83.8471223864371
+        ],
+        "status": "ok"
+      },
+      "D5": {
+        "frames": 5,
+        "dates": [
+          "2025-08-25",
+          "2026-09-22"
+        ],
+        "wavelengths": [
+          4.282,
+          4.291,
+          4.296
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D5-6111403499",
+            "date": "2026-03-15",
+            "corr0": 0.874,
+            "bestRotationDeg": 0,
+            "corrBest": 0.874,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D5-6127086712",
+            "date": "2026-08-18",
+            "corr0": 0.88,
+            "bestRotationDeg": 0,
+            "corrBest": 0.88,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D5-6127378822",
+            "date": "2026-08-21",
+            "corr0": 0.817,
+            "bestRotationDeg": 0,
+            "corrBest": 0.817,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D5-6130562802",
+            "date": "2026-09-22",
+            "corr0": 0.9,
+            "bestRotationDeg": 0,
+            "corrBest": 0.9,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.817,
+        "anyRotation": false,
+        "expectedShiftPx": 1.81,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          84.29791442814799,
+          84.40582205530679,
+          77.38329572580119,
+          75.65303105322222,
+          86.20682361883064
+        ],
+        "status": "ok"
+      },
+      "D6": {
+        "frames": 5,
+        "dates": [
+          "2025-08-25",
+          "2026-08-19"
+        ],
+        "wavelengths": [
+          4.785,
+          4.789,
+          4.801,
+          4.823
+        ],
+        "pairs": [
+          {
+            "frame": "barnard-D6-6111838152",
+            "date": "2026-03-19",
+            "corr0": 0.788,
+            "bestRotationDeg": 0,
+            "corrBest": 0.788,
+            "status": "weak"
+          },
+          {
+            "frame": "barnard-D6-6116413313",
+            "date": "2026-05-04",
+            "corr0": 0.746,
+            "bestRotationDeg": 0,
+            "corrBest": 0.746,
+            "status": "weak"
+          },
+          {
+            "frame": "barnard-D6-6116460712",
+            "date": "2026-05-04",
+            "corr0": 0.823,
+            "bestRotationDeg": 0,
+            "corrBest": 0.823,
+            "status": "ok"
+          },
+          {
+            "frame": "barnard-D6-6127120906",
+            "date": "2026-08-19",
+            "corr0": 0.768,
+            "bestRotationDeg": 0,
+            "corrBest": 0.768,
+            "status": "weak"
+          }
+        ],
+        "minCorr0": 0.746,
+        "anyRotation": false,
+        "expectedShiftPx": 1.64,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          81.2254460693116,
+          79.73253610269276,
+          80.49852117261527,
+          77.01829696421889,
+          82.0659757537634
+        ],
+        "status": "weak"
+      }
+    }
+  },
+  "r-dra": {
+    "name": "R Draconis",
+    "defaultDetector": "D3",
+    "detectors": {
+      "D1": {
+        "frames": 8,
+        "dates": [
+          "2025-06-06",
+          "2026-09-17"
+        ],
+        "wavelengths": [
+          0.956,
+          0.958,
+          0.961,
+          0.962,
+          0.963,
+          0.965,
+          0.966,
+          0.967
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D1-6086345707",
+            "date": "2025-07-07",
+            "corr0": 0.541,
+            "bestRotationDeg": 0,
+            "corrBest": 0.541,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D1-6092404919",
+            "date": "2025-09-06",
+            "corr0": 0.565,
+            "bestRotationDeg": 0,
+            "corrBest": 0.565,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D1-6093661728",
+            "date": "2025-09-18",
+            "corr0": 0.469,
+            "bestRotationDeg": 0,
+            "corrBest": 0.469,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D1-6098483779",
+            "date": "2025-11-05",
+            "corr0": 0.491,
+            "bestRotationDeg": 0,
+            "corrBest": 0.491,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D1-6123094794",
+            "date": "2026-07-09",
+            "corr0": 0.673,
+            "bestRotationDeg": 0,
+            "corrBest": 0.673,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D1-6128029772",
+            "date": "2026-08-28",
+            "corr0": 0.404,
+            "bestRotationDeg": 0,
+            "corrBest": 0.404,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D1-6130045471",
+            "date": "2026-09-17",
+            "corr0": 0.532,
+            "bestRotationDeg": 0,
+            "corrBest": 0.532,
+            "status": "weak"
+          }
+        ],
+        "minCorr0": 0.404,
+        "anyRotation": false,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          449.1283090003012,
+          401.7094080779736,
+          194.10991450813472,
+          182.28698834438396,
+          222.45003316378492,
+          231.18574164744572,
+          446.02623708407464,
+          449.0983354389401
+        ],
+        "status": "FAIL"
+      },
+      "D2": {
+        "frames": 6,
+        "dates": [
+          "2025-06-08",
+          "2026-06-22"
+        ],
+        "wavelengths": [
+          1.402,
+          1.405,
+          1.406,
+          1.41,
+          1.412,
+          1.42
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D2-6085157271",
+            "date": "2025-06-25",
+            "corr0": 0.289,
+            "bestRotationDeg": 0,
+            "corrBest": 0.289,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D2-6099773274",
+            "date": "2025-11-18",
+            "corr0": 0.371,
+            "bestRotationDeg": 0,
+            "corrBest": 0.371,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D2-6101213174",
+            "date": "2025-12-03",
+            "corr0": 0.423,
+            "bestRotationDeg": 0,
+            "corrBest": 0.423,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D2-6101987199",
+            "date": "2025-12-10",
+            "corr0": 0.358,
+            "bestRotationDeg": 0,
+            "corrBest": 0.358,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D2-6121323054",
+            "date": "2026-06-22",
+            "corr0": 0.801,
+            "bestRotationDeg": 0,
+            "corrBest": 0.801,
+            "status": "ok"
+          }
+        ],
+        "minCorr0": 0.289,
+        "anyRotation": false,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          334.3912194428622,
+          864.4432752018837,
+          194.95573912334484,
+          654.2276062059908,
+          518.6200987594037,
+          160.92338318427272
+        ],
+        "status": "FAIL"
+      },
+      "D3": {
+        "frames": 8,
+        "dates": [
+          "2025-04-25",
+          "2026-06-12"
+        ],
+        "wavelengths": [
+          1.85,
+          1.855,
+          1.861,
+          1.864,
+          1.865,
+          1.867
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D3-6079259830",
+            "date": "2025-04-27",
+            "corr0": 0.455,
+            "bestRotationDeg": 0,
+            "corrBest": 0.455,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D3-6081569417",
+            "date": "2025-05-20",
+            "corr0": 0.487,
+            "bestRotationDeg": 0,
+            "corrBest": 0.487,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D3-6083825436",
+            "date": "2025-06-12",
+            "corr0": 0.324,
+            "bestRotationDeg": 0,
+            "corrBest": 0.324,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D3-6112286713",
+            "date": "2026-03-23",
+            "corr0": 0.179,
+            "bestRotationDeg": 0,
+            "corrBest": 0.179,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D3-6114445477",
+            "date": "2026-04-14",
+            "corr0": 0.708,
+            "bestRotationDeg": 0,
+            "corrBest": 0.708,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D3-6117080058",
+            "date": "2026-05-10",
+            "corr0": 0.53,
+            "bestRotationDeg": 0,
+            "corrBest": 0.53,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D3-6120385792",
+            "date": "2026-06-12",
+            "corr0": 0.383,
+            "bestRotationDeg": 0,
+            "corrBest": 0.383,
+            "status": "FAIL"
+          }
+        ],
+        "minCorr0": 0.179,
+        "anyRotation": false,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          670.6552912077761,
+          591.6067353656007,
+          756.362312678248,
+          486.4883173215609,
+          337.99957743841145,
+          543.260546020062,
+          250.63293108092734,
+          74.06816412468618
+        ],
+        "status": "FAIL"
+      },
+      "D4": {
+        "frames": 8,
+        "dates": [
+          "2025-06-06",
+          "2026-09-17"
+        ],
+        "wavelengths": [
+          3.226,
+          3.237,
+          3.24,
+          3.244,
+          3.248,
+          3.253,
+          3.256,
+          3.258
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D4-6086345707",
+            "date": "2025-07-07",
+            "corr0": 0.217,
+            "bestRotationDeg": 0,
+            "corrBest": 0.217,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6092404919",
+            "date": "2025-09-06",
+            "corr0": 0.057,
+            "bestRotationDeg": 0,
+            "corrBest": 0.058,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6093661728",
+            "date": "2025-09-18",
+            "corr0": 0.256,
+            "bestRotationDeg": 0,
+            "corrBest": 0.256,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6096704137",
+            "date": "2025-10-19",
+            "corr0": 0.265,
+            "bestRotationDeg": 0,
+            "corrBest": 0.265,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6123094794",
+            "date": "2026-07-09",
+            "corr0": 0.463,
+            "bestRotationDeg": 0,
+            "corrBest": 0.463,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6128029772",
+            "date": "2026-08-28",
+            "corr0": 0.153,
+            "bestRotationDeg": 0,
+            "corrBest": 0.153,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D4-6130045471",
+            "date": "2026-09-17",
+            "corr0": 0.224,
+            "bestRotationDeg": 0,
+            "corrBest": 0.224,
+            "status": "FAIL"
+          }
+        ],
+        "minCorr0": 0.057,
+        "anyRotation": false,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          760.3627723602448,
+          703.0660689197157,
+          394.0471037378513,
+          377.3087965052611,
+          363.9689209011326,
+          381.7232555294566,
+          385.76222424804524,
+          531.3732192538955
+        ],
+        "status": "FAIL"
+      },
+      "D5": {
+        "frames": 5,
+        "dates": [
+          "2025-06-08",
+          "2026-06-21"
+        ],
+        "wavelengths": [
+          4.216,
+          4.217,
+          4.221,
+          4.223,
+          4.232
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D5-6085883790",
+            "date": "2025-07-02",
+            "corr0": 0.331,
+            "bestRotationDeg": 0,
+            "corrBest": 0.331,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D5-6099773423",
+            "date": "2025-11-18",
+            "corr0": 0.335,
+            "bestRotationDeg": 0,
+            "corrBest": 0.335,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D5-6101987348",
+            "date": "2025-12-10",
+            "corr0": 0.403,
+            "bestRotationDeg": 0,
+            "corrBest": 0.403,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D5-6121261827",
+            "date": "2026-06-21",
+            "corr0": 0.459,
+            "bestRotationDeg": 0,
+            "corrBest": 0.466,
+            "status": "FAIL"
+          }
+        ],
+        "minCorr0": 0.331,
+        "anyRotation": false,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          404.55776141886673,
+          null,
+          257.77062609976934,
+          283.9727864387695,
+          180.26587570122797
+        ],
+        "status": "FAIL"
+      },
+      "D6": {
+        "frames": 9,
+        "dates": [
+          "2025-04-25",
+          "2026-06-12"
+        ],
+        "wavelengths": [
+          4.574,
+          4.589,
+          4.59,
+          4.595,
+          4.599,
+          4.605,
+          4.607,
+          4.608,
+          4.61
+        ],
+        "pairs": [
+          {
+            "frame": "r-dra-D6-6079259830",
+            "date": "2025-04-27",
+            "corr0": 0.712,
+            "bestRotationDeg": 0,
+            "corrBest": 0.712,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D6-6081569417",
+            "date": "2025-05-20",
+            "corr0": 0.408,
+            "bestRotationDeg": 0,
+            "corrBest": 0.408,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D6-6083825436",
+            "date": "2025-06-12",
+            "corr0": 0.186,
+            "bestRotationDeg": 0,
+            "corrBest": 0.217,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D6-6103555898",
+            "date": "2025-12-26",
+            "corr0": 0.268,
+            "bestRotationDeg": 0,
+            "corrBest": 0.285,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D6-6112090241",
+            "date": "2026-03-21",
+            "corr0": 0.23,
+            "bestRotationDeg": 0,
+            "corrBest": 0.23,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D6-6114439123",
+            "date": "2026-04-14",
+            "corr0": 0.619,
+            "bestRotationDeg": 0,
+            "corrBest": 0.619,
+            "status": "weak"
+          },
+          {
+            "frame": "r-dra-D6-6118213554",
+            "date": "2026-05-22",
+            "corr0": 0.187,
+            "bestRotationDeg": 90,
+            "corrBest": 0.242,
+            "status": "FAIL"
+          },
+          {
+            "frame": "r-dra-D6-6120385792",
+            "date": "2026-06-12",
+            "corr0": 0.413,
+            "bestRotationDeg": 0,
+            "corrBest": 0.413,
+            "status": "FAIL"
+          }
+        ],
+        "minCorr0": 0.186,
+        "anyRotation": true,
+        "expectedShiftPx": 0.0,
+        "measuredShiftPx": null,
+        "targetPeakSnr": [
+          null,
+          null
+        ],
+        "fluxes": [
+          252.1256507852856,
+          236.13754814575515,
+          350.7466673715121,
+          274.73214654772534,
+          218.86055393695338,
+          237.5291263893837,
+          180.46663411414022,
+          148.30624888173406,
+          142.82233462621502
+        ],
+        "status": "FAIL"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "r-dra-D2-6085157271",
+  "obsDate": "2025-06-25",
+  "mjd": 60851.572707,
+  "detector": "D2",
+  "wavelengthUm": 1.4118,
+  "width": 145,
+  "height": 145,
+  "pixelScaleArcsec": 6.2,
+  "hasFlags": true,
+  "flaggedPixels": 314,
+  "centrePixel": {
+    "x": 72,
+    "y": 72
+  },
+  "targetPixel": {
+    "x": 72.0,
+    "y": 72.0
+  },
+  "flux": null,
+  "fluxErr": null,
+  "fluxUnit": "mJy",
+  "apertureMaskedFraction": 1.0,
+  "saturated": true,
+  "release": "DR1",
+  "files": {
+    "pixels": "r-dra-D2-6085157271.f32",
+    "flags": "r-dra-D2-6085157271.u8"
+  }
+}

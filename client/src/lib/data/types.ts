@@ -36,6 +36,8 @@ export interface LightCurvePoint {
   flux: number;
   fluxErr: number;
   frameId: string;
+  /** "wing": the star saturates, so the flux is from the unsaturated ring just outside its core. */
+  method?: "aperture" | "wing";
 }
 export interface SpectrumPoint {
   wavelengthUm: number;

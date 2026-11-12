@@ -36,6 +36,52 @@ function ring(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, co
   ctx.fill();
 }
 
+/**
+ * A small gold seal with the AstroBlink "A" mark: two gold rings, a faint gold fill, the letter A and a
+ * four-pointed star at its upper right (echoing the logo). Drawn in the certificate's gold accent.
+ */
+function seal(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, c: CertificateColours) {
+  ctx.save();
+  ctx.fillStyle = c.accent;
+  ctx.globalAlpha = 0.08;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = c.accent;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.fillStyle = c.accent;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = '700 64px "Space Grotesk", system-ui, sans-serif';
+  ctx.fillText("A", cx, cy + 4);
+
+  // Four-pointed star, as in the logo.
+  const sx = cx + r * 0.42;
+  const sy = cy - r * 0.42;
+  const s = r * 0.16;
+  ctx.beginPath();
+  ctx.moveTo(sx, sy - s);
+  ctx.lineTo(sx + s * 0.3, sy - s * 0.3);
+  ctx.lineTo(sx + s, sy);
+  ctx.lineTo(sx + s * 0.3, sy + s * 0.3);
+  ctx.lineTo(sx, sy + s);
+  ctx.lineTo(sx - s * 0.3, sy + s * 0.3);
+  ctx.lineTo(sx - s, sy);
+  ctx.lineTo(sx - s * 0.3, sy - s * 0.3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 /** AstroBlink logo proportions (public/brand/astroblink-logo.png, 705 × 445). */
 const LOGO_RATIO = 705 / 445;
 
@@ -101,6 +147,8 @@ export function drawCertificate(
   ctx.fillStyle = c.ink;
   ctx.font = "500 40px Inter, system-ui, sans-serif";
   ctx.fillText(`${text.dateLabel}: ${text.dateText}`, CERT_W / 2, 1400);
+
+  seal(ctx, CERT_W / 2 + 420, 1386, 72, c);
 
   ctx.fillStyle = c.muted;
   ctx.font = "400 36px Inter, system-ui, sans-serif";

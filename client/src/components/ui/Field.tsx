@@ -11,8 +11,8 @@ export function Input({ invalid = false, mono = false, className, ...props }: In
     <input
       aria-invalid={invalid || undefined}
       className={cn(
-        "h-11 w-full rounded-[var(--radius-sm)] border bg-surface-2 px-3 text-body text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none",
-        invalid ? "border-danger" : "border-border-strong",
+        "h-11 w-full rounded-[var(--radius-sm)] border bg-surface-2 px-3 text-body text-text-primary placeholder:text-text-muted focus:border-border-strong focus:outline-none",
+        invalid ? "border-danger" : "border-border hover:border-border-strong",
         mono && "font-mono tabular-nums",
         className,
       )}
@@ -38,7 +38,7 @@ export function Chip({ selected = false, className, children, ...props }: ChipPr
         "relative inline-flex h-9 items-center gap-1.5 rounded-full border px-4 text-body-sm font-medium before:absolute before:inset-x-0 before:-top-1.5 before:-bottom-1.5 before:content-['']",
         selected
           ? "border-primary bg-primary-subtle text-text-primary"
-          : "border-border-strong bg-surface-2 text-text-secondary hover:text-text-primary",
+          : "border-border bg-surface-2 text-text-secondary hover:border-border-strong hover:text-text-primary",
         className,
       )}
       {...props}

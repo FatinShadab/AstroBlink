@@ -41,6 +41,8 @@ export interface AdvancedProps {
   pick: { x: number; y: number } | null;
   /** True when the spectrum is of the target star (real data), not of a clicked pixel. */
   spectrumOfTarget?: boolean;
+  /** Spectrum y-axis unit, e.g. "mJy"; defaults to "relative". */
+  spectrumUnit?: string;
   shareUrl: string;
   embedSnippet: string;
   onCopy: (text: string, doneKey: DictKey) => void;
@@ -99,7 +101,7 @@ export function AdvancedToolsPanel({ expanded = false, ...props }: AdvancedProps
               label={t("explore.detector")}
               value={props.detector}
               onChange={props.onDetector}
-              options={DETECTORS.map((d) => ({ value: d.id, label: d.id }))}
+              options={DETECTORS.map((d) => ({ value: d.id, label: d.id, swatch: `var(--det-${d.id.toLowerCase()})` }))}
             />
             <p className="text-caption text-text-muted">
               {DETECTORS.map((d) => `${d.id} ${d.minUm.toFixed(2)}–${d.maxUm.toFixed(2)} μm`).join(" · ")}
@@ -182,7 +184,11 @@ export function AdvancedToolsPanel({ expanded = false, ...props }: AdvancedProps
               />
               {t("explore.flagLegend")}
             </div>
-            <p className="text-body-sm text-text-secondary">{fill(t("explore.flagCount"), { count: props.flagCount })}</p>
+            <p className="text-body-sm text-text-secondary">
+              {props.flagCount === 0
+                ? t("explore.noGlitches")
+                : fill(t("explore.flagCount"), { count: props.flagCount })}
+            </p>
           </TabsContent>
         )}
 
@@ -199,7 +205,10 @@ export function AdvancedToolsPanel({ expanded = false, ...props }: AdvancedProps
             {props.spectrum.error && <p className="text-body-sm text-danger">{t("explore.spectrumError")}</p>}
             {props.spectrum.points && (
               <>
-                <SpectrumChart points={props.spectrum.points} />
+                <SpectrumChart
+                  points={props.spectrum.points}
+                  unit={props.spectrumUnit ?? t("explore.unitRelative")}
+                />
                 <div>
                   <Button
                     variant="secondary"
@@ -318,7 +327,7 @@ function FrameSelect({
     <label className="flex flex-col gap-1 text-body-sm font-medium text-text-primary">
       {label}
       <select
-        className="h-11 rounded-[var(--radius-sm)] border border-border-strong bg-surface-2 px-3 text-body text-text-primary"
+        className="h-11 rounded-[var(--radius-sm)] border border-border bg-surface-2 px-3 text-body text-text-primary hover:border-border-strong focus:border-border-strong"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
       >

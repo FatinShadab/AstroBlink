@@ -9,7 +9,7 @@ Usage (from client/):  <venv>/Scripts/python.exe scripts/qa_render.py
 from __future__ import annotations
 
 import json
-from datetime import date
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -19,29 +19,17 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "public" / "data"
 OUT = Path(__file__).resolve().parent / "qa"
 
-# Default detector per preset (client/src/data/presets.ts).
-DEFAULT_DETECTOR = {"wise-0855": "D6", "barnard": "D2", "eps-indi-b": "D5", "r-dra": "D3", "rw-aur": "D3"}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from qa_check import default_detectors, select_matched_wavelength  # noqa: E402  same selection as the viewer
+
+# Default detector per preset, read from client/src/data/presets.ts.
+DEFAULT_DETECTOR = default_detectors()
 CROP = 64  # pixels shown (≈ 6.6′)
 ZOOM = 6
 
 
-def tolerance(det: str) -> float:
-    return 0.005 if det in ("D5", "D6") else 0.012
-
-
 def matched_group(frames: list[dict]) -> list[dict]:
-    """Largest group within the wavelength tolerance; ties go to the longest time span (as in the viewer)."""
-    if len(frames) < 2:
-        return []
-    tol = tolerance(frames[0]["detector"])
-    best, best_span = [], -1.0
-    for anchor in frames:
-        group = [f for f in frames if abs(f["wavelengthUm"] - anchor["wavelengthUm"]) / anchor["wavelengthUm"] <= tol]
-        days = [date.fromisoformat(f["obsDate"]).toordinal() for f in group]
-        span = max(days) - min(days)
-        if len(group) > len(best) or (len(group) == len(best) and span > best_span):
-            best, best_span = group, span
-    return sorted(best, key=lambda f: f["obsDate"]) if len(best) >= 2 else []
+    return select_matched_wavelength(frames)
 
 
 def load(tdir: Path, frame: dict) -> np.ndarray:
@@ -81,10 +69,11 @@ def mark(im: Image.Image, x: float, y: float, colour) -> None:
     draw.ellipse([px - r, py - r, px + r, py + r], outline=colour, width=2)
 
 
-def render(tid: str) -> dict | None:
+def render(tid: str, det: str | None = None) -> dict | None:
     tdir = DATA / tid
     manifest = json.loads((tdir / "manifest.json").read_text())
-    det = DEFAULT_DETECTOR[tid]
+    is_default = det is None
+    det = det or DEFAULT_DETECTOR[tid]
     on_det = [f for f in manifest["frames"] if f["detector"] == det]
     group = matched_group(on_det)
     note = "matched wavelength"
@@ -126,7 +115,7 @@ def render(tid: str) -> dict | None:
     draw.text((10, h + title_h + 8), "Blue circle: expected position at the earliest date. Orange: at the latest date.",
               fill=(166, 176, 197), font=font)
     OUT.mkdir(parents=True, exist_ok=True)
-    out = OUT / f"{tid}.png"
+    out = OUT / (f"{tid}.png" if is_default else f"{tid}-{det}.png")
     canvas.save(out)
 
     shift = float(np.hypot(b["targetPixel"]["x"] - a["targetPixel"]["x"], b["targetPixel"]["y"] - a["targetPixel"]["y"]))
@@ -136,6 +125,15 @@ def render(tid: str) -> dict | None:
 
 
 if __name__ == "__main__":
+    # --all also renders every detector (qa/<id>-<det>.png), to compare before choosing a default.
+    every = "--all" in sys.argv
+    # --targets barnard,r-dra limits the run to those presets.
+    only = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--targets=")), None)
     for tid in DEFAULT_DETECTOR:
+        if only and tid not in only:
+            continue
         if (DATA / tid / "manifest.json").exists():
             print(render(tid))
+            if every:
+                for d in ("D1", "D2", "D3", "D4", "D5", "D6"):
+                    print(render(tid, d))

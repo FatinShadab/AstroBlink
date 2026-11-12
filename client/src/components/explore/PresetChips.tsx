@@ -1,5 +1,6 @@
 "use client";
 
+import { DataBadge } from "@/components/ui/DataBadge";
 import { Chip } from "@/components/ui/Field";
 import { PRESETS, isPresetReady, type PresetId } from "@/data/presets";
 import { useT } from "@/lib/i18n/LangProvider";
@@ -27,7 +28,9 @@ export function PresetChips({
             className="shrink-0"
           >
             {preset.name}
-            {!ready && (
+            {ready ? (
+              <DataBadge real className="ml-1" />
+            ) : (
               <span className="text-caption text-text-muted">· {t("explore.presetPending")}</span>
             )}
           </Chip>

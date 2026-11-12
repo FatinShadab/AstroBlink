@@ -213,6 +213,10 @@ export default function ScrollGlobe({
               (!section.align || section.align === "left") && "items-start text-left",
             )}
           >
+            {index === 0 && (
+              // Soft cobalt glow behind the hero headline (token-based, static).
+              <div aria-hidden="true" className="hero-glow pointer-events-none absolute inset-0 -z-10" />
+            )}
             <div className="w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
               <Heading
                 className={cn(
@@ -299,7 +303,7 @@ export default function ScrollGlobe({
                       "inline-flex h-11 w-full items-center justify-center rounded-[var(--radius-sm)] px-6 text-sm font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:text-base",
                       action.variant === "primary"
                         ? "bg-primary text-primary-foreground hover:bg-primary-hover"
-                        : "border border-border-strong bg-surface-2 text-foreground hover:bg-surface-3",
+                        : "border border-border bg-surface-2 text-foreground hover:border-border-strong hover:bg-surface-3",
                     );
                     return action.href ? (
                       <Link key={action.label} href={action.href} className={className}>

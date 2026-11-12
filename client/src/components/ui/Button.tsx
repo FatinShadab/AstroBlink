@@ -15,7 +15,7 @@ const hit =
 
 const variants: Record<ButtonVariant, string> = {
   primary: "bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-pressed",
-  secondary: "bg-surface-2 text-text-primary border border-border-strong hover:bg-surface-3",
+  secondary: "bg-surface-2 text-text-primary border border-border hover:border-border-strong hover:bg-surface-3 active:border-border-strong",
   tertiary: "bg-transparent text-primary hover:bg-primary-subtle",
   danger: "bg-danger text-on-danger hover:opacity-90",
   icon: "bg-transparent text-text-secondary hover:bg-surface-2 aria-pressed:text-text-primary",

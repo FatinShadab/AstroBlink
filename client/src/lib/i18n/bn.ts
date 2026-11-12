@@ -51,6 +51,7 @@ export const bn: Record<DictKey, string> = {
   "common.loading": "লোড হচ্ছে…",
   "common.demoData": "ডেমো ডেটা",
   "common.simulatedSky": "সিমুলেটেড আকাশ",
+  "common.realData": "আসল NASA ডেটা",
   "common.comingSoon": "শীঘ্রই আসছে",
 
   "state.errorTitle": "কিছু একটা ভুল হয়েছে", // TODO bn review
@@ -174,12 +175,14 @@ export const bn: Record<DictKey, string> = {
   "preset.wise0855.look": "ছোট তরঙ্গদৈর্ঘ্যে প্রায় অদৃশ্য, লম্বা তরঙ্গে স্পষ্ট।", // TODO bn review
   "preset.rwAur.desc": "একটি তরুণ তারা যার উজ্জ্বলতা অনিয়মিতভাবে বদলায়।", // TODO bn review
   "preset.rwAur.look": "একই স্থান, সময়ের সাথে উজ্জ্বলতা বদলায়।", // TODO bn review
+  "preset.rwAur.note": "RW Aurigae-এর জন্য আমাদের SPHEREx ডেটা প্রায় ২ সপ্তাহের।", // TODO bn review
+  "preset.wise0855.note": "WISE 0855 SPHEREx-এর শনাক্তকরণ সীমার কাছাকাছি; একক ফ্রেমে তারাটি নাও দেখা যেতে পারে।", // TODO bn review
   "preset.rDra.desc": "একটি স্পন্দনশীল তারা যা প্রায় প্রতি ২৪৫ দিনে উজ্জ্বল ও ম্লান হয়।", // TODO bn review
   "preset.rDra.look": "একই স্থান, একটি নিয়মিত উজ্জ্বলতা চক্র।", // TODO bn review
 
   "explore.lightCurve": "সময়ের সাথে উজ্জ্বলতা", // TODO bn review
   "explore.brightnessCaption": "বড় মান = বেশি উজ্জ্বল। প্রতিটি ফ্রেমের কেন্দ্রে মাপা।", // TODO bn review
-  "explore.brightnessCaptionReal": "বড় মান = বেশি উজ্জ্বল। লক্ষ্যবস্তুর উপর অ্যাপারচার ফটোমেট্রি (mJy); চিহ্নিত ও স্যাচুরেটেড পিক্সেল বাদ দেওয়া হয়, আর স্যাচুরেটেড ফ্রেমের কোনো বিন্দু থাকে না।",
+  "explore.brightnessCaptionReal": "লক্ষ্য তারার উজ্জ্বলতা (অ্যাপারচার ফটোমেট্রি, mJy)। চিহ্নিত পিক্সেল বাদ দেওয়া হয়; স্যাচুরেটেড ফ্রেমের কোনো বিন্দু থাকে না।", // TODO bn review
   "explore.brightness": "উজ্জ্বলতা", // TODO bn review
   "explore.contrast": "কন্ট্রাস্ট", // TODO bn review
   "explore.reset": "রিসেট", // TODO bn review
@@ -214,7 +217,14 @@ export const bn: Record<DictKey, string> = {
   "explore.showFlags": "গ্লিচ ফ্ল্যাগ দেখান", // TODO bn review
   "explore.flagLegend": "অনির্ভরযোগ্য পিক্সেল (কসমিক রে বা স্যাচুরেশন)", // TODO bn review
   "explore.flagCount": "এই ফ্রেমে {count}টি চিহ্নিত পিক্সেল", // TODO bn review
+  "explore.noGlitches": "এই ফ্রেমে কোনো গ্লিচ চিহ্নিত হয়নি",
   "explore.spectrumHint": "ব্লিংক ভিউয়ের যেকোনো তারায় ক্লিক করে তার বর্ণালি দেখুন।", // TODO bn review
+  "explore.unitRelative": "আপেক্ষিক",
+  "explore.unitTargetPixel": "mJy (লক্ষ্য পিক্সেল)",
+  "explore.unitWing": "mJy (বাইরের বলয়, আনুমানিক)", // TODO bn review
+  "explore.brightnessCaptionWing": "লক্ষ্য তারার উজ্জ্বলতা (অ্যাপারচার ফটোমেট্রি, mJy)। তারাটি SPHEREx-এর জন্য খুব উজ্জ্বল এবং এর কেন্দ্র স্যাচুরেটেড, তাই চারপাশের অস্যাচুরেটেড বলয় মাপা হয়েছে: ফ্রেমগুলো তুলনা করুন, পরম মান নয়।", // TODO bn review
+  "explore.axisWavelength": "তরঙ্গদৈর্ঘ্য (μm)",
+  "explore.spectrumDropped": "চার্ট থেকে বাদ: {count} (স্যাচুরেটেড, চিহ্নিত বা স্পষ্ট ব্যতিক্রম)।",
   "explore.spectrumTarget": "লক্ষ্য নক্ষত্রের বর্ণালি: প্রতিটি SPHEREx পর্যবেক্ষণের জন্য একটি বিন্দু, প্রতিটি নিজ নিজ তরঙ্গদৈর্ঘ্যে।",
   "explore.spectrumWaiting": "এখনও কোনো তারা বাছা হয়নি।", // TODO bn review
   "explore.spectrumError": "এই পিক্সেলের বর্ণালি লোড করা যায়নি।", // TODO bn review
@@ -355,7 +365,7 @@ export const bn: Record<DictKey, string> = {
   "cert.notEligible":
     "Check at least {min} fields to unlock your certificate. You have checked {count} so far.", // TODO bn
   "cert.unlockButton": "Get certificate", // TODO bn
-  "cert.withdraw": "Withdraw certificate (PNG)", // TODO bn
+  "cert.withdraw": "সনদ ডাউনলোড করুন (PNG)",
   "header.account": "Account menu", // TODO bn
   "header.certificate": "Certificate", // TODO bn
   "header.signOut": "Sign out", // TODO bn

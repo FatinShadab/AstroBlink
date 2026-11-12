@@ -13,6 +13,10 @@
 # testing
 /coverage
 
+# raw SPHEREx cutouts downloaded by scripts/fetch_spherex.py (large; re-downloadable)
+/.cache
+scripts/__pycache__
+
 # next.js
 /.next/
 /out/

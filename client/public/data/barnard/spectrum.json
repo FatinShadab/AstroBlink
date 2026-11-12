@@ -1,38 +1,425 @@
 [
   {
+    "wavelengthUm": 0.7414,
+    "flux": 54.14810434236759,
+    "fluxErr": 0.5627571309988586,
     "detector": "D1",
-    "wavelengthUm": 0.8475,
-    "flux": 1148.7630634307861,
-    "fluxErr": 327.49951955442344
+    "obsDate": "2026-08-25",
+    "frameId": "barnard-D1-6127725171",
+    "method": "wing"
   },
   {
+    "wavelengthUm": 0.8425,
+    "flux": 78.94073177703255,
+    "fluxErr": 0.7342008946079288,
+    "detector": "D1",
+    "obsDate": "2025-08-30",
+    "frameId": "barnard-D1-6091794452",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 0.9477,
+    "flux": 132.1388344882589,
+    "fluxErr": 1.0249884444443447,
+    "detector": "D1",
+    "obsDate": "2026-03-11",
+    "frameId": "barnard-D1-6111056807",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.0165,
+    "flux": 139.74011709236908,
+    "fluxErr": 1.0281210713162916,
+    "detector": "D1",
+    "obsDate": "2025-09-01",
+    "frameId": "barnard-D1-6091910304",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.0172,
+    "flux": 151.09786513608452,
+    "fluxErr": 1.1516703394143342,
+    "detector": "D1",
+    "obsDate": "2026-03-11",
+    "frameId": "barnard-D1-6111063577",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.0223,
+    "flux": 151.8863149329745,
+    "fluxErr": 1.2056995920367515,
+    "detector": "D1",
+    "obsDate": "2026-08-25",
+    "frameId": "barnard-D1-6127779022",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.0879,
+    "flux": 173.98947540299255,
+    "fluxErr": 1.4045745203617694,
     "detector": "D2",
-    "wavelengthUm": 1.2818,
-    "flux": 982.9290618896484,
-    "fluxErr": 257.72741590686076
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D2-6127338018",
+    "method": "wing"
   },
   {
+    "wavelengthUm": 1.1072,
+    "flux": 152.3918165631407,
+    "fluxErr": 1.1129282237448197,
+    "detector": "D1",
+    "obsDate": "2025-08-29",
+    "frameId": "barnard-D1-6091672646",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.2529,
+    "flux": 178.4741773371508,
+    "fluxErr": 1.2327782985493887,
+    "detector": "D2",
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D2-6127351784",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.4452,
+    "flux": 109.5653561187391,
+    "fluxErr": 1.0067026521025813,
+    "detector": "D2",
+    "obsDate": "2026-03-15",
+    "frameId": "barnard-D2-6111403200",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.5029,
+    "flux": 103.92076251057907,
+    "fluxErr": 1.062300297121575,
+    "detector": "D2",
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D2-6127378822",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.5115,
+    "flux": 104.30481134807299,
+    "fluxErr": 1.0759119524143461,
+    "detector": "D2",
+    "obsDate": "2026-08-18",
+    "frameId": "barnard-D2-6127086712",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.5116,
+    "flux": 142.06682915463284,
+    "fluxErr": 1.203391639147763,
+    "detector": "D2",
+    "obsDate": "2026-09-22",
+    "frameId": "barnard-D2-6130562802",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.5161,
+    "flux": 74.53141874461411,
+    "fluxErr": 0.9108897552291877,
+    "detector": "D2",
+    "obsDate": "2026-03-15",
+    "frameId": "barnard-D2-6111403499",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.5166,
+    "flux": 115.59707756081316,
+    "fluxErr": 1.0321711956921473,
+    "detector": "D2",
+    "obsDate": "2025-08-25",
+    "frameId": "barnard-D2-6091271415",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.6246,
+    "flux": 169.7603058351198,
+    "fluxErr": 1.2457518439756878,
     "detector": "D3",
-    "wavelengthUm": 2.0369,
-    "flux": 1374.3980102539062,
-    "fluxErr": 329.9261235709055
+    "obsDate": "2026-03-23",
+    "frameId": "barnard-D3-6112265413",
+    "method": "wing"
   },
   {
+    "wavelengthUm": 1.6609,
+    "flux": 280.43378814260245,
+    "fluxErr": 1.6465468589445897,
+    "detector": "D2",
+    "obsDate": "2026-08-19",
+    "frameId": "barnard-D2-6127134355",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 1.8359,
+    "flux": 68.29541048729989,
+    "fluxErr": 0.7972911988213912,
+    "detector": "D3",
+    "obsDate": "2026-03-19",
+    "frameId": "barnard-D3-6111831072",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.1005,
+    "flux": 149.2199011448941,
+    "fluxErr": 1.085170849854176,
+    "detector": "D3",
+    "obsDate": "2025-08-25",
+    "frameId": "barnard-D3-6091203741",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.1062,
+    "flux": 168.06850516422884,
+    "fluxErr": 0.9882755590241832,
+    "detector": "D3",
+    "obsDate": "2026-05-04",
+    "frameId": "barnard-D3-6116413313",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.1068,
+    "flux": 100.53305217288052,
+    "fluxErr": 0.7810776448251683,
+    "detector": "D3",
+    "obsDate": "2026-03-19",
+    "frameId": "barnard-D3-6111838152",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.1546,
+    "flux": 110.61578512142691,
+    "fluxErr": 0.8218551666450709,
+    "detector": "D3",
+    "obsDate": "2026-05-04",
+    "frameId": "barnard-D3-6116460712",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.4115,
+    "flux": 84.96126358211102,
+    "fluxErr": 0.9027598669773926,
+    "detector": "D3",
+    "obsDate": "2026-03-21",
+    "frameId": "barnard-D3-6112028009",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 2.419,
+    "flux": 93.15382793404343,
+    "fluxErr": 0.9578317638429511,
     "detector": "D4",
-    "wavelengthUm": 3.0342,
-    "flux": 924.3782501220703,
-    "fluxErr": 121.6659815223955
+    "obsDate": "2026-08-25",
+    "frameId": "barnard-D4-6127725171",
+    "method": "wing"
   },
   {
+    "wavelengthUm": 2.7433,
+    "flux": 102.39619836946088,
+    "fluxErr": 0.5779731548906198,
+    "detector": "D4",
+    "obsDate": "2026-08-24",
+    "frameId": "barnard-D4-6127623318",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.2262,
+    "flux": 86.68050865738019,
+    "fluxErr": 0.4823680141435284,
+    "detector": "D4",
+    "obsDate": "2026-08-29",
+    "frameId": "barnard-D4-6128166060",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.449,
+    "flux": 91.08633378808169,
+    "fluxErr": 0.5533272516742501,
+    "detector": "D4",
+    "obsDate": "2025-09-01",
+    "frameId": "barnard-D4-6091910304",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.4517,
+    "flux": 90.36804811737122,
+    "fluxErr": 0.4972896682490113,
+    "detector": "D4",
+    "obsDate": "2026-03-11",
+    "frameId": "barnard-D4-6111063577",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.4729,
+    "flux": 83.8471223864371,
+    "fluxErr": 0.4738404526065968,
+    "detector": "D4",
+    "obsDate": "2026-08-25",
+    "frameId": "barnard-D4-6127779022",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.8001,
+    "flux": 85.09340673424832,
+    "fluxErr": 0.4552562663742086,
+    "detector": "D4",
+    "obsDate": "2025-08-29",
+    "frameId": "barnard-D4-6091672646",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 3.8043,
+    "flux": 103.4085867621765,
+    "fluxErr": 0.5199771784127045,
     "detector": "D5",
-    "wavelengthUm": 4.0764,
-    "flux": 1236.7757759094238,
-    "fluxErr": 376.3063385769158
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D5-6127338018",
+    "method": "wing"
   },
   {
+    "wavelengthUm": 3.9901,
+    "flux": 98.62974039148786,
+    "fluxErr": 0.48953951916509664,
+    "detector": "D5",
+    "obsDate": "2025-08-27",
+    "frameId": "barnard-D5-6091427627",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2203,
+    "flux": 80.60754101265407,
+    "fluxErr": 0.429539357503384,
+    "detector": "D5",
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D5-6127372118",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2821,
+    "flux": 75.65303105322222,
+    "fluxErr": 0.35576740075211777,
+    "detector": "D5",
+    "obsDate": "2026-08-21",
+    "frameId": "barnard-D5-6127378822",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2907,
+    "flux": 77.38329572580119,
+    "fluxErr": 0.4246790691849444,
+    "detector": "D5",
+    "obsDate": "2026-08-18",
+    "frameId": "barnard-D5-6127086712",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2908,
+    "flux": 86.20682361883064,
+    "fluxErr": 0.4482027447070629,
+    "detector": "D5",
+    "obsDate": "2026-09-22",
+    "frameId": "barnard-D5-6130562802",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2959,
+    "flux": 84.29791442814799,
+    "fluxErr": 0.4400523849348062,
+    "detector": "D5",
+    "obsDate": "2025-08-25",
+    "frameId": "barnard-D5-6091271415",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.2961,
+    "flux": 84.40582205530679,
+    "fluxErr": 0.4472001749824934,
+    "detector": "D5",
+    "obsDate": "2026-03-15",
+    "frameId": "barnard-D5-6111403499",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.412,
+    "flux": 104.42262974671598,
+    "fluxErr": 0.5157578991922024,
     "detector": "D6",
-    "wavelengthUm": 4.7444,
-    "flux": 885.3845663070679,
-    "fluxErr": 157.0814302674125
+    "obsDate": "2026-03-23",
+    "frameId": "barnard-D6-6112265413",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.4297,
+    "flux": 64.3350241096809,
+    "fluxErr": 0.5000005306005924,
+    "detector": "D5",
+    "obsDate": "2026-08-28",
+    "frameId": "barnard-D5-6128016626",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.5966,
+    "flux": 81.67380479274891,
+    "fluxErr": 0.4240994123415371,
+    "detector": "D6",
+    "obsDate": "2026-08-18",
+    "frameId": "barnard-D6-6127059478",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.7846,
+    "flux": 81.2254460693116,
+    "fluxErr": 0.601344128552778,
+    "detector": "D6",
+    "obsDate": "2025-08-25",
+    "frameId": "barnard-D6-6091203741",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.789,
+    "flux": 80.49852117261527,
+    "fluxErr": 0.5198319496580708,
+    "detector": "D6",
+    "obsDate": "2026-05-04",
+    "frameId": "barnard-D6-6116413313",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.7894,
+    "flux": 79.73253610269276,
+    "fluxErr": 0.516590079346057,
+    "detector": "D6",
+    "obsDate": "2026-03-19",
+    "frameId": "barnard-D6-6111838152",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.8015,
+    "flux": 82.0659757537634,
+    "fluxErr": 0.5494320548154512,
+    "detector": "D6",
+    "obsDate": "2026-08-19",
+    "frameId": "barnard-D6-6127120906",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 4.8234,
+    "flux": 77.01829696421889,
+    "fluxErr": 0.5585297890955757,
+    "detector": "D6",
+    "obsDate": "2026-05-04",
+    "frameId": "barnard-D6-6116460712",
+    "method": "wing"
+  },
+  {
+    "wavelengthUm": 5.0022,
+    "flux": 79.40312019229683,
+    "fluxErr": 0.7745546285454086,
+    "detector": "D6",
+    "obsDate": "2026-03-21",
+    "frameId": "barnard-D6-6112028009",
+    "method": "wing"
   }
 ]

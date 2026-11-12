@@ -182,6 +182,8 @@ export function ExploreView() {
       }),
     [frames, realField],
   );
+  // Stars that saturate SPHEREx are measured on their unsaturated outer ring; the captions say so.
+  const wingPhotometry = realField?.lightCurve?.some((p) => p.method === "wing") ?? false;
 
   // Spectrum (design §8.2). Real data has the target star's spectrum, so it loads without a click;
   // the simulated sky gives the clicked pixel's spectrum.
@@ -488,7 +490,11 @@ export function ExploreView() {
               <LightCurveChart
                 points={lightPoints}
                 current={current}
-                caption={realField ? t("explore.brightnessCaptionReal") : undefined}
+                caption={
+                  realField
+                    ? t(wingPhotometry ? "explore.brightnessCaptionWing" : "explore.brightnessCaptionReal")
+                    : undefined
+                }
               />
             ) : (
               <p className="text-body-sm text-text-muted">{t("common.loading")}</p>
@@ -502,7 +508,8 @@ export function ExploreView() {
 
         </div>
 
-        <div className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+        {/* Sticky with its own scroll: a tall tools panel never leaves an empty area beside the viewer. */}
+        <div className="min-w-0 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain">
           <AdvancedSidePanel
             detector={detector}
             onDetector={(value) => newTarget({ det: value })}
@@ -521,6 +528,9 @@ export function ExploreView() {
             spectrum={spectrum}
             pick={pick}
             spectrumOfTarget={realTarget}
+            spectrumUnit={
+              realField ? (wingPhotometry ? t("explore.unitWing") : "mJy") : realTarget ? t("explore.unitTargetPixel") : t("explore.unitRelative")
+            }
             shareUrl={`${origin}/explore${search}`}
             embedSnippet={embedSnippet(origin, search)}
             onCopy={(text, doneKey) => void copyText(text, doneKey)}

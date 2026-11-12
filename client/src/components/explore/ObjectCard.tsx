@@ -27,6 +27,7 @@ export function ObjectCard({ preset }: { preset: Preset | null }) {
         <span className="font-medium">{t("explore.lookFor")}: </span>
         {t(preset.lookKey)}
       </p>
+      {preset.dataNoteKey && <p className="text-caption text-text-muted">{t(preset.dataNoteKey)}</p>}
     </Card>
   );
 }

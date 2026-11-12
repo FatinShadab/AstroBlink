@@ -36,19 +36,19 @@ export function ActivityChart({
     <div className="h-56 w-full" role="img" aria-label={label}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-          <CartesianGrid vertical={false} stroke="var(--border)" />
+          <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
           <XAxis
             dataKey="date"
             tick={AXIS}
-            stroke="var(--border)"
+            stroke="var(--chart-grid)"
             tickFormatter={(v: string) => formatDate(v, lang)}
             minTickGap={24}
           />
-          <YAxis allowDecimals={false} tick={AXIS} stroke="var(--border)" width={32} />
+          <YAxis allowDecimals={false} tick={AXIS} stroke="var(--chart-grid)" width={32} />
           <Tooltip contentStyle={TOOLTIP} labelFormatter={(v) => formatDate(String(v), lang)} />
           <Bar
             dataKey="count"
-            fill="var(--primary)"
+            fill="var(--data-1)"
             radius={[4, 4, 0, 0]}
             isAnimationActive={false}
           />
@@ -70,9 +70,9 @@ export function MonthlyChart({
     <div className="h-64 w-full" role="img" aria-label={label}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-          <CartesianGrid vertical={false} stroke="var(--border)" />
-          <XAxis dataKey="month" tick={AXIS} stroke="var(--border)" />
-          <YAxis tick={AXIS} stroke="var(--border)" width={48} />
+          <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
+          <XAxis dataKey="month" tick={AXIS} stroke="var(--chart-grid)" />
+          <YAxis tick={AXIS} stroke="var(--chart-grid)" width={48} />
           <Tooltip contentStyle={TOOLTIP} />
           <Area
             type="monotone"
@@ -100,8 +100,8 @@ export function ProjectBars({
     <div className="h-64 w-full" role="img" aria-label={label}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 8, right: 16, bottom: 0, left: 8 }}>
-          <XAxis type="number" allowDecimals={false} tick={AXIS} stroke="var(--border)" />
-          <YAxis type="category" dataKey="name" tick={AXIS} stroke="var(--border)" width={150} />
+          <XAxis type="number" allowDecimals={false} tick={AXIS} stroke="var(--chart-grid)" />
+          <YAxis type="category" dataKey="name" tick={AXIS} stroke="var(--chart-grid)" width={150} />
           <Tooltip contentStyle={TOOLTIP} />
           <Bar
             dataKey="value"

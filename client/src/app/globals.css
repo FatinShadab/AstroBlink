@@ -22,8 +22,9 @@
   --surface-glass: rgba(7, 8, 13, 0.72);
 
   /* Borders: cobalt blue */
-  --border: #0047ab;
-  --border-glass: rgba(0, 71, 171, 0.35);
+  /* Cobalt at 30% for resting card/panel borders; full cobalt only for hover, active and focus. */
+  --border: rgba(0, 71, 171, 0.3);
+  --border-glass: rgba(0, 71, 171, 0.3);
   --border-strong: #0047ab;
   --focus-ring: #b1ff1f;
 
@@ -31,17 +32,41 @@
   --text-primary: #e8e6e1;
   --text-secondary: #e8e6e1;
   --text-muted: rgba(232, 230, 225, 0.7);
-  --text-heading: #b1ff1f;
+  /* Headings use the soft white. */
+  --text-heading: #e8e6e1;
 
-  /* Brand and action: acid lime is the single accent */
+  /*
+    Acid lime is kept for primary buttons, active tabs/toggles, the reticle and the current point on
+    charts. Badges and other highlights use the soft white accent.
+  */
   --primary: #b1ff1f;
   --primary-hover: #c8ff5c;
   --primary-pressed: #95d918;
   --primary-subtle: rgba(177, 255, 31, 0.12);
   --on-primary: #07080d;
-  --accent: #b1ff1f;
-  --accent-subtle: rgba(177, 255, 31, 0.12);
+  --accent: #e8e6e1;
+  --accent-subtle: rgba(232, 230, 225, 0.1);
   --on-accent: #07080d;
+
+  /* Data source badges: real NASA data in cyan; simulated sky in muted grey. */
+  --badge-real: #56b4e9;
+  --badge-real-bg: rgba(86, 180, 233, 0.14);
+  --badge-sim: #8a8f98;
+  --badge-sim-bg: rgba(138, 143, 152, 0.14);
+
+  /* Detector chips D1–D6: a warm infrared ramp (short → long wavelength). */
+  --det-d1: #b23a48;
+  --det-d2: #c9553d;
+  --det-d3: #e07a3f;
+  --det-d4: #e9b949;
+  --det-d5: #edd27a;
+  --det-d6: #f2e3b3;
+
+  /* Charts: faint gridlines; data points in cyan (--data-1); the current point in lime (--primary). */
+  --chart-grid: rgba(232, 230, 225, 0.08);
+
+  /* Landing hero: soft cobalt glow behind the headline. */
+  --hero-glow: rgba(0, 71, 171, 0.18);
 
   /* Semantic (functional) */
   --success: #3ddc97;
@@ -111,6 +136,11 @@
   --color-muted: var(--surface-2);
   --color-muted-foreground: var(--text-secondary);
   --color-primary-foreground: var(--on-primary);
+
+  --color-badge-real: var(--badge-real);
+  --color-badge-real-bg: var(--badge-real-bg);
+  --color-badge-sim: var(--badge-sim);
+  --color-badge-sim-bg: var(--badge-sim-bg);
 
   --color-data-1: var(--data-1);
   --color-data-2: var(--data-2);
@@ -199,6 +229,11 @@
   }
 }
 
+/* Landing hero: a soft cobalt glow behind the headline (static, no animation). */
+.hero-glow {
+  background: radial-gradient(ellipse 55% 50% at 28% 45%, var(--hero-glow), transparent 70%);
+}
+
 /* Moving planet on the landing page: a slow drift up and down (components/ui/globe.tsx). */
 @utility animate-planet-float {
   animation: planet-float 12s ease-in-out infinite;
@@ -268,7 +303,7 @@ body::after {
     font-weight: 600;
   }
 
-  /* Acid lime is for headings and marks; reading text uses the neutral. */
+  /* Headings in the soft white. */
   h1,
   h2 {
     color: var(--text-heading);

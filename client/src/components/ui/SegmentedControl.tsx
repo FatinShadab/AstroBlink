@@ -8,6 +8,8 @@ export interface SegmentOption<T extends string> {
   label: string;
   /** Shown but not selectable (for features in a later phase). */
   disabled?: boolean;
+  /** Optional colour (a CSS variable) shown as a small dot before the label, e.g. detector D1–D6. */
+  swatch?: string;
 }
 
 export interface SegmentedControlProps<T extends string> {
@@ -85,8 +87,12 @@ export function SegmentedControl<T extends string>({
                 ? "bg-surface-3 text-text-primary shadow-[inset_0_-2px_0_var(--primary)]"
                 : "text-text-secondary hover:text-text-primary",
               option.disabled && "cursor-not-allowed opacity-40 hover:text-text-secondary",
+              option.swatch && "inline-flex items-center gap-1.5",
             )}
           >
+            {option.swatch && (
+              <span aria-hidden="true" className="size-2 rounded-full" style={{ background: option.swatch }} />
+            )}
             {option.label}
           </button>
         );
