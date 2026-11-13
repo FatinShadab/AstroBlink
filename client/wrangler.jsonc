@@ -1,0 +1,13 @@
+// Cloudflare deploy config: serves the static export (npm run build:static -> out/) as static assets.
+// Used by `npx wrangler deploy`, which is the deploy command of a Cloudflare Workers Git build.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "astroblink",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out",
+    // /about is served from about.html; unknown paths get out/404.html with status 404.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
