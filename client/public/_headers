@@ -1,0 +1,5 @@
+# Cloudflare Pages headers (static export). Mirrors headers() in next.config.ts.
+/embed
+  Content-Security-Policy: frame-ancestors *
+/embed/
+  Content-Security-Policy: frame-ancestors *

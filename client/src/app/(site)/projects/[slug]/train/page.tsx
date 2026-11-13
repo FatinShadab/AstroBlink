@@ -3,7 +3,12 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/Container";
 import { TrainFlow } from "@/components/classify/TrainFlow";
-import { projectBySlug } from "@/data/projects";
+import { PROJECTS, projectBySlug } from "@/data/projects";
+
+/** Every project is known at build time, so each slug is prerendered (needed for the static export). */
+export function generateStaticParams() {
+  return PROJECTS.map((project) => ({ slug: project.slug }));
+}
 
 /** Reads the slug inside Suspense, as Next 16 requires for route params (instant navigation). */
 async function TrainContent({ params }: { params: Promise<{ slug: string }> }) {
