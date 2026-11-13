@@ -460,7 +460,7 @@ export const en = {
   "about.credits.body":
     "Built with NASA SPHEREx data from IRSA/IPAC. AstroBlink is a NASA Space Apps Challenge project and is not endorsed by NASA.",
   "about.models":
-    "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. Shown without changes.",
+    "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. The file was made smaller to load faster; the planet looks the same.",
   "about.team.title": "Team",
   "about.team.body":
     "Team OP built AstroBlink for the NASA Space Apps Challenge 2026.",

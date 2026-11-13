@@ -20,6 +20,7 @@ npm run dev          # http://localhost:3000/explore?preset=barnard
 |---|---|
 | `npm run dev` | Development server |
 | `npm run build` | Production build (standalone output for Docker) |
+| `npm run build:static` | Static site in `out/` (for Cloudflare Pages; no server needed) |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm test` | Vitest unit tests (coordinates, stretch, modes, photometry, synthetic data, URL state, stats) |

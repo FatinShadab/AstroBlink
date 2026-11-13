@@ -7,6 +7,8 @@ import { useReducedMotion } from "@/lib/a11y/useReducedMotion";
 /*
  * Moving planet for the scroll landing: an Earth 3D model (public/models/earth.glb).
  * The model is CC-BY-4.0: author Stéphane Agullo (sa3d), via Sketchfab. Credit is on the about page.
+ * The file is a slimmed copy of the original (shared buffers, 16-bit indices and normals) so it stays
+ * under the 25 MB per-file limit of Cloudflare Pages; the picture is the same.
  * The viewer is Google's <model-viewer> (Apache-2.0), loaded from jsDelivr at a pinned version.
  * Decorative: the sections carry the content, so the viewer is hidden from assistive technology.
  * It rotates slowly; reduced motion (OS or in-app setting) turns the rotation off.

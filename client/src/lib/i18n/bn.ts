@@ -459,7 +459,7 @@ export const bn: Record<DictKey, string> = {
   "about.credits.body":
     "Built with NASA SPHEREx data from IRSA/IPAC. AstroBlink is a NASA Space Apps Challenge project and is not endorsed by NASA.", // TODO bn
   "about.models":
-    "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. Shown without changes.", // TODO bn
+    "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. The file was made smaller to load faster; the planet looks the same.", // TODO bn
   "about.team.title": "Team", // TODO bn
   "about.team.body":
     "Team OP NASA Space Apps Challenge 2026-এর জন্য AstroBlink তৈরি করেছে।",
