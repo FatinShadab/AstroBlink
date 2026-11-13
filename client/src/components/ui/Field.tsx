@@ -26,8 +26,7 @@ export interface ChipProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 /**
- * Design §9.3: 36px high, pill, selected = primary-subtle fill + primary border + leading check.
- * The 44px hit area is added with ::before (rules §3.7).
+ * Glass pill, 44px high (rules §3.7). Selected = lime-tinted glass + primary border + leading check.
  */
 export function Chip({ selected = false, className, children, ...props }: ChipProps) {
   return (
@@ -35,10 +34,10 @@ export function Chip({ selected = false, className, children, ...props }: ChipPr
       type="button"
       aria-pressed={selected}
       className={cn(
-        "relative inline-flex h-9 items-center gap-1.5 rounded-full border px-4 text-body-sm font-medium before:absolute before:inset-x-0 before:-top-1.5 before:-bottom-1.5 before:content-['']",
+        "glass relative inline-flex h-11 items-center gap-2 rounded-full px-5 text-body font-medium",
         selected
-          ? "border-primary bg-primary-subtle text-text-primary"
-          : "border-border-strong bg-surface-2 text-text-secondary hover:text-text-primary",
+          ? "border-primary! bg-primary-subtle! text-text-primary"
+          : "text-text-secondary hover:text-text-primary",
         className,
       )}
       {...props}

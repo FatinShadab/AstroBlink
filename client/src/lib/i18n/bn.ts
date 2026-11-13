@@ -14,8 +14,8 @@ export const bn: Record<DictKey, string> = {
   "footer.uiuAlt": "United International University crest", // TODO bn
   "footer.pages": "Pages", // TODO bn
   "footer.ctaTitle": "Ready to spot something moving?", // TODO bn
-  "footer.ctaBody": "Pick a mission, or open the sky on any spot. No experience needed.", // TODO bn
-  "footer.ctaProjects": "Browse missions", // TODO bn
+  "footer.ctaBody": "Pick a project, or explore any spot in the sky. No experience needed.", // TODO bn
+  "footer.ctaProjects": "Browse projects", // TODO bn
   "footer.ctaExplore": "Explore the sky", // TODO bn
   "footer.project": "Project", // TODO bn
   "nav.projects": "প্রকল্প",
@@ -231,7 +231,7 @@ export const bn: Record<DictKey, string> = {
   "answer.real": "Real object", // TODO bn
 
   "projects.title": "Projects", // TODO bn
-  "projects.intro": "Pick a mission. No experience needed.", // TODO bn
+  "projects.intro": "Pick a project. No experience needed: each one starts with a short practice round.", // TODO bn
   "projects.filter": "Filter by level", // TODO bn
   "projects.filter.all": "All", // TODO bn
   "projects.filter.beginner": "Beginner", // TODO bn
@@ -351,7 +351,7 @@ export const bn: Record<DictKey, string> = {
   "cert.notEligible":
     "Check at least {min} fields to unlock your certificate. You have checked {count} so far.", // TODO bn
   "cert.unlockButton": "Get certificate", // TODO bn
-  "cert.withdraw": "Withdraw certificate (PNG)", // TODO bn
+  "cert.withdraw": "Download certificate (PNG)", // TODO bn
   "header.account": "Account menu", // TODO bn
   "header.certificate": "Certificate", // TODO bn
   "header.signOut": "Sign out", // TODO bn
@@ -364,12 +364,12 @@ export const bn: Record<DictKey, string> = {
     "Spot moving stars and new worlds in NASA SPHEREx infrared images. Blink two pictures of the same spot and see what changed.", // TODO bn
   "landing.try": "Try it now", // TODO bn
   "landing.join": "Join a project", // TODO bn
-  "landing.free": "Free · No sign-up needed", // TODO bn
+  "landing.free": "Free to use. No sign-up needed to explore.", // TODO bn
   "landing.demoLabel": "Simulated example: Barnard's Star blinking", // TODO bn
   "landing.demoCaption": "Simulated example", // TODO bn
   "landing.how.title": "How it works", // TODO bn
   "landing.how.1.title": "Choose a spot", // TODO bn
-  "landing.how.1.body": "Type coordinates or pick one of five test targets.", // TODO bn
+  "landing.how.1.body": "Type sky coordinates, or start with one of five famous stars.", // TODO bn
   "landing.how.2.title": "Watch it blink", // TODO bn
   "landing.how.2.body": "See the same patch of sky from several visits, one after another.", // TODO bn
   "landing.how.3.title": "Report what you see", // TODO bn
@@ -380,7 +380,7 @@ export const bn: Record<DictKey, string> = {
   "landing.spherex.body":
     "SPHEREx is a NASA infrared space telescope, launched in March 2025. It maps the whole sky about every six months, so the same spot is seen again and again.", // TODO bn
   "landing.spherex.link": "Read more about the mission and our data", // TODO bn
-  "landing.cta.title": "Ready to look?", // TODO bn
+  "landing.cta.title": "Ready to find something new?", // TODO bn
   "landing.community": "Our community", // TODO bn
   "landing.how.intro":
     "Pick a spot, watch it blink, and report what changed. No experience needed.", // TODO bn
@@ -391,11 +391,12 @@ export const bn: Record<DictKey, string> = {
   "landing.nav.projects": "Projects", // TODO bn
   "landing.nav.spherex": "SPHEREx", // TODO bn
   "landing.nav.start": "Begin", // TODO bn
-  "landing.scroll.interactive": "Interactive", // TODO bn
-  "landing.scroll.explore": "Scroll to explore", // TODO bn
+  "landing.scroll.interactive": "Free, no sign-up needed", // TODO bn
+  "landing.scroll.explore": "Scroll to see how it works", // TODO bn
   "landing.scroll.goTo": "Go to {name}", // TODO bn
   "landing.scroll.section": "Section {n}", // TODO bn
   "landing.scroll.progress": "Sections", // TODO bn
+  "landing.searchLabel": "Already have coordinates? Jump straight to that spot (RA, Dec)", // TODO bn
 
   "community.title": "Community", // TODO bn
   "community.intro":
@@ -421,7 +422,7 @@ export const bn: Record<DictKey, string> = {
     "Astronomers have used blink comparators for a long time. Two pictures of the same patch of sky are shown one after another. Anything that moved or changed stands out, while the still stars stay put. Pluto was found this way in 1930 by Clyde Tombaugh, who compared photographic plates by eye.", // TODO bn
   "about.data.title": "About our data", // TODO bn
   "about.data.body":
-    "By default the viewer uses a simulated sky. It is generated in your browser from a seeded model, so the same spot always looks the same. Every simulated view says so. Real SPHEREx cutouts can be added later as static files. There is no live archive connection in this version.", // TODO bn
+    "Right now the viewer shows a simulated sky. It is generated in your browser from a fixed model, so the same spot always looks the same, and every simulated view is labelled. Real SPHEREx images will replace it once the AstroBlink data service is connected.", // TODO bn
   "about.credits.title": "Credits and acknowledgements", // TODO bn
   "about.credits.body":
     "Built with NASA SPHEREx data from IRSA/IPAC. AstroBlink is a NASA Space Apps Challenge project and is not endorsed by NASA.", // TODO bn
@@ -429,7 +430,7 @@ export const bn: Record<DictKey, string> = {
     "3D model of Earth by Stéphane Agullo (sa3d), licensed CC BY 4.0, via Sketchfab. Shown without changes.", // TODO bn
   "about.team.title": "Team", // TODO bn
   "about.team.body":
-    "TODO: team name, members and credits. To be filled in by the team (brain §10).", // TODO bn
+    "AstroBlink is built by a student team at United International University (UIU), Dhaka, for the NASA Space Apps Challenge 2026.", // TODO bn
 
   "me.guest": "Guest", // TODO bn
   "me.volunteer": "Volunteer", // TODO bn

@@ -60,7 +60,7 @@ export function SegmentedControl<T extends string>({
       aria-label={label}
       id={groupId}
       className={cn(
-        "inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-[var(--radius-sm)] bg-surface-2 p-1",
+        "inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-[var(--radius-md)] border border-white/10 bg-white/[0.04] p-1 backdrop-blur-md",
         className,
       )}
     >
@@ -80,10 +80,10 @@ export function SegmentedControl<T extends string>({
             onClick={() => onChange(option.value)}
             onKeyDown={(e) => onKeyDown(index, e)}
             className={cn(
-              "relative h-9 shrink-0 rounded-[6px] px-3 text-body-sm font-medium before:absolute before:inset-x-0 before:-top-1 before:-bottom-1 before:content-['']",
+              "relative h-11 shrink-0 rounded-[var(--radius-sm)] px-4 text-body font-medium",
               selected
-                ? "bg-surface-3 text-text-primary shadow-[inset_0_-2px_0_var(--primary)]"
-                : "text-text-secondary hover:text-text-primary",
+                ? "glass text-text-primary shadow-[inset_0_-2px_0_var(--primary)]!"
+                : "text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary",
               option.disabled && "cursor-not-allowed opacity-40 hover:text-text-secondary",
             )}
           >

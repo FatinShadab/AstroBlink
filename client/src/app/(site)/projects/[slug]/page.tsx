@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/Container";
 import { ProjectOverview } from "@/components/projects/ProjectOverview";
 import { projectBySlug } from "@/data/projects";
+import { en } from "@/lib/i18n/en";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const project = projectBySlug(slug);
-  return { title: project ? project.slug.replace(/-/g, " ") : "Project" };
+  return { title: project ? en[project.titleKey] : "Project" };
 }
 
 /** Reads the slug inside Suspense, as Next 16 requires for route params (instant navigation). */

@@ -61,7 +61,7 @@ export function LoginView({ next }: { next?: string }) {
     <div className="relative grid w-full flex-1 lg:grid-cols-2">
       <Link
         href="/"
-        className="absolute top-4 left-4 z-10 inline-flex h-10 items-center gap-2 rounded-[var(--radius-sm)] bg-surface-glass px-3 text-body-sm font-medium text-text-primary backdrop-blur-[12px] hover:bg-surface-3"
+        className={buttonStyles({ variant: "secondary", size: "sm", className: "absolute top-4 left-4 z-10" })}
       >
         <span aria-hidden="true">←</span>
         {t("login.back")}

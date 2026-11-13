@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -32,10 +31,10 @@ export function HeroSearch() {
   }
 
   return (
-    <div className="mb-8 flex max-w-xl flex-col gap-3 sm:mb-10">
+    <div className="mt-10 flex max-w-xl flex-col gap-3 border-t border-white/10 pt-6">
       <form onSubmit={submit} className="flex flex-col gap-2" noValidate>
         <label htmlFor="hero-coords" className="text-body-sm font-medium text-text-primary">
-          {t("explore.searchLabel")}
+          {t("landing.searchLabel")}
         </label>
         <div className="flex gap-2">
           <Input
@@ -48,6 +47,7 @@ export function HeroSearch() {
             aria-describedby={error ? "hero-coords-error" : "hero-coords-help"}
             spellCheck={false}
             autoComplete="off"
+            className="h-12"
           />
           <Button type="submit" variant="secondary" className="shrink-0">
             {t("explore.searchSubmit")}
@@ -64,9 +64,6 @@ export function HeroSearch() {
           </p>
         )}
       </form>
-      <Link href="/explore" className="self-start text-body-sm font-medium text-text-primary underline-offset-4 hover:underline">
-        {t("nav.explore")} →
-      </Link>
     </div>
   );
 }

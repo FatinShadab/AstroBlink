@@ -80,13 +80,14 @@ export function AstroLanding() {
         sectionFallback: t("landing.scroll.section"),
         progress: t("landing.scroll.progress"),
       }}
+      // One position per section, always beside the text so the planet never sits behind words.
       globeConfig={{
         positions: [
           { top: "50%", left: "88%", scale: 1 },
-          { top: "25%", left: "50%", scale: 0.9 },
-          { top: "15%", left: "90%", scale: 2 },
-          { top: "50%", left: "50%", scale: 1.8 },
-          { top: "50%", left: "75%", scale: 1.4 },
+          { top: "86%", left: "90%", scale: 0.8 },
+          { top: "84%", left: "92%", scale: 0.9 },
+          { top: "50%", left: "8%", scale: 1.3 },
+          { top: "50%", left: "88%", scale: 1.2 },
         ],
       }}
     />

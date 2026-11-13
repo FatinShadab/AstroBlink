@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { buttonStyles } from "@/components/ui/Button";
 import Globe from "@/components/ui/globe";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ export interface ScrollSection {
   subtitle?: string;
   description: string;
   align?: "left" | "center" | "right";
-  /** Optional content placed after the description, e.g. the hero coordinate search. */
+  /** Optional content placed after the actions, e.g. the hero coordinate search. */
   search?: React.ReactNode;
   features?: { title: string; description: string }[];
   actions?: {
@@ -257,14 +258,17 @@ export default function ScrollGlobe({
                 )}
               </div>
 
-              {section.search}
-
               {section.features && (
-                <ul className="mb-8 grid gap-3 sm:mb-10 sm:gap-4">
+                <ul
+                  className={cn(
+                    "mb-8 grid gap-3 text-left sm:mb-10 sm:gap-4",
+                    section.features.length === 3 && "md:grid-cols-3",
+                  )}
+                >
                   {section.features.map((feature) => (
                     <li
                       key={feature.title}
-                      className="rounded-[var(--radius-md)] border border-border bg-card p-4 transition-colors duration-300 hover:border-primary/30 sm:p-5 lg:p-6"
+                      className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-md transition-colors duration-300 hover:border-primary/30 sm:p-5 lg:p-6"
                     >
                       <div className="flex items-start gap-3 sm:gap-4">
                         <span
@@ -295,12 +299,11 @@ export default function ScrollGlobe({
                   )}
                 >
                   {section.actions.map((action) => {
-                    const className = cn(
-                      "inline-flex h-11 w-full items-center justify-center rounded-[var(--radius-sm)] px-6 text-sm font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:text-base",
-                      action.variant === "primary"
-                        ? "bg-primary text-primary-foreground hover:bg-primary-hover"
-                        : "border border-border-strong bg-surface-2 text-foreground hover:bg-surface-3",
-                    );
+                    const className = buttonStyles({
+                      variant: action.variant,
+                      size: "lg",
+                      className: "w-full sm:w-auto",
+                    });
                     return action.href ? (
                       <Link key={action.label} href={action.href} className={className}>
                         {action.label}
@@ -318,6 +321,8 @@ export default function ScrollGlobe({
                   })}
                 </div>
               )}
+
+              {section.search}
             </div>
           </section>
         );
