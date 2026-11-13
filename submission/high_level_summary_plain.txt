@@ -1,0 +1,33 @@
+AstroBlink: High-Level Summary
+Date: 2026-11-13
+
+FORM VERSION
+
+AstroBlink is a public website where anyone can enter a sky position, or pick one of five preset targets, and watch real NASA SPHEREx infrared images of that spot play like a short film. Anything that moves or changes brightness stands out. The site is built for curious visitors, students and citizen scientists. They can explore the sky, share or embed any view, and join guided projects that teach them to spot moving stars, brown dwarfs, variable stars and detector glitches. A backend pipeline prepares the image series, and a consensus service combines volunteer marks into candidate lists.
+
+FULL SUMMARY
+
+What it is
+
+AstroBlink is a citizen-science blink comparator for NASA's SPHEREx mission. SPHEREx launched in March 2025. It scans the whole sky about every six months, in infrared light, across many wavelengths and six detectors. The same patch of sky gets photographed again and again, so anything that moves, pulses or changes brightness shows up as a difference between frames. AstroBlink makes those differences easy to see. Nothing needs to be installed and no account is needed.
+
+Who it helps
+
+- Visitors and judges can open the viewer right away. They type coordinates or click one of five presets (Barnard's Star, Epsilon Indi B, WISE 0855, RW Aurigae and R Draconis), and the image series plays on its own.
+- Learners get explainer cards, a field guide and a practice round with known answers and feedback.
+- Contributors sort batches of image fields with four large answer buttons. They see their progress through each batch and earn a completion certificate, drawn in the browser.
+- Analysts can switch between blink, side-by-side, merge, difference and stack views. They can change the detector, stretch and field of view, check glitch flags, and read light curves and spectra.
+
+How it works
+
+The Next.js front end reads SPHEREx frames through a single data-provider interface, so components never fetch data themselves. The five presets use 255 real SPHEREx frames from public releases. Any other position shows a simulated sky, clearly labelled as such. Each viewer state lives in the URL, so a view can be shared, and an embed route lets the viewer sit inside another website.
+
+Behind the front end, a Python worker queries the IRSA archive for SPHEREx exposures. It reads only the bytes it needs from the public S3 bucket, aligns the frames on a shared 0.5-degree grid, and renders small WebP tiles with coordinate sidecars. A FastAPI service stores subjects and classifications in PostgreSQL. Its consensus algorithm clusters volunteer marks for each epoch, weights each volunteer by reliability, and links the clusters into motion tracks.
+
+Why it matters
+
+AstroBlink lowers the barrier to real survey data. It is public and available in English and Bangla. It is built for accessibility, with a reduced-motion mode, a colour-blind-safe merge view, and a blink rate capped for comfortable viewing. The matched wavelengths, the grid size for nearby objects' parallax, and the filtered detector defects are all documented, so people can check the results.
+
+Status and next steps
+
+The viewer, the citizen-science layer, and the backend ingestion and consensus services are all implemented, and each has a unit-test suite. Next, we want to connect the viewer to live backend subjects, add more real targets as SPHEREx releases come out, and add Gaia and WISE catalogue overlays.

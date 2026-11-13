@@ -1,0 +1,144 @@
+AstroBlink: Project Details
+Date: 2026-11-13
+
+1. OVERVIEW AND THE CHALLENGE
+
+AstroBlink is a public website for NASA's SPHEREx mission. You type in a sky position or click a preset, and a short series of real SPHEREx frames plays like a film. Moving, pulsing and glitching objects stand out. A citizen-science layer sits on top, with guided projects, practice rounds, classification batches, a field guide, personal stats and a certificate. Behind the viewer, a backend pipeline fetches the data, prepares matched image series, and combines volunteer marks into candidate lists.
+
+We built it for the NASA Space Apps Challenge 2026, SPHEREx sky blinker track.
+
+Brief requirement: Public-facing, no barrier
+How AstroBlink answers it: The viewer opens without an account. Sign-in is optional and used only for personal progress.
+
+Brief requirement: Enter RA and Dec
+How AstroBlink answers it: A coordinate search accepts sexagesimal and decimal degrees.
+
+Brief requirement: A series of images, not two
+How AstroBlink answers it: A blink player with play and pause, a timeline, frame metadata, zoom and pan.
+
+Brief requirement: Five test targets
+How AstroBlink answers it: Five one-click presets: Barnard's Star, Epsilon Indi B, WISE 0855, RW Aurigae and R Draconis.
+
+Brief requirement: Easy to update with new data
+How AstroBlink answers it: One data-provider interface, and a fetch script that adds new SPHEREx epochs.
+
+Brief requirement: Use the bands and detectors
+How AstroBlink answers it: Detector selector (D1 to D6), narrow-slice wavelength handling in the backend, and a spectrum chart on click.
+
+Brief requirement: Add or subtract images
+How AstroBlink answers it: Difference and stack view modes, alongside blink, side-by-side and merge.
+
+Brief requirement: Choose a field of view
+How AstroBlink answers it: Field-of-view selector (2, 5, 10 and 15 arcminutes).
+
+Brief requirement: Shareable and embeddable
+How AstroBlink answers it: Every viewer state lives in the URL. An embed route is provided for iframes.
+
+Brief requirement: Contamination flags
+How AstroBlink answers it: A glitch flag overlay, with cosmic-ray and saturation marks.
+
+2. SCIENCE BACKGROUND
+
+SPHEREx scans the whole sky about every six months, in roughly 100 narrow infrared bands from 0.75 to 5 micrometres, with six detectors (D1 to D6). Two features of the instrument shaped the design:
+
+1. Wavelength gradient. Each detector has a linear variable filter, so the wavelength shifts across its field. Frames taken at different wavelengths can look different even when nothing has changed. AstroBlink compares frames at the same wavelength: 1.0 micrometre on D1, 2.0 on D3 and 4.0 on D5. It uses a tight tolerance and checks the shared overlap.
+2. Six-month orbit parallax. Earth's motion shifts nearby objects against the background. A brown dwarf 500 to 1000 AU away can move several pixels between visits. So the backend builds 0.5-degree cutouts (293 by 293 pixels at 6.15 arcseconds per pixel). They are large enough to hold these shifts.
+
+3. USER EXPERIENCE (FRONT END)
+
+Explore viewer. The image takes most of the space. Coordinate search accepts both common formats. Five preset chips open object cards. The five view modes are blink, side by side, merge (three wavelengths in false colour), difference (stars vanish and movers appear as a bright and dark pair) and stack (faint objects show up). The player bar has play, pause, step and speed controls, and it stays within two frame changes per second. Analysis tools include stretch (linear, logarithmic or asinh), detector choice, field of view, a glitch-flag overlay, a light curve, and a spectrum on click that exports to CSV. The URL stores the whole view, so a shared link opens the same view.
+
+Citizen-science projects. Each of the four projects asks its own question:
+
+Project: Hunt moving stars | Task: Did the object move? | Level: Beginner | Detector: D2 | Fields: 120
+Project: Brown dwarfs | Task: Did the faint object move? | Level: Intermediate | Detector: D6 | Fields: 80
+Project: Variable watch | Task: Did the brightness change? | Level: Intermediate | Detector: D3 | Fields: 100
+Project: Glitch patrol | Task: Is this real or a glitch? | Level: Advanced | Detector: D3 | Fields: 60
+
+Each project starts with a training round that has known answers and feedback. After that, volunteers classify batches of ten, with a progress bar. Keys 1 to 4 pick the answer buttons. A field guide and explainer cards show what movers, variables and glitches look like.
+
+Personal layer. Sign-in is a mock. It saves a name and email on the device only. Stats stay in the browser. Eligible users get a certificate drawn on a canvas in the browser. The community page shows demonstration data, labelled as such.
+
+Language and accessibility. The interface is in English and Bangla. It has a reduced-motion mode, a colour-blind-safe merge option, skip links, visible focus states and labelled controls.
+
+4. DATA PIPELINE (WORKER)
+
+The ingestion worker is a Python process. It takes jobs from a Redis queue. Each job goes through these steps:
+
+1. Runtime guards. A 500 MiB scratch budget and a 600-second cap per job protect the host.
+2. Duplicate check. PostgreSQL with pgSphere checks whether a subject already exists within one arcsecond.
+3. Discovery. IRSA's TAP service lists the SPHEREx exposures that cover the position. A 30-day gap splits them into epochs, one per six-month survey pass.
+4. Wavelength-matched selection. For each epoch, the worker picks one exposure per detector at the target wavelength. If two are within 0.002 micrometres, it takes the one with the larger shared overlap, then the earlier date. A subject needs at least two matched epochs.
+5. Efficient archive access. The worker reads only the row strips it needs from each FITS file, using parallel HTTP Range requests on the public S3 bucket. Header parsing stops at the END card. The worker skips the cutout service, which returned HTTP 503 errors during testing.
+6. Quality masking. Defect flags are applied. Transient and outlier flags are masked by default. Pixels that are not valid across all epochs of the shared wavelength are excluded.
+7. Reprojection. Frames go onto a common 6.15-arcsecond-per-pixel grid, the native pixel scale. No resampling blur is added.
+8. Rendering. Each narrow-slice image gets an asinh stretch, and masked pixels are hatched. When all three slices exist, a three-band colour composite is made too. Each tile is a WebP under 250 KB, with a JSON sidecar that holds the coordinate solution and provenance.
+9. Storage. Tiles go to S3-compatible storage, a subject row goes into PostgreSQL, and the ingest job is marked complete.
+
+5. BACKEND API AND CONSENSUS
+
+The API is a FastAPI service with Alembic migrations. Its endpoints are: GET /api/v1/subjects/next, POST /api/v1/classify, POST /api/v1/consensus/run (admin token, idempotent per subject), GET /api/v1/candidates with CSV and IVOA VOTable 1.4 export, and GET /health.
+
+The consensus engine is a pure function. It has no database or web dependencies:
+
+- Distance. Haversine separations handle the wrap at 0 and 360 degrees, and right ascension is scaled by declination.
+- Clustering. Within each epoch, a reliability-weighted DBSCAN groups the marks that point at the same spot. The radius is 1.5 pixels, about 9.2 arcseconds.
+- Centroid and dispersion. Each cluster gets a weighted spherical centroid and a dispersion in arcseconds.
+- Reliability. Volunteer weights update based on how often they agree with gold-standard subjects, whose answers are known.
+- Tracklets. Clusters from different epochs link up within a maximum displacement. Each link gets a motion vector: arcseconds per epoch and a position angle.
+- Candidates. Tracklets that pass the thresholds become candidates for expert review.
+
+6. ARCHITECTURE, DATA AND TESTING
+
+Monorepo. client/ (Next.js, TypeScript, Tailwind v4, Zustand, nuqs, Recharts, Vitest), api/ (FastAPI, SQLAlchemy, Alembic, pytest), worker/ (Python, Astropy, NumPy, Redis, boto3, pytest), contracts/ (OpenAPI 3.1), infra/ (Docker Compose, PostgreSQL 16 with pgSphere, MinIO, Redis) and docs/ and audit/. Each app builds from its own folder and talks to the others only through HTTP, PostgreSQL, Redis and object storage.
+
+Front-end data design. Components never fetch data. They call a SkyDataProvider interface. A routing provider uses real static data for the five presets and labelled simulated sky everywhere else. A third provider slot is held for the backend API.
+
+Real data:
+
+Target: WISE 0855 | Frames: 48 | Observed: 2025-05-05 to 2026-05-14 | Releases: QR2
+Target: Barnard's Star | Frames: 47 | Observed: 2025-08-25 to 2026-09-22 | Releases: DR1, QR3
+Target: Epsilon Indi B | Frames: 46 | Observed: 2025-04-24 to 2026-10-02 | Releases: QR2, QR3
+Target: R Draconis | Frames: 66 | Observed: 2025-04-25 to 2026-09-17 | Releases: DR1, QR3
+Target: RW Aurigae | Frames: 48 | Observed: 2026-09-02 to 2026-09-16 | Releases: QR3
+Total: 255 frames
+
+Backend verification. We checked the verified facts against live S3 listings, FITS header byte ranges and IRSA responses. The checks cover the cutout geometry, the wavelength tolerances, the masking rules, the 250 KB tile limit and the pgSphere duplicate check.
+
+Automated tests. The API has 25 test functions. Its suite passed 31 tests in the October 2026 audit run; contract-validation tests were left out of that run. The worker has 38 test functions. Its real-data tests are marked separately and run on demand. The front end has about 100 unit tests across 16 files.
+
+Design decisions:
+
+Decision: Match frames by wavelength | Reason: The linear variable filter would otherwise create false blinks
+Decision: 0.5 degree cutouts | Reason: Contain the six-month parallax of nearby objects
+Decision: Native 6.15 arcsecond grid | Reason: Avoids resampling blur
+Decision: S3 byte ranges instead of the cutout service | Reason: Faster, and avoids the service's 503 errors
+Decision: pgSphere deduplication | Reason: Exact spherical distance checks within one arcsecond
+Decision: Labelled simulated content | Reason: Users always know what is real
+Decision: No login wall, no sidebar | Reason: The image stays the focus
+Decision: Capped blink rate | Reason: Comfortable viewing, respects reduced motion
+
+Who it helps. The public and students, teachers (through the Bangla interface), citizen scientists who classify images, and astronomers who receive candidate lists as VOTable 1.4.
+
+What we would build next.
+
+1. Connect the reserved backend provider, so classification batches come from live subjects.
+2. Add more real targets as SPHEREx releases come out.
+3. Add Gaia and WISE overlays with Aladin Lite, loaded on demand.
+4. Give experts a review queue for consensus candidates.
+5. Replace demo community numbers with real statistics once accounts and the database are live.
+6. Show a candidate's linked positions across epochs in the viewer.
+
+7. FORM-READY VERSION (UNDER 5,000 CHARACTERS)
+
+AstroBlink is a public website for NASA's SPHEREx mission, with no login. Anyone can type a sky position or click one of five presets (Barnard's Star, Epsilon Indi B, WISE 0855, RW Aurigae, R Draconis). They then watch a short series of real SPHEREx infrared frames play like a film, so moving, pulsing and glitching objects stand out.
+
+The viewer has blink, side-by-side, merge, difference and stack modes, with controls for detector, stretch and field of view. It also shows glitch flags, a light curve and a spectrum on click, and it can be embedded. Every view lives in the URL, so any view can be shared.
+
+A citizen-science layer adds four guided projects (moving stars, brown dwarfs, variable stars and glitch patrol), a practice round with feedback, batches of ten classifications with progress tracking, a field guide, personal stats and a certificate drawn in the browser. The interface is in English and Bangla, with reduced-motion and colour-blind-safe options.
+
+The science is built in. SPHEREx's linear variable filters shift the wavelength across each detector, so frames are matched at the same wavelength to avoid false blinks. Cutouts are 0.5 degrees, which is big enough to hold the six-month parallax of nearby objects. The worker reads only the bytes it needs from the public S3 archive, aligns frames on the native 6.15-arcsecond grid, masks defect pixels, and renders WebP tiles under 250 KB with coordinate sidecars. A FastAPI service stores subjects and classifications in PostgreSQL with pgSphere. The consensus engine clusters volunteer marks per epoch, weights volunteers by reliability, links clusters into motion tracks, and exports candidates as CSV or IVOA VOTable 1.4.
+
+The five presets use 255 real SPHEREx frames from public Quick Release and DR1 products. Other positions show a clearly labelled simulated sky. The front end is Next.js and TypeScript. The backend is Python, FastAPI and Astropy, and the whole stack runs with Docker Compose. Unit tests cover the viewer's maths and state, the consensus engine, the worker's FITS, masking and rendering code, and the API.
+
+Next, we want to connect the viewer to live backend subjects, add more real targets as SPHEREx releases arrive, add Gaia and WISE catalogue overlays, and give experts a review queue for consensus candidates.
