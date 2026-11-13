@@ -41,7 +41,8 @@ export function truthFor(project: ProjectDef, target: SkyTarget): Answer {
 
 /** True when the first frame has a flagged pixel in the central 5×5 aperture. */
 export function centreGlitch(target: SkyTarget): boolean {
-  const px = generateFramePixels(target, 0);
+  // Same options as the contributor viewer, so the answer matches what people see.
+  const px = generateFramePixels(target, 0, new Date(), { contributor: true });
   const flags = px.flags;
   if (!flags) return false;
   const side = px.width;

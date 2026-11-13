@@ -17,6 +17,8 @@ export interface RealThumb {
   detector: Detector;
   /** "ends": earliest and latest matched frames (a 2-frame blink); "first": one still frame. */
   frames: "ends" | "first";
+  /** With "first": which matched frame to show (default 0, the earliest), e.g. to skip a frame with an artefact. */
+  frameIndex?: number;
   /** Side of the square crop in pixels (6.2″ each). */
   size: number;
   /** Crop centre relative to the target, in pixels (default: on the target). */
@@ -83,7 +85,10 @@ async function loadReal(spec: RealThumb, signal?: AbortSignal): Promise<ThumbIma
   const manifest = await loadManifest(spec.preset);
   const group = selectMatchedWavelength(manifest.frames.filter((f) => f.detector === spec.detector));
   if (group.length === 0) throw new Error(`No matched frames for ${spec.preset} ${spec.detector}`);
-  const picks = spec.frames === "ends" && group.length >= 2 ? [group[0], group[group.length - 1]] : [group[0]];
+  const picks =
+    spec.frames === "ends" && group.length >= 2
+      ? [group[0], group[group.length - 1]]
+      : [group[Math.min(spec.frameIndex ?? 0, group.length - 1)]];
   const crops = await Promise.all(
     picks.map(async (f) => {
       const [px, fl] = await Promise.all([
@@ -114,7 +119,9 @@ const SIMULATED_TARGET: SkyTarget = { raDeg: 150.1, decDeg: 2.2, fovArcmin: 5, d
 const SIMULATED_TODAY = new Date("2026-11-01T00:00:00Z"); // fixed, so the image never changes
 
 function loadSimulated(): ThumbImage {
-  const frames = [0, 1].map((i) => generateFramePixels(SIMULATED_TARGET, i, SIMULATED_TODAY));
+  const frames = [0, 1].map((i) =>
+    generateFramePixels(SIMULATED_TARGET, i, SIMULATED_TODAY, { contributor: true }),
+  );
   const range = percentileRange(frames.map((f) => f.data));
   return {
     width: frames[0].width,

@@ -11,8 +11,8 @@ export interface ProjectImage {
 }
 
 const BARNARD_BLINK: ProjectImage = {
-  // D5: matched-wavelength frames from Aug 2025 and Sep 2026 (the viewer's default for Barnard's Star).
-  spec: { kind: "real", preset: "barnard", detector: "D5", frames: "ends", size: 40 },
+  // D2: matched-wavelength frames from Aug 2025 and Sep 2026 (the viewer's default for Barnard's Star).
+  spec: { kind: "real", preset: "barnard", detector: "D2", frames: "ends", size: 40 },
   target: "Barnard's Star",
   labelKey: "thumb.label.barnard",
 };
@@ -26,12 +26,15 @@ const SIMULATED_GLITCH: ProjectImage = {
 export const PROJECT_IMAGES: Record<string, ProjectImage> = {
   "hunt-moving-stars": BARNARD_BLINK,
   "brown-dwarfs": {
-    spec: { kind: "real", preset: "eps-indi-b", detector: "D5", frames: "first", size: 40, clip: "crop" },
+    // The second matched D5 frame (2 Oct 2026): the first (1 Oct) has a brighter rectangular patch, a seam
+    // in the stored image, just below the brown dwarf.
+    spec: { kind: "real", preset: "eps-indi-b", detector: "D5", frames: "first", frameIndex: 1, size: 40, clip: "crop" },
     target: "Epsilon Indi B",
     labelKey: "thumb.label.epsIndiB",
   },
   "variable-watch": {
-    spec: { kind: "real", preset: "r-dra", detector: "D3", frames: "first", size: 40 },
+    // 120 px = 12.4′: wide enough that the bright star's glow fades into the surrounding field.
+    spec: { kind: "real", preset: "r-dra", detector: "D3", frames: "first", size: 120 },
     target: "R Draconis",
     labelKey: "thumb.label.rDra",
   },
@@ -51,7 +54,7 @@ export const LOOK_FOR_IMAGES: readonly ProjectImage[] = [
   SIMULATED_GLITCH,
   {
     // The same two dates as the mover, on a patch of sky beside the star: everything stays put.
-    spec: { kind: "real", preset: "barnard", detector: "D5", frames: "ends", size: 40, offset: { x: -40, y: 30 } },
+    spec: { kind: "real", preset: "barnard", detector: "D2", frames: "ends", size: 40, offset: { x: -40, y: 30 } },
     target: "field near Barnard's Star",
     labelKey: "thumb.label.static",
   },

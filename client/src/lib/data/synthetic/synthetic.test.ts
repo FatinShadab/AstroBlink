@@ -72,6 +72,80 @@ describe("synthetic field", () => {
   });
 });
 
+describe("contributor options (classify and practice)", () => {
+  const plain: SkyTarget = { raDeg: 10, decDeg: 10, fovArcmin: 5, detector: "D3" };
+
+  it("keeps cosmic-ray hits out of the outer 10% of the frame", () => {
+    for (let ra = 0; ra < 360; ra += 15) {
+      const t = { ...plain, raDeg: ra };
+      const px = generateFramePixels(t, 0, TODAY, { contributor: true });
+      const side = px.width;
+      const margin = Math.ceil(side * 0.1);
+      px.flags?.forEach((f, i) => {
+        if ((f & 1) === 0) return;
+        const x = i % side;
+        const y = Math.floor(i / side);
+        expect(x).toBeGreaterThanOrEqual(margin);
+        expect(y).toBeGreaterThanOrEqual(margin);
+        expect(x).toBeLessThan(side - margin);
+        expect(y).toBeLessThan(side - margin);
+      });
+    }
+  });
+
+  it("has no cosmic-ray hits outside Glitch patrol (glitches: false)", () => {
+    for (let ra = 0; ra < 360; ra += 30) {
+      const px = generateFramePixels({ ...plain, raDeg: ra }, 0, TODAY, { contributor: true, glitches: false });
+      expect(px.flags?.some((f) => (f & 1) !== 0)).toBe(false);
+    }
+  });
+
+  it("puts a steady star at the reticle in a plain field", () => {
+    const side = fieldSide(5);
+    const c = Math.round((side - 1) / 2);
+    const a = generateFramePixels(plain, 0, TODAY, { contributor: true });
+    const b = generateFramePixels(plain, 0, TODAY);
+    expect(a.data[c * side + c] - b.data[c * side + c]).toBeGreaterThan(300);
+  });
+
+  it("centres a mover's track on the reticle", () => {
+    const barnard = presetById("barnard");
+    if (!barnard) throw new Error("missing preset");
+    const t: SkyTarget = { raDeg: barnard.raDeg, decDeg: barnard.decDeg, fovArcmin: 5, detector: "D2" };
+    const n = visitDates(t.raDeg, TODAY).length;
+    const side = fieldSide(5);
+    // In the difference (last − first), the mover leaves a minimum where it was and a maximum where it is.
+    const f = generateFramePixels(t, 0, TODAY, { contributor: true });
+    const l = generateFramePixels(t, n - 1, TODAY, { contributor: true });
+    const first = f.data;
+    const last = l.data;
+    // Cosmic-ray hits are brighter than the mover in a difference; leave flagged pixels out.
+    const glitch = (j: number) => ((f.flags?.[j] ?? 0) | (l.flags?.[j] ?? 0)) !== 0;
+    let lo = 0;
+    let hi = 0;
+    for (let j = 1; j < first.length; j++) {
+      if (glitch(j)) continue;
+      const d = last[j] - first[j];
+      if (d < last[lo] - first[lo]) lo = j;
+      if (d > last[hi] - first[hi]) hi = j;
+    }
+    const mid = (side - 1) / 2;
+    const at = (j: number) => ({ x: (j % side) - mid, y: Math.floor(j / side) - mid });
+    // Both ends of the track lie within 2 px of the reticle and on opposite sides of it.
+    const a = at(lo);
+    const b = at(hi);
+    expect(Math.hypot(a.x, a.y)).toBeLessThan(2.5);
+    expect(Math.hypot(b.x, b.y)).toBeLessThan(2.5);
+    expect(a.y * b.y).toBeLessThan(0);
+  });
+
+  it("leaves the default (Explore) output unchanged", () => {
+    const a = generateFramePixels(plain, 0, TODAY);
+    const b = generateFramePixels(plain, 0, TODAY, {});
+    expect(Array.from(a.data)).toEqual(Array.from(b.data));
+  });
+});
+
 describe("presets", () => {
   it("gives every preset finite coordinates (none pending)", () => {
     const pending = PRESETS.filter((p) => !isPresetReady(p)).map((p) => p.id);

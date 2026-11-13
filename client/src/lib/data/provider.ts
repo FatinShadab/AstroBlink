@@ -129,8 +129,31 @@ export function getProvider(): SkyDataProvider {
  * "synthetic" forces the labelled simulated sky; the classify and train flows use it, because their
  * fields have known answers that only the synthetic model provides.
  */
-export type DataChoice = "sky" | "synthetic";
+export type DataChoice = "sky" | "synthetic" | "synthetic-glitches";
+
+/**
+ * The simulated sky as the contributor flows show it: the object to judge sits at the reticle
+ * (GenerateOptions.contributor). Only Glitch patrol fields ("synthetic-glitches") have cosmic-ray hits,
+ * kept away from the frame edge; the other projects show no glitches. Explore never uses these.
+ */
+function contributorProvider(glitches: boolean): SkyDataProvider {
+  return {
+    ...syntheticProvider,
+    async getFramePixels(frame, signal) {
+      checkAborted(signal);
+      const parts = splitFrameId(frame.id);
+      const target = parts ? parseFieldId(parts.fieldId) : null;
+      if (!parts || !target) throw new Error(`Unknown frame id ${frame.id}`);
+      return generateFramePixels(target, parts.index, new Date(), { contributor: true, glitches });
+    },
+  };
+}
+
+const contributorClean = contributorProvider(false);
+const contributorGlitches = contributorProvider(true);
 
 export function providerFor(choice: DataChoice): SkyDataProvider {
-  return choice === "synthetic" ? syntheticProvider : getProvider();
+  if (choice === "synthetic") return contributorClean;
+  if (choice === "synthetic-glitches") return contributorGlitches;
+  return getProvider();
 }

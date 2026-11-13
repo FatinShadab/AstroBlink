@@ -92,6 +92,7 @@ export function ClassifyFlow({ project }: { project: ProjectDef }) {
           key={field.fieldId}
           target={field.target}
           advanced
+          glitches={project.taskType === "glitch"}
           actions={
             <ClassifyStep
               key={`${offset}-${index}`}

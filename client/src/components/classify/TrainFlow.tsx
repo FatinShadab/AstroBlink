@@ -82,6 +82,7 @@ export function TrainFlow({ project }: { project: ProjectDef }) {
           key={fields[index].fieldId}
           target={fields[index].target}
           advanced
+          glitches={project.taskType === "glitch"}
           actions={
             <TrainStep
               key={index}

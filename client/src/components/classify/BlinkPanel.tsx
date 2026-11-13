@@ -19,7 +19,7 @@ import { useT } from "@/lib/i18n/LangProvider";
 import type { DictKey } from "@/lib/i18n/en";
 import { countFlagged, flagOverlayRgba } from "@/lib/sky/modes";
 import { makeRgbaCanvas } from "@/lib/sky/render";
-import { NO_ADJUST } from "@/lib/sky/stretch";
+import { NO_ADJUST, percentileRange } from "@/lib/sky/stretch";
 import { useUserStore, type BlinkFps } from "@/lib/state/useUserStore";
 import { useViewerUiStore } from "@/lib/state/useViewerUiStore";
 import { cn } from "@/lib/utils";
@@ -42,6 +42,7 @@ export function BlinkPanel({
   label,
   advanced = false,
   actions,
+  glitches = false,
 }: {
   target: SkyTarget;
   showPlayer?: boolean;
@@ -54,17 +55,26 @@ export function BlinkPanel({
   advanced?: boolean;
   /** Answer buttons and confirm, kept in view next to the media (with `advanced`). */
   actions?: React.ReactNode;
+  /** Simulated cosmic-ray hits in the field: only Glitch patrol (and demos of glitches) use them. */
+  glitches?: boolean;
 }) {
   const { t, lang } = useT();
   const router = useRouter();
   const toast = useToast();
   // Classify and train stay on the labelled synthetic sky: their answers come from the synthetic model.
-  const { load } = useFieldFrames(target, "synthetic");
+  const { load } = useFieldFrames(target, glitches ? "synthetic-glitches" : "synthetic");
   const loaded = load.status === "ready" ? load.data : null;
   const frames = useMemo(() => loaded?.frames ?? [], [loaded]);
   const count = frames.length;
 
-  const [stretch, setStretch] = useState<StretchKind>("asinh");
+  // Softer default than Explore: a log stretch from the sky level (median, so noise stays dark) up to the
+  // brightest pixel, so bright stars keep a core with a falloff instead of clipping to flat white
+  // squares. The Image tab can still change the stretch.
+  const [stretch, setStretch] = useState<StretchKind>("log");
+  const softRange = useMemo(
+    () => (loaded ? percentileRange(loaded.frames.map((f) => f.data), 50, 100) : null),
+    [loaded],
+  );
   const [showFlags, setShowFlags] = useState(false);
   const brightness = useViewerUiStore((s) => s.brightness);
   const contrast = useViewerUiStore((s) => s.contrast);
@@ -72,7 +82,7 @@ export function BlinkPanel({
     () => (brightness === 0 && contrast === 1 ? NO_ADJUST : { brightness, contrast }),
     [brightness, contrast],
   );
-  const canvases = useFrameCanvases(loaded, stretch, adjust);
+  const canvases = useFrameCanvases(loaded, stretch, adjust, softRange);
   const flagCanvases = useMemo(() => {
     if (!loaded || !showFlags) return [];
     return loaded.frames.map((f) =>

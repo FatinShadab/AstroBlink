@@ -9,7 +9,7 @@ describe("resolveTarget", () => {
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.target.raDeg).toBeCloseTo(269.4463, 3);
-      expect(result.target.detector).toBe("D5");
+      expect(result.target.detector).toBe("D2");
       expect(result.target.fovArcmin).toBe(5);
     }
   });

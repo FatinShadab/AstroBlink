@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { visibleLabels } from "./timelineLabels";
 import { Button } from "@/components/ui/Button";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useLang, useT } from "@/lib/i18n/LangProvider";
@@ -14,6 +16,9 @@ const SPEEDS = [
   { value: "1", label: "1×" },
   { value: "2", label: "2×" },
 ] as const;
+
+/** Space a month-year label needs ("Sept ’26" in the caption size), plus a small gap. */
+const LABEL_MIN_GAP_PX = 64;
 
 interface PlayerBarProps {
   frames: FrameMeta[];
@@ -43,6 +48,21 @@ export function PlayerBar(props: PlayerBarProps) {
     if (count <= 1 || max === min) return 50;
     return ((times[i] - min) / (max - min)) * 100;
   };
+
+  // Date labels: all of them unless two would overlap; then only first, middle and last.
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [timelineWidth, setTimelineWidth] = useState(0);
+  useEffect(() => {
+    const el = timelineRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => setTimelineWidth(el.clientWidth));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const labelled = visibleLabels(
+    frames.map((_, i) => (position(i) / 100) * timelineWidth),
+    LABEL_MIN_GAP_PX,
+  );
 
   return (
     <div className="flex flex-col gap-3 border-t border-border bg-surface-1 px-3 py-3 md:px-4">
@@ -80,6 +100,7 @@ export function PlayerBar(props: PlayerBarProps) {
         </div>
 
         <div
+          ref={timelineRef}
           role="group"
           aria-label={t("explore.timeline")}
           className="relative h-11 min-w-[200px] flex-1"
@@ -106,9 +127,14 @@ export function PlayerBar(props: PlayerBarProps) {
                       : "size-2 border border-border-strong bg-surface-3",
                   )}
                 />
-                <span className="absolute top-8 text-caption whitespace-nowrap text-text-muted">
-                  {formatMonthYear(frame.obsDate, lang)}
-                </span>
+                {labelled.has(i) && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-8 text-caption whitespace-nowrap text-text-muted"
+                  >
+                    {formatMonthYear(frame.obsDate, lang)}
+                  </span>
+                )}
               </button>
             );
           })}

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T18:23:24.444411+00:00",
+  "generated": "2026-11-13T00:11:38.737827+00:00",
   "targets": [
     {
       "id": "wise-0855",
@@ -7,6 +7,8 @@
       "raDeg": 133.760644,
       "decDeg": -7.241366,
       "frameCount": 48,
+      "stackCount": 0,
+      "spectrumPoints": 48,
       "dateRange": [
         "2025-05-05",
         "2026-05-14"
@@ -30,6 +32,8 @@
       "raDeg": 269.446291,
       "decDeg": 4.767917,
       "frameCount": 47,
+      "stackCount": 0,
+      "spectrumPoints": 47,
       "dateRange": [
         "2025-08-25",
         "2026-09-22"
@@ -46,8 +50,7 @@
         "DR1",
         "QR3"
       ],
-      "manifest": "/data/barnard/manifest.json",
-      "spectrumPoints": 47
+      "manifest": "/data/barnard/manifest.json"
     },
     {
       "id": "eps-indi-b",
@@ -55,6 +58,8 @@
       "raDeg": 331.096448,
       "decDeg": -56.800596,
       "frameCount": 46,
+      "stackCount": 0,
+      "spectrumPoints": 46,
       "dateRange": [
         "2025-04-24",
         "2026-10-02"
@@ -78,6 +83,8 @@
       "raDeg": 248.16667,
       "decDeg": 66.755,
       "frameCount": 66,
+      "stackCount": 0,
+      "spectrumPoints": 58,
       "dateRange": [
         "2025-04-25",
         "2026-09-17"
@@ -94,8 +101,7 @@
         "DR1",
         "QR3"
       ],
-      "manifest": "/data/r-dra/manifest.json",
-      "spectrumPoints": 58
+      "manifest": "/data/r-dra/manifest.json"
     },
     {
       "id": "rw-aur",
@@ -103,6 +109,8 @@
       "raDeg": 76.95625,
       "decDeg": 30.40139,
       "frameCount": 48,
+      "stackCount": 0,
+      "spectrumPoints": 48,
       "dateRange": [
         "2026-09-02",
         "2026-09-16"

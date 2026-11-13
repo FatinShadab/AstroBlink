@@ -57,9 +57,9 @@ export const PRESETS: readonly Preset[] = [
     id: "barnard",
     name: "Barnard's Star",
     kind: "mover",
-    // D5: five frames at one wavelength from Aug 2025 to Sep 2026 (the longest baseline, 1.8 px of motion),
-    // star field aligned (scripts/qa_check.py), and the steadiest brightness of this non-variable star.
-    detector: "D5",
+    // D2: five frames at one wavelength from Aug 2025 to Sep 2026 (the longest baseline, 1.8 px of motion),
+    // with the best-aligned star field of all detectors (scripts/qa_check.py, correlation 0.90).
+    detector: "D2",
     fovArcmin: 5,
     raDeg: 269.446291, // position at epoch 2025.9
     decDeg: 4.767917,

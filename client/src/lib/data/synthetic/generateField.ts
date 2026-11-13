@@ -85,11 +85,28 @@ export function buildFieldData(target: SkyTarget, today: Date = new Date()): Fie
   return { fieldId, target, frames, source: "synthetic", isSimulated: true };
 }
 
+/**
+ * Options for the contributor flows (classify and practice), which ask about the object at the reticle:
+ * - the mover's track is centred on the reticle (it sits there half-way through the visits);
+ * - a plain field gets one steady star at the reticle, so there is always something to judge;
+ * - cosmic-ray hits stay out of the outer 10% of the frame.
+ * Explore uses the defaults (none of these), so its simulated sky is unchanged.
+ */
+export interface GenerateOptions {
+  contributor?: boolean;
+  /** Cosmic-ray hits (default true). Off for contributor fields outside Glitch patrol. */
+  glitches?: boolean;
+}
+
+const CONTRIBUTOR_GLITCH_MARGIN = 0.1;
+const CONTRIBUTOR_CENTRE_STAR_COUNTS = 900;
+
 /** Pixel data for visit `index` of this target. Pure: no state, no randomness beyond the seed. */
 export function generateFramePixels(
   target: SkyTarget,
   index: number,
   today: Date = new Date(),
+  options: GenerateOptions = {},
 ): FramePixels {
   const dates = visitDates(target.raDeg, today);
   const date = dates[index];
@@ -102,7 +119,13 @@ export function generateFramePixels(
   const flags = new Uint8Array(n);
   const centre = (side - 1) / 2;
   const special = presetAt(target)?.synthetic;
+  const contributor = options.contributor === true;
   const tYears = (date.getTime() - firstVisitUtc(target.raDeg)) / MS_PER_YEAR;
+  // Contributor flows: time from the middle of the visits, so a mover crosses the reticle half-way.
+  const tMidYears =
+    (dates[0].getTime() + dates[dates.length - 1].getTime()) / 2 / MS_PER_YEAR -
+    firstVisitUtc(target.raDeg) / MS_PER_YEAR;
+  const tTrack = contributor ? tYears - tMidYears : tYears;
 
   // 1. Background: sky level plus Gaussian noise, one seed per frame.
   const noiseRng = mulberry32(hashSeed(key, "noise", index));
@@ -123,7 +146,9 @@ export function generateFramePixels(
   }
 
   // 3. Special object (preset): a mover or a variable at the target position.
-  if (special) addSpecial(data, side, centre, tYears, special, target, key);
+  // Movers use the track time; a variable's brightness keeps its own time base (tYears).
+  if (special) addSpecial(data, side, centre, special.kind === "mover" ? tTrack : tYears, special, target, key);
+  else if (contributor) addPsf(data, side, centre, centre, CONTRIBUTOR_CENTRE_STAR_COUNTS);
 
   // 4. Saturation near very bright sources.
   for (let i = 0; i < n; i++) {
@@ -135,13 +160,16 @@ export function generateFramePixels(
 
   // 5. Glitches: cosmic-ray hits (single pixels or short horizontal streaks), flagged as 1.
   const glitchRng = mulberry32(hashSeed(key, "glitch", index));
-  const hits = 2 + Math.floor(glitchRng() * 3);
+  const hits = options.glitches === false ? 0 : 2 + Math.floor(glitchRng() * 3);
+  // Contributor flows keep hits inside the inner 80% (the same random draws, mapped inwards).
+  const margin = contributor ? Math.ceil(side * CONTRIBUTOR_GLITCH_MARGIN) : 0;
+  const span = side - 2 * margin;
   for (let h = 0; h < hits; h++) {
-    const x = Math.floor(glitchRng() * side);
-    const y = Math.floor(glitchRng() * side);
+    const x = margin + Math.floor(glitchRng() * span);
+    const y = margin + Math.floor(glitchRng() * span);
     const streak = glitchRng() < 0.5 ? 1 : 2 + Math.floor(glitchRng() * 3);
     const amount = streak === 1 ? COSMIC_RAY_COUNTS : STREAK_COUNTS;
-    for (let k = 0; k < streak && x + k < side; k++) {
+    for (let k = 0; k < streak && x + k < side - margin; k++) {
       const i = y * side + x + k;
       data[i] += amount;
       flags[i] |= 1;
